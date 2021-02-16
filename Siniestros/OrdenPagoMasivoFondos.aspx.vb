@@ -36,13 +36,13 @@ Partial Class Siniestros_OrdenPagoMasivoFondos
     Protected Sub btn_Revisar_Click(sender As Object, e As EventArgs) Handles btn_Revisar.Click
 
         Dim ws As New ws_Generales.GeneralesClient
-        Dim server As String = ws.ObtieneParametro(9)
+        Dim server As String = ws.ObtieneParametro(3)
         Dim RptFilters As String
         RptFilters = "&NumLote=" & txt_NumLote.Text
 
 
         server = Replace(Replace(server, "@Reporte", "RevisionOrdenPagoMasiva"), "@Formato", "EXCEL")
-        server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros")
+        server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
         server = server & RptFilters
         Funciones.EjecutaFuncion("window.open('" & server & "');")
 

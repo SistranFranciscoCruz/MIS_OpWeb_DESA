@@ -1,123 +1,119 @@
-﻿@media only screen and (max-width: 1366px) and (min-width: 1280px){
+﻿@media only screen and (max-width: 1366px) and (min-width: 1280px) {
     .zona-principal {
-        width:1000px;
+        /*width:1000px;*/
+        width: 100% /*FJCP 10290 - Mejoras Fase II Rediseño de pantalla */
     }
 
-    .panel-seccion-fija{
-        font-family:Myriad Pro;
-        border-width:.5px;
-        border-right-style:inset;
-        border-color:rgba(0,0,0,.2);
-        z-index:100;
-        width:1000px;
+    .panel-seccion-fija {
+        font-family: Myriad Pro;
+        border-width: .5px;
+        border-right-style: inset;
+        border-color: rgba(0,0,0,.2);
+        z-index: 100;
+        width: 1000px;
         /*background-color: rgb(255, 255, 255); 
         position:fixed;*/
     }
 
-    .tab-content{
-        height:240px; 
-        overflow-y:scroll;
-        overflow-x:hidden;
+    .tab-content {
+        height: 240px;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
-    .tab-memoria{
-        height:240px; 
-        overflow-y:scroll;
-        overflow-x:hidden;
+    .tab-memoria {
+        height: 240px;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
-    .Descripcion{
-        width:150px; 
+    .Descripcion {
+        width: 150px;
     }
 
-    .PolizaGarantia{
-        width:950px;
+    .PolizaGarantia {
+        width: 950px;
     }
 
-    .PolizaSeleccionadas{
-        width:1180px;
-        overflow-x:hidden;
+    .PolizaSeleccionadas {
+        width: 1180px;
+        overflow-x: hidden;
     }
 
 
-    .Garantias{
-        height:425px;
+    .Garantias {
+        height: 425px;
     }
 
-    .Orden{
-        height:525px;
+    .Orden {
+        height: 525px;
     }
 
-    .Firma{
-        height:585px;
+    .Firma {
+        height: 585px;
     }
 
-    .Distribucion{
-        width:1190px;
+    .Distribucion {
+        width: 1190px;
     }
-
 }
 
-@media only screen and (max-width: 1600px) and (min-width: 1367px){
+@media only screen and (max-width: 1600px) and (min-width: 1367px) {
     .zona-principal {
-        width:1220px;
+        /*width: 1220px;*/
+        width: 100% /*FJCP 10290 - Mejoras Fase II Rediseño de pantalla */
     }
 
-    .panel-seccion-fija{
-        font-family:Myriad Pro;
-        border-width:.5px;
-        border-right-style:inset;
-        border-color:rgba(0,0,0,.2);
-        z-index:100;
-        width:1220px;
-        /*background-color: rgb(255, 255, 255);*/ 
+    .panel-seccion-fija {
+        font-family: Myriad Pro;
+        border-width: .5px;
+        border-right-style: inset;
+        border-color: rgba(0,0,0,.2);
+        z-index: 100;
+        width: 1220px;
+        /*background-color: rgb(255, 255, 255);*/
         /*position:fixed;*/
     }
 
-    .tab-content{
-        height:400px; 
-        overflow-y:scroll;
-        overflow-x:hidden;
+    .tab-content {
+        height: 400px;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
-    .tab-memoria{
-        height:400px; 
-        overflow-y:scroll;
-        overflow-x:hidden;
+    .tab-memoria {
+        height: 400px;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
-    .Descripcion{
-        width:250px; 
+    .Descripcion {
+        width: 250px;
     }
 
-    .PolizaGarantia{
-        width:1180px;
+    .PolizaGarantia {
+        width: 1180px;
     }
 
-    .PolizaSeleccionadas{
-        width:1390px;
-        overflow-x:hidden;
+    .PolizaSeleccionadas {
+        width: 1390px;
+        overflow-x: hidden;
     }
 
 
-    .Garantias{
-        height:550px;
+    .Garantias {
+        height: 550px;
     }
 
-    .Orden{
-        height:655px;
+    .Orden {
+        height: 655px;
     }
 
-    .Firma{
-        height:710px;
+    .Firma {
+        height: 710px;
     }
 
-    .Distribucion{
-        width:1440px;
-    } 
-
+    .Distribucion {
+        width: 1440px;
+    }
 }
-
-
-
-

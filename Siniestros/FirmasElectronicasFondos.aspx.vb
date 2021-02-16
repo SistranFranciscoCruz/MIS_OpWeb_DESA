@@ -2563,9 +2563,9 @@ Partial Class Siniestros_FirmasElectronicas
 
             Dim ws As New ws_Generales.GeneralesClient
 
-            server = ws.ObtieneParametro(9)
+            server = ws.ObtieneParametro(3)
             server = Replace(Replace(server, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&nro_op=@nro_op"
-            server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros")
+            server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
             server = Replace(server, "OrdenPago", "OrdenPago_stro")
 
             For Each row In grdOrdenPago.Rows
@@ -3012,11 +3012,11 @@ Partial Class Siniestros_FirmasElectronicas
 
         'Impresion Solicitud de Pago
         Dim wssp As New ws_Generales.GeneralesClient
-        Dim serversp As String = wssp.ObtieneParametro(8)
+        Dim serversp As String = wssp.ObtieneParametro(3)
         'impresion de la solicitud de pago
         'If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
         serversp = Replace(Replace(serversp, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&P_varios_op=@nro_op"
-        serversp = Replace(serversp, "ReportesGMX", "ReportesOPSiniestros")
+        serversp = Replace(serversp, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
         serversp = Replace(serversp, "OrdenPago", "SolicitudPago")
 
 

@@ -7,7 +7,8 @@
 
      <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|1|1|1|1|1|1|1|1|" />
 
-     <div style="width:1000px; min-width:1000px; overflow-x:hidden">
+     <%--<div style="width:1000px; min-width:1000px; overflow-x:hidden">--%>
+    <div style="overflow-x: hidden">
         <div class="cuadro-titulo panel-encabezado">
             <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana0" class="contraer"  />
             <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana0" class="expandir"  />

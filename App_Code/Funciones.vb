@@ -744,7 +744,62 @@ Public Class Funciones
     End Function
 
 
+    Public Shared Function ObtenerDatosOut(ByVal sProcedimiento As String, Optional ByVal oParametros As Dictionary(Of String, Object) = Nothing, Optional parametros As List(Of SqlParameter) = Nothing) As SqlCommand
 
+        Dim oDatos As DataSet
+
+        Dim sConexion As String = String.Empty
+
+        Dim oDataAdapter As SqlDataAdapter
+
+        Dim oConexion As SqlConnection
+
+        Dim oComando As SqlCommand
+
+        Try
+
+            oDatos = New DataSet
+            oDataAdapter = New SqlDataAdapter
+            oComando = New SqlCommand
+
+            sConexion = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+            oConexion = New SqlConnection(sConexion)
+
+
+            oConexion.Open()
+            oComando = New SqlCommand(sProcedimiento, oConexion)
+            oComando.CommandType = CommandType.StoredProcedure
+
+            If Not oParametros Is Nothing Then
+
+                For Each p As KeyValuePair(Of String, Object) In oParametros
+                    oComando.Parameters.AddWithValue(String.Format("@{0}", p.Key), p.Value)
+                Next
+
+            End If
+
+            For Each _parametro As SqlParameter In parametros
+                oComando.Parameters.Add(_parametro)
+
+            Next
+
+            oDataAdapter = New SqlDataAdapter(oComando)
+
+            oComando.ExecuteNonQuery()
+
+
+
+            oComando.Connection.Close()
+            oConexion.Close()
+
+
+        Catch ex As Exception
+            ObtenerDatosOut = Nothing
+        End Try
+
+        ObtenerDatosOut = oComando
+
+    End Function
 
 
 

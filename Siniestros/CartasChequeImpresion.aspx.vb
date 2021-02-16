@@ -10,6 +10,7 @@ Partial Class Siniestros_CartasChequeImpresion
     Private Enum TipoFiltro
         Todas = 1
         PendientesEntrega = 2
+        Rechazadas = 3 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
         Entregadas = 4
     End Enum
 
@@ -70,6 +71,7 @@ Partial Class Siniestros_CartasChequeImpresion
             Else
                 oParametros.Add("pend_entrega", IIf(chk_Pendientes.Checked = True, -1, 0))
                 oParametros.Add("entregadas", IIf(chk_Entregadas.Checked = True, -1, 0))
+                oParametros.Add("rechazadas", IIf(chk_Rechazadas.Checked = True, -1, 0)) 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
             End If
 
 
@@ -98,6 +100,10 @@ Partial Class Siniestros_CartasChequeImpresion
     Protected Sub chk_Entregadas_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Entregadas.CheckedChanged
         VerificaRadios(TipoFiltro.Entregadas)
     End Sub
+
+    Protected Sub chk_Rechazadas_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Rechazadas.CheckedChanged
+        VerificaRadios(TipoFiltro.Rechazadas) 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
+    End Sub
     Private Sub VerificaRadios(tipo As Integer)
 
         Select Case tipo
@@ -106,16 +112,25 @@ Partial Class Siniestros_CartasChequeImpresion
                 If chk_Ninguno.Checked Then
                     chk_Entregadas.Checked = False
                     chk_Pendientes.Checked = False
+                    chk_Rechazadas.Checked = False 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
                 End If
             Case 2
                 If chk_Pendientes.Checked Then
                     chk_Entregadas.Checked = False
                     chk_Ninguno.Checked = False
+                    chk_Rechazadas.Checked = False 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
+                End If
+            Case 3 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
+                If chk_Rechazadas.Checked Then
+                    chk_Entregadas.Checked = False
+                    chk_Ninguno.Checked = False
+                    chk_Pendientes.Checked = False
                 End If
             Case 4
                 If chk_Entregadas.Checked Then
                     chk_Pendientes.Checked = False
                     chk_Ninguno.Checked = False
+                    chk_Rechazadas.Checked = False 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
                 End If
         End Select
 
@@ -183,28 +198,52 @@ Partial Class Siniestros_CartasChequeImpresion
     Private Sub btnGuardar_Click(sender As Object, e As EventArgs) Handles btnGuardar.Click
         Dim dtSelec As DataTable
         Dim msgError As String
-        Dim foliosError As String
+        'FJCP 10267 - CC - OPs Web_Cartas_Cheque Ini
+        Dim errorFolios As Boolean
+        Dim foliosErrorFecha As String
+        Dim foliosErrorMotivo As String
+        'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
         dtSelec = obtenerSeleccionados()
-        'Session("dtSelAct") = dtSelec 'FJCP
-        foliosError = ""
-
+        'FJCP 10267 - CC - OPs Web_Cartas_Cheque Ini
+        foliosErrorFecha = ""
+        foliosErrorMotivo = ""
+        errorFolios = False
+        msgError = ""
 
         If dtSelec.Rows.Count > 0 Then
-
-
-
             For Each row As DataRow In dtSelec.Rows
-                If row("FECHA ENTREGA").ToString() = "" Then
-                    foliosError = foliosError & row("FOLIO CARTA").ToString() & ", "
+                If row("ACCION").ToString() = 3 Then
+                    'If row("FECHA DE ENTREGA O RECHAZO").ToString() = "" Then
+                    '    foliosErrorFecha = foliosErrorFecha & row("FOLIO CARTA").ToString() & ", "
+                    'End If
+                    If row("MOTIVO RECHAZO").ToString() = "" Then
+                        foliosErrorMotivo = foliosErrorMotivo & row("FOLIO CARTA").ToString() & ", "
+                    End If
+                End If
+
+                If row("ACCION").ToString() = 4 Then
+                    If row("FECHA DE ENTREGA O RECHAZO").ToString() = "" Then
+                        foliosErrorFecha = foliosErrorFecha & row("FOLIO CARTA").ToString() & ", "
+                    End If
                 End If
             Next
 
+            If foliosErrorFecha <> "" Then
+                msgError = "Falta capturar fecha entrega para folio(s): " + foliosErrorFecha + "<br>"
+                errorFolios = True
+            End If
 
-            If foliosError <> "" Then
-                msgError = "Falta capturar fecha entrega para folio(s): " & foliosError
+            If foliosErrorMotivo <> "" Then
+                msgError = msgError + "Falta capturar motivo de rechazo para folio(s): " & foliosErrorMotivo
+                errorFolios = True
+            End If
+
+            If errorFolios Then
                 MuestraMensaje("Fecha de Entrega", msgError, TipoMsg.Advertencia)
                 Exit Sub
             End If
+            'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
+
 
             Dim dtActualiza = New DataTable
             ActualizaEntregada(dtSelec)
@@ -269,11 +308,26 @@ Partial Class Siniestros_CartasChequeImpresion
                     Dim fecha_entrega As TextBox
                     fecha_entrega = row.Cells(i).FindControl("txt_fec_entrega")
 
-                    If selecc.Checked Then
+                    'FJCP 10267 - CC - OPs Web_Cartas_Cheque Ini
+                    Dim mot_rechaazo As TextBox
+                    mot_rechaazo = row.Cells(i).FindControl("txt_mot_rech")
 
+                    Dim accion As DropDownList
+                    accion = row.Cells(i).FindControl("dropEstado")
+                    'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
+
+                    If selecc.Checked Then
+                        'FJCP 10267 - CC - OPs Web_Cartas_Cheque Ini
                         If i = 6 Then
+                            dtSel.Rows(indexTabla)(i) = accion.SelectedValue
+                            add = True
+                        ElseIf i = 7 Then
                             dtSel.Rows(indexTabla)(i) = fecha_entrega.Text.ToString()
                             add = True
+                        ElseIf i = 8 Then
+                            dtSel.Rows(indexTabla)(i) = mot_rechaazo.Text.ToString()
+                            add = True
+                            'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
                         Else
                             dtSel.Rows(indexTabla)(i) = row.Cells(i).Text
                             add = True
@@ -303,8 +357,20 @@ Partial Class Siniestros_CartasChequeImpresion
                 oParametros = New Dictionary(Of String, Object)
                 oParametros.Add("folio_carta_gmx", ValidarParametros(row("FOLIO CARTA")))
                 oParametros.Add("cod_ususario", Master.cod_usuario.ToString())
-                oParametros.Add("fec_entrega", Funciones.FormatearFecha(row("FECHA ENTREGA"), Funciones.enumFormatoFecha.YYYYMMDD))
-                oParametros.Add("status", 4)
+
+                'FJCP 10267 - CC - OPs Web_Cartas_Cheque Ini
+                If row("ACCION") = 3 Then
+                    'oParametros.Add("fec_proceso", Funciones.FormatearFecha(row("FECHA DE ENTREGA O RECHAZO"), Funciones.enumFormatoFecha.YYYYMMDD))
+                    oParametros.Add("status", 3)
+                    oParametros.Add("mot_rechazo", row("MOTIVO RECHAZO").ToString())
+                End If
+
+                If row("ACCION") = 4 Then
+                    oParametros.Add("fec_entrega", Funciones.FormatearFecha(row("FECHA DE ENTREGA O RECHAZO"), Funciones.enumFormatoFecha.YYYYMMDD))
+                    oParametros.Add("status", 4)
+                End If
+                'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
+
                 Funciones.ObtenerDatos("usp_datos_carta_ch_autoriza", oParametros)
             Next
 
@@ -333,16 +399,15 @@ Partial Class Siniestros_CartasChequeImpresion
                     Else
                         strFoliosRep = strFoliosRep & "," & folioRep.ToString()
                     End If
-
-
                 Next
 
                 Dim ws As New ws_Generales.GeneralesClient
-                Dim server As String = ws.ObtieneParametro(9)
+                'Dim server As String = ws.ObtieneParametro(9)
+                Dim server As String = ws.ObtieneParametro(3)
 
                 server = Replace(Replace(server, "@Reporte", "RepCartasCheque"), "@Formato", "PDF") & "&folio=@folio"
-                server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros")
-
+                'server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros") 
+                server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                 Funciones.EjecutaFuncion(String.Format("fn_ImprimirCartas('{0}','{1}');", server, strFoliosRep))
 
             Else
@@ -432,13 +497,15 @@ Partial Class Siniestros_CartasChequeImpresion
                                 If Trim(txt_nro_stro.Text) = "" Then
                                     If Trim(txt_cheque_a_nom.Text) = "" Then
                                         If chk_Entregadas.Checked = False Then
-                                            If chk_Pendientes.Checked = False Then
-                                                If chk_Ninguno.Checked = False Then
-                                                    MuestraMensaje("Validación", "Debe elegir al menos un filtro para la consulta", TipoMsg.Advertencia)
-                                                    ValidaFiltros = False
+                                            If chk_Rechazadas.Checked = False Then 'FJCP 10267 - CC - OPs Web_Cartas_Cheque
+                                                If chk_Pendientes.Checked = False Then
+                                                    If chk_Ninguno.Checked = False Then
+                                                        MuestraMensaje("Validación", "Debe elegir al menos un filtro para la consulta", TipoMsg.Advertencia)
+                                                        ValidaFiltros = False
+                                                    End If
                                                 End If
                                             End If
-                                            End If
+                                        End If
                                     End If
                                 End If
                             Else
@@ -537,5 +604,44 @@ Partial Class Siniestros_CartasChequeImpresion
         chk_Entregadas.Checked = False
     End Sub
 
+    Protected Sub dropEstado_SelectedIndexChanged(sender As Object, e As EventArgs)
+        'FJCP 10267 - CC - OPs Web_Cartas_Cheque Fin
+        Dim row As GridViewRow = DirectCast(DirectCast(sender, DropDownList).NamingContainer, GridViewRow)
+
+
+        Dim ddlRechazo = DirectCast(grd.Rows(row.RowIndex).FindControl("dropEstado"), DropDownList)
+        Dim txtRechazo = DirectCast(grd.Rows(row.RowIndex).FindControl("txt_mot_rech"), TextBox)
+        Dim txtFecEntregada = DirectCast(grd.Rows(row.RowIndex).FindControl("txt_fec_entrega"), TextBox)
+        Dim chkEntregada = DirectCast(grd.Rows(row.RowIndex).FindControl("Chk_Entregado"), CheckBox)
+
+
+
+
+        If ddlRechazo.SelectedValue = 3 Then
+            txtRechazo.Enabled = True
+            txtFecEntregada.Enabled = False
+
+            chkEntregada.Checked = True
+            txtFecEntregada.Text = DateTime.Now.ToString("dd/MM/yyyy")
+            txtRechazo.Focus()
+
+
+        ElseIf ddlRechazo.SelectedValue = 4 Then
+            txtFecEntregada.Enabled = True
+            txtFecEntregada.Focus()
+            txtRechazo.Enabled = False
+            txtRechazo.Text = ""
+            chkEntregada.Checked = True
+
+        Else
+            txtFecEntregada.Enabled = False
+            txtFecEntregada.Text = ""
+            txtFecEntregada.Enabled = False
+            txtRechazo.Text = ""
+            chkEntregada.Checked = False
+            txtRechazo.Enabled = False
+
+        End If
+    End Sub
 
 End Class

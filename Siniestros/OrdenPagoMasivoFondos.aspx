@@ -255,9 +255,11 @@
  
     <br />
 
+    <input type="text" id="txt_width" hidden="hidden" />
     <div class="row">
 
-        <table id="list47" >
+        <%--<table id="list47" >--%>
+        <table id="list47" width="98%">
         </table>
         <div id="plist47"></div>
     </div>

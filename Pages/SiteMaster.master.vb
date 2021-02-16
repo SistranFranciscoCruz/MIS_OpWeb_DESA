@@ -9,6 +9,7 @@ Partial Class Pages_SiteMaster
     Private config_poliza() As String
     Private DetalleUsuario() As String
     Public Event _btn_ConfirmaMail_Click()
+    Dim Tercero As New Tercero()
 
     Private Enum Filtros
         Poliza = 0
@@ -178,11 +179,11 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
-    Public WriteOnly Property Clase_Logo() As String
-        Set(ByVal value As String)
-            div_Logo.Attributes("class") = value
-        End Set
-    End Property
+    'Public WriteOnly Property Clase_Logo() As String
+    '    Set(ByVal value As String)
+    '        div_Logo.Attributes("class") = value
+    '    End Set
+    'End Property
 
     Public WriteOnly Property Clase_Form() As String
         Set(ByVal value As String)
@@ -190,11 +191,11 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
-    Public WriteOnly Property fecha_visible() As Boolean
-        Set(ByVal value As Boolean)
-            cuadro_fecha.Visible = value
-        End Set
-    End Property
+    'Public WriteOnly Property fecha_visible() As Boolean
+    '    Set(ByVal value As Boolean)
+    '        cuadro_fecha.Visible = value
+    '    End Set
+    'End Property
 
     Public Property mSeleccionados() As String
         Get
@@ -2121,6 +2122,14 @@ Partial Class Pages_SiteMaster
                     End If
 
                 Next
+                'FJCP MEJORAS 10290 PAGO INTERNACIONAL INI
+                If HiddenFieldPI.Value <> "" Then
+                    Funciones.EjecutaFuncion("llenarCpto2();")
+                End If
+                'FJCP MEJORAS 10290 PAGO TESOFE FIN
+                If txtCuentaBancariaT_stro.Text = Funciones.fn_EjecutaStr("usp_CargarDatosBancariosDepGob_stro @Accion = 2").ToString() Then
+                    MuestraMensaje("Dependencias", "Seleccione una dependencia", TipoMsg.Advertencia)
+                End If
 
                 Funciones.CerrarModal("#Transferencias_stro")
             Else
@@ -2281,48 +2290,68 @@ Partial Class Pages_SiteMaster
                     cmbBancoT_stro.SelectedValue = IIf(oValoresActuales("Banco") = String.Empty, cmbBancoT_stro.SelectedValue, oValoresActuales("Banco"))
                 End If
                 If (oValoresActuales("Fasttrack") = "SI") Then
-                        cmbTipoCuentaT_stro.SelectedValue = CInt(oValoresActuales("TipoCuenta"))
-                    Else
-                        cmbTipoCuentaT_stro.SelectedValue = IIf(oValoresActuales("TipoCuenta") = String.Empty, cmbTipoCuentaT_stro.SelectedValue, oValoresActuales("TipoCuenta"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        cmbMonedaT_stro.SelectedValue = CInt(oValoresActuales("Moneda"))
-                    Else
-                        cmbMonedaT_stro.SelectedValue = IIf(oValoresActuales("Moneda") = String.Empty, cmbMonedaT_stro.SelectedValue, oValoresActuales("Moneda"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        Me.txtSucursalT_stro.Text = oValoresActuales("Sucursal")
-                    Else
-                        Me.txtSucursalT_stro.Text = IIf(oValoresActuales("Sucursal").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Sucursal"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
+                    cmbTipoCuentaT_stro.SelectedValue = CInt(oValoresActuales("TipoCuenta"))
+                Else
+                    cmbTipoCuentaT_stro.SelectedValue = IIf(oValoresActuales("TipoCuenta") = String.Empty, cmbTipoCuentaT_stro.SelectedValue, oValoresActuales("TipoCuenta"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    cmbMonedaT_stro.SelectedValue = CInt(oValoresActuales("Moneda"))
+                Else
+                    cmbMonedaT_stro.SelectedValue = IIf(oValoresActuales("Moneda") = String.Empty, cmbMonedaT_stro.SelectedValue, oValoresActuales("Moneda"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    Me.txtSucursalT_stro.Text = oValoresActuales("Sucursal")
+                Else
+                    Me.txtSucursalT_stro.Text = IIf(oValoresActuales("Sucursal").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Sucursal"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
                     Me.txtBeneficiarioT_stro.Text = oValoresActuales("Beneficiario")
                 Else
-                        Me.txtBeneficiarioT_stro.Text = IIf(oValoresActuales("Beneficiario").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Beneficiario"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        Me.txtCuentaBancariaT_stro.Text = oValoresActuales("CuentaBancaria")
-                    Else
-                        Me.txtCuentaBancariaT_stro.Text = IIf(oValoresActuales("CuentaBancaria").ToString.Trim = String.Empty, String.Empty, oValoresActuales("CuentaBancaria"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        Me.txtCuentaBancariaT_stro_Confirmacion.Text = oValoresActuales("CuentaBancaria")
-                    Else
-                        Me.txtCuentaBancariaT_stro_Confirmacion.Text = IIf(oValoresActuales("CuentaBancaria").ToString.Trim = String.Empty, String.Empty, oValoresActuales("CuentaBancaria"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        Me.txtPlazaT_stro.Text = oValoresActuales("Plaza")
-                    Else
-                        Me.txtPlazaT_stro.Text = IIf(oValoresActuales("Plaza").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Plaza"))
-                    End If
-                    If (oValoresActuales("Fasttrack") = "SI") Then
-                        Me.txtAbaT_stro.Text = oValoresActuales("ABA")
-                    Else
-                        Me.txtAbaT_stro.Text = IIf(oValoresActuales("ABA").ToString.Trim = String.Empty, String.Empty, oValoresActuales("ABA"))
-                    End If
-
-                    cmbTipoCuentaT_stro.SelectedValue = 2
+                    Me.txtBeneficiarioT_stro.Text = IIf(oValoresActuales("Beneficiario").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Beneficiario"))
                 End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    Me.txtCuentaBancariaT_stro.Text = oValoresActuales("CuentaBancaria")
+                Else
+                    Me.txtCuentaBancariaT_stro.Text = IIf(oValoresActuales("CuentaBancaria").ToString.Trim = String.Empty, String.Empty, oValoresActuales("CuentaBancaria"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    Me.txtCuentaBancariaT_stro_Confirmacion.Text = oValoresActuales("CuentaBancaria")
+                Else
+                    Me.txtCuentaBancariaT_stro_Confirmacion.Text = IIf(oValoresActuales("CuentaBancaria").ToString.Trim = String.Empty, String.Empty, oValoresActuales("CuentaBancaria"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    Me.txtPlazaT_stro.Text = oValoresActuales("Plaza")
+                Else
+                    Me.txtPlazaT_stro.Text = IIf(oValoresActuales("Plaza").ToString.Trim = String.Empty, String.Empty, oValoresActuales("Plaza"))
+                End If
+                If (oValoresActuales("Fasttrack") = "SI") Then
+                    Me.txtAbaT_stro.Text = oValoresActuales("ABA")
+                Else
+                    Me.txtAbaT_stro.Text = IIf(oValoresActuales("ABA").ToString.Trim = String.Empty, String.Empty, oValoresActuales("ABA"))
+                End If
+
+                cmbTipoCuentaT_stro.SelectedValue = 2
+
+                'FJCP 10290 MEJORAS Folio OnBase ini
+                If oValoresActuales("tipoUsuario") <> 10 Then
+                    If oValoresActuales("fOnbase_edoCta").ToString.Trim <> "" Then
+                        Dim hrefOnBase As String
+                        linkOnBase.HRef = ""
+                        hrefOnBase = ""
+                        'cambiar a id 2 cuando se habilite el ws del folio onbase edo cta
+                        hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws @id = 2,  @folioOnbase = " & oValoresActuales("fOnbase_edoCta").ToString.Trim)
+                        linkOnBase.HRef = hrefOnBase
+                        lblFoliOnbaseEdoCtaDesc.Visible = True
+                        lblFoliOnbaseEdoCta.Visible = True
+                        lblFoliOnbaseEdoCta.Text = oValoresActuales("fOnbase_edoCta").ToString.Trim
+                        'FJCP 10290 MEJORAS Folio OnBase fin
+                    End If
+                Else
+                    lblFoliOnbaseEdoCtaDesc.Visible = False
+                    lblFoliOnbaseEdoCta.Visible = False
+                End If
+
+            End If
             'End If
 
 
@@ -2348,7 +2377,10 @@ Partial Class Pages_SiteMaster
                 cmbTipoCuentaT_stro.SelectedValue = 2
             End If
 
+
             hid_Control.Value = Control
+            'FJCP 10290 MEJORAS PAGO INTERNACIONAL 
+            hidCtaOriginal.Value = txtCuentaBancariaT_stro.Text.Trim()
 
             Session.Add("SubModWeb", "")
             Session("SubModWeb") = sn_submod_web
@@ -2359,5 +2391,419 @@ Partial Class Pages_SiteMaster
         End Try
 
     End Sub
+    Private Sub drTipoPers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles drTipoPers.SelectedIndexChanged
+        Dim valor As String
+        valor = drTipoPers.SelectedValue
+        valor = ""
+        If drTipoPers.SelectedValue = "F" Then
+            txt_apMatmTer.Enabled = True
+            txt_nombresmTer.Enabled = True
+        Else
+            txt_apMatmTer.Enabled = False
+            txt_nombresmTer.Enabled = False
+        End If
+    End Sub
+    Private Sub btnAcepmTer_Click(sender As Object, e As EventArgs) Handles btnAcepmTer.Click
+        Dim oDatos As DataSet
+        Dim oTabla As DataTable
+        Dim oParametros As New Dictionary(Of String, Object)
+        Dim dtResult As New DataTable
+        'ELIMNAR
+        'drTipoPers.SelectedValue = "J"
+        'txt_apPatmTer.Text = "SISTRAN TEST"
+        'txt_fecNacmTer.Text = "04/04/1995"
+        'txtRFCmTer.Text = "SIS950404KY7"
+        If ValidaDatos() Then
+            Tercero.sApellido1 = txt_apPatmTer.Text.Trim
+            Tercero.sApellido2 = txt_apMatmTer.Text.Trim
+            Tercero.sNombre = txt_nombresmTer.Text.Trim
+            Tercero.sNit = txtRFCmTer.Text.Trim
+            Tercero.vFecNacim = Funciones.FormatearFecha(txt_fecNacmTer.Text.Trim, Funciones.enumFormatoFecha.YYYYMMDD)
+            Tercero.sTipoPersona = drTipoPers.SelectedValue
+            If Tercero.RFC Then
+                If drTipoPers.SelectedValue = "F" Then
+                    oParametros.Add("txtApellido1", txt_apPatmTer.Text.Trim)
+                    oParametros.Add("txtApellido2", txt_apMatmTer.Text.Trim)
+                    oParametros.Add("txtNombre", txt_nombresmTer.Text.Trim)
+                    oParametros.Add("codTipoDoc", 1)
+                    oParametros.Add("nroDoc", txtRFCmTer.Text.Trim)
+                    oParametros.Add("nroNit", txtRFCmTer.Text.Trim)
+                    oParametros.Add("fecNac", Funciones.FormatearFecha(txt_fecNacmTer.Text.Trim, Funciones.enumFormatoFecha.YYYYMMDD))
+                    oParametros.Add("txtSexo", drSexo.SelectedValue)
+                    oParametros.Add("codEstCivil", 1)
+                    oParametros.Add("codTipoPersona", drTipoPers.SelectedValue)
+                    oParametros.Add("txtOrigen", "T")
+                    oParametros.Add("codOcupacion", -1)
+                    oParametros.Add("codUsuario", cod_usuario.ToString())
+                    oParametros.Add("nroEdad", hidEdadmTer.Value)
+                    oParametros.Add("dGenerales", 1)
+                Else
+                    oParametros.Add("txtApellido1", txt_apPatmTer.Text.Trim)
+                    oParametros.Add("codTipoDoc", 1)
+                    oParametros.Add("nroDoc", txtRFCmTer.Text.Trim)
+                    oParametros.Add("nroNit", txtRFCmTer.Text.Trim)
+                    oParametros.Add("txtSexo", "F")
+                    oParametros.Add("codEstCivil", 1)
+                    oParametros.Add("codTipoPersona", drTipoPers.SelectedValue)
+                    oParametros.Add("txtOrigen", "T")
+                    oParametros.Add("codUsuario", cod_usuario.ToString())
+                    oParametros.Add("nroEdad", hidEdadmTer.Value)
+                    oParametros.Add("dGenerales", 1)
+                End If
+                oDatos = Funciones.ObtenerDatos("usp_Alta_Upt_Tercero", oParametros)
+                oTabla = oDatos.Tables(0)
+                If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
+                    Dim codError As Integer
+                    Dim msgError As String
+                    Dim codTerceroNvo As Integer
+                    codTerceroNvo = oTabla.Rows(0)("codTercero")
+                    codError = oTabla.Rows(0)("snFlag")
+                    msgError = oTabla.Rows(0)("msg_err").ToString()
+                    If codError <> -1 Then
+                        Funciones.CerrarModal("#RegistroTerceros")
+                        Funciones.fn_Consulta("spS_CatalogosSIR @strCatalogo = 'BenTercero_stro', @Condicion = " + codTerceroNvo.ToString(), dtResult)
+                        hidCodTercero.Value = dtResult.Rows(0)("Clave")
+                        hidNomTercero.Value = dtResult.Rows(0)("Descripcion").ToString()
+                        hidrfcTercero.Value = dtResult.Rows(0)("OcultaCampo1").ToString()
+                        limpRegTerceros()
+                        Funciones.EjecutaFuncion("selecTercero();")
+                    Else
+                        MuestraMensaje("Validación", "Error: " + msgError + ". No se pudo grabar el tercero.", TipoMsg.Advertencia)
+                    End If
+                End If
+            End If
+        End If
+    End Sub
+    Private Function ValidaDatos() As Boolean
+        Dim msgError As String
+        msgError = ""
+        If drTipoPers.SelectedValue = "F" Then
+            If Trim(txt_apPatmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Apellido Paterno"
+            If Trim(txt_apMatmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Apellido Materno "
+            If Trim(txt_nombresmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Nombres "
+            If Trim(txt_fecNacmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Fecha Nacimiento "
+            If Trim(txtRFCmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "RFC "
+        Else
+            If Trim(txt_apPatmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Razón Social"
+            If Trim(txt_fecNacmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "Fecha Nacimiento "
+            If Trim(txtRFCmTer.Text) = "" Then msgError = msgError & IIf(msgError = "", "", ",") & "RFC "
+        End If
+        If msgError <> "" Then
+            MuestraMensaje("Valida campos", "Los campos " & msgError & "no puedes estar vacíos", TipoMsg.Advertencia)
+            Return False
+        End If
+        Return True
+    End Function
+    Private Sub btnCancTer_Click(sender As Object, e As EventArgs) Handles btnCancTer.Click
+        limpRegTerceros()
+        Funciones.CerrarModal("#RegistroTerceros")
+    End Sub
+    Private Sub limpRegTerceros()
+        drTipoPers.SelectedValue = "F"
+        txtRFCmTer.Text = ""
+        txt_apPatmTer.Text = ""
+        txt_apMatmTer.Text = ""
+        txt_nombresmTer.Text = ""
+        txt_fecNacmTer.Text = ""
+    End Sub
+
+    Private Sub chkPagoInter_CheckedChanged(sender As Object, e As EventArgs) Handles chkPagoInter.CheckedChanged
+        Dim dt As New DataTable
+        Dim A As String
+        If chkPagoInter.Checked Then
+
+            'hidCtaOriginal.Value = txtCuentaBancariaT_stro.Text.Trim()
+
+            Funciones.CerrarModal("#Transferencias_stro")
+            Funciones.AbrirModal("#PagoInternacional")
+
+            Funciones.fn_Consulta("usp_obt_pais_pago_inter", dt)
+            Funciones.LlenaDDL(drPaisPI, dt, "cod_pais", "txt_desc", 0, False)
+            drPaisPI.SelectedValue = -1
+
+
+        Else
+            txtCuentaBancariaT_stro.Text = hidCtaOriginal.Value
+            txtCuentaBancariaT_stro_Confirmacion.Text = hidCtaOriginal.Value
+
+        End If
+    End Sub
+    Private Sub btnPagoInternacionalAceptar_Click(sender As Object, e As EventArgs) Handles btnPagoInternacionalAceptar.Click
+
+        Try
+
+            If ValidaDatosPagoInter() Then
+
+                Dim ctaParam As String
+                ctaParam = Funciones.fn_EjecutaStr("usp_CargarDatosBancariosDepGob_stro @Accion = 10") 'FJCP MEJORAS PAGO INTERNACIONAL 
+                txtCuentaBancariaT_stro.Text = ctaParam
+                txtCuentaBancariaT_stro_Confirmacion.Text = ctaParam
+
+                Funciones.CerrarModal("#PagoInternacional")
+                Funciones.AbrirModal("#Transferencias_stro")
+                'Response.Redirect("Eliminar.aspx")
+
+            Else
+                MuestraMensaje("Validación", "Falta capturar campos", TipoMsg.Falla)
+            End If
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Private Sub btnPagoInternacionalCancelar_Click(sender As Object, e As EventArgs) Handles btnPagoInternacionalCancelar.Click
+
+        txtCuentaBancariaT_stro.Text = hidCtaOriginal.Value
+        txtCuentaBancariaT_stro_Confirmacion.Text = hidCtaOriginal.Value
+        Funciones.CerrarModal("#PagoInternacional")
+        Funciones.AbrirModal("#Transferencias_stro")
+        chkPagoInter.Checked = False
+        limpiarCtrlesPagoInter()
+        limpiarCtrlesTriangulado()
+    End Sub
+
+    Private Sub chkTrianguladoPI_CheckedChanged(sender As Object, e As EventArgs) Handles chkTrianguladoPI.CheckedChanged
+        If chkTrianguladoPI.Checked Then
+            txtTrianNomBancoPI.Enabled = True
+            txtTrianCuentaPI.Enabled = True
+            txtTrianAbaPI.Enabled = True
+        Else
+            txtTrianNomBancoPI.Enabled = False
+            txtTrianCuentaPI.Enabled = False
+            txtTrianAbaPI.Enabled = False
+        End If
+
+        limpiarCtrlesTriangulado()
+    End Sub
+
+    Private Sub drPaisPI_SelectedIndexChanged(sender As Object, e As EventArgs) Handles drPaisPI.SelectedIndexChanged
+        habilitarCntrlesPagoInter()
+    End Sub
+
+    Private Sub habilitarCntrlesPagoInter()
+        Dim codPais As Integer
+        Dim dt As New DataTable
+        codPais = drPaisPI.SelectedValue
+        Funciones.fn_Consulta("EXECUTE usp_habilita_ctrles_pago_inter @cod_Pais =" + codPais.ToString(), dt)
+
+        limpiarCtrlesPagoInter()
+
+        txtBancoPI.Enabled = IIf(dt.Rows(0)("sn_banco") = -1, True, False)
+        txtNroBancoPI.Enabled = IIf(dt.Rows(0)("sn_num_banco") = -1, True, False)
+        txtDomBancoPI.Enabled = IIf(dt.Rows(0)("sn_domicilio") = -1, True, False)
+        txtCuentaPI.Enabled = IIf(dt.Rows(0)("sn_cuenta") = -1, True, False)
+        txtAbaPI.Enabled = IIf(dt.Rows(0)("sn_aba_routing") = -1, True, False)
+        txtSwiftPI.Enabled = IIf(dt.Rows(0)("sn_swift") = -1, True, False)
+        txtTransitPI.Enabled = IIf(dt.Rows(0)("sn_transit") = -1, True, False)
+        txtIbanPI.Enabled = IIf(dt.Rows(0)("sn_iban") = -1, True, False)
+
+    End Sub
+    Private Sub limpiarCtrlesPagoInter()
+        txtBancoPI.Text = ""
+        txtNroBancoPI.Text = ""
+        txtDomBancoPI.Text = ""
+        txtCuentaPI.Text = ""
+        txtAbaPI.Text = ""
+        txtSwiftPI.Text = ""
+        txtTransitPI.Text = ""
+        txtIbanPI.Text = ""
+    End Sub
+    Private Sub limpiarCtrlesTriangulado()
+        txtTrianNomBancoPI.Text = ""
+        txtTrianCuentaPI.Text = ""
+        txtTrianAbaPI.Text = ""
+    End Sub
+
+
+    Private Function ValidaDatosPagoInter() As Boolean
+        Dim datosPagoInter As String
+        Dim concepto2 As String
+        Dim dt As New DataTable
+
+        'dt.Columns.Add("nro_OP")
+        datosPagoInter = drPaisPI.SelectedValue.ToString() + "|" +
+            txtBancoPI.Text.Trim() + "|" +
+            txtNroBancoPI.Text.Trim() + "|" +
+            txtDomBancoPI.Text.Trim() + "|" +
+            txtCuentaPI.Text.Trim() + "|" +
+            txtAbaPI.Text.Trim() + "|" +
+            txtSwiftPI.Text.Trim() + "|" +
+            txtTransitPI.Text.Trim() + "|" +
+            txtIbanPI.Text.Trim() + "|" +
+            IIf(chkTrianguladoPI.Checked = True, "-1", "0") + "|" +
+            txtTrianNomBancoPI.Text.Trim() + "|" +
+            txtTrianCuentaPI.Text.Trim() + "|" +
+            txtTrianAbaPI.Text.Trim()
+
+        dt.Columns.Add("cod_pais")
+        dt.Columns.Add("banco")
+        dt.Columns.Add("num_banco")
+        dt.Columns.Add("domicilio")
+        dt.Columns.Add("cuenta")
+        dt.Columns.Add("aba_routing")
+        dt.Columns.Add("swift")
+        dt.Columns.Add("transit")
+        dt.Columns.Add("iban")
+        dt.Columns.Add("triangulado")
+        dt.Columns.Add("banco_triang")
+        dt.Columns.Add("cuenta_triang")
+        dt.Columns.Add("aba_routing_triang")
+        Try
+            concepto2 = ""
+
+            'concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblPaisPI.Text.Trim() + ": " + drPaisPI.SelectedItem.ToString()
+
+
+            If drPaisPI.SelectedValue <> -1 Then
+
+                If txtBancoPI.Enabled = True Then
+                    If txtBancoPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblBancoPI.Text.Trim() + ": " + txtBancoPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtNroBancoPI.Enabled = True Then
+                    If txtNroBancoPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblNroBancoPI.Text.Trim() + ": " + txtNroBancoPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtDomBancoPI.Enabled = True Then
+                    If txtDomBancoPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblDomBancoPI.Text.Trim() + ": " + txtDomBancoPI.Text.Trim() + ", " + drPaisPI.SelectedItem.ToString()
+                        'concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblPaisPI.Text.Trim() + ": " + drPaisPI.SelectedItem.ToString()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtCuentaPI.Enabled = True Then
+                    If txtCuentaPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblCuentaPI.Text.Trim() + ": " + txtCuentaPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtAbaPI.Enabled = True Then
+                    If txtAbaPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblAbaPI.Text.Trim() + ": " + txtAbaPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtSwiftPI.Enabled = True Then
+                    If txtSwiftPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblSwiftPI.Text.Trim() + ": " + txtSwiftPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+                'kjkj
+                If txtTransitPI.Enabled = True Then
+                    If txtTransitPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTransitPI.Text.Trim() + ": " + txtTransitPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+                If txtIbanPI.Enabled = True Then
+                    If txtIbanPI.Text <> "" Then
+                        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblIbanPI.Text.Trim() + ": " + txtIbanPI.Text.Trim()
+                    Else
+                        Return False
+                    End If
+                End If
+
+
+                'If txtIbanPI.Enabled = True Then
+                '    If txtIbanPI.Text <> "" Then
+                '        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTrianguladoPI.Text.Trim() + ": " + chkTrianguladoPI.Text.Trim()
+                '    Else
+                '        Return False
+                'End If
+                'End If
+
+                'If chkTrianguladoPI.Checked Then
+                '    'concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTrianguladoPI.Text.Trim() + ": " + chkTrianguladoPI.Text.Trim()
+                '    concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + "Pago Triangulado, se anexa información de banco: "
+
+                '    If txtTrianNomBancoPI.Text <> "" Then
+                '        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTrianNomBancoPI.Text.Trim() + ": " + txtTrianNomBancoPI.Text.Trim()
+                '    Else
+                '        Return False
+                '    End If
+
+                '    If txtTrianCuentaPI.Text <> "" Then
+                '        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTrianCuentaPI.Text.Trim() + ": " + txtTrianCuentaPI.Text.Trim()
+                '    Else
+                '        Return False
+                '    End If
+                '    If txtTrianAbaPI.Text <> "" Then
+                '        concepto2 = concepto2 + IIf(concepto2 = "", "", "-") + lblTrianAbaPI.Text.Trim() + ": " + txtTrianAbaPI.Text.Trim()
+                '    Else
+                '        Return False
+                '    End If
+                'End If
+
+
+                If chkTrianguladoPI.Checked Then
+
+                    If txtTrianNomBancoPI.Text.Trim() = "" Then
+                        Return False
+                    End If
+
+                    If txtTrianCuentaPI.Text.Trim() = "" Then
+                        Return False
+                    End If
+
+                    If txtTrianAbaPI.Text.Trim() = "" Then
+                        Return False
+                    End If
+                End If
+
+                Dim row As DataRow = dt.NewRow()
+
+                row("cod_pais") = drPaisPI.SelectedValue
+                row("banco") = txtBancoPI.Text.Trim()
+                row("num_banco") = txtNroBancoPI.Text.Trim()
+                row("domicilio") = txtDomBancoPI.Text.Trim()
+                row("cuenta") = txtCuentaPI.Text.Trim()
+                row("aba_routing") = txtAbaPI.Text.Trim()
+                row("swift") = txtSwiftPI.Text.Trim()
+                row("transit") = txtTransitPI.Text.Trim()
+                row("iban") = txtIbanPI.Text.Trim()
+                row("triangulado") = IIf(chkTrianguladoPI.Checked = True, -1, 0)
+                row("banco_triang") = txtTrianNomBancoPI.Text.Trim()
+                row("cuenta_triang") = txtTrianCuentaPI.Text.Trim()
+                row("aba_routing_triang") = txtTrianAbaPI.Text.Trim()
+                dt.Rows.Add(row)
+
+            Else
+                Return False
+            End If
+
+            HiddenFieldPI.Value = concepto2
+            hidDatosPagoInter.Value = datosPagoInter
+
+            Session("dtPI") = ""
+            Session("dtPI") = dt
+
+
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+
+    End Function
+
+
 End Class
 

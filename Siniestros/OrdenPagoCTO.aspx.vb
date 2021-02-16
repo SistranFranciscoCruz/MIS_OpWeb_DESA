@@ -2024,7 +2024,7 @@ Partial Class Siniestros_OrdenPago
                             Dim ws As New ws_Generales.GeneralesClient
                             Dim server As String = ws.ObtieneParametro(3)
                             server = Replace(Replace(server, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&nro_op=@nro_op"
-                            server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros")
+                            server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                             server = Replace(server, "OrdenPago", "OrdenPago_stro")
                             'Funciones.EjecutaFuncion("fn_ImprimirOrden('" & server & "','" & "234777" & "');")
                             Funciones.EjecutaFuncion(String.Format("fn_ImprimirOrden('{0}','{1}');", server, CStr(oDatos.Tables(oDatos.Tables.Count - 1).Rows(0).Item("nro_op"))))
@@ -2083,7 +2083,7 @@ Partial Class Siniestros_OrdenPago
                                 Dim ws As New ws_Generales.GeneralesClient
                                 Dim server As String = ws.ObtieneParametro(3)
                                 server = Replace(Replace(server, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&nro_op=@nro_op"
-                                server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros")
+                                server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                                 server = Replace(server, "OrdenPago", "OrdenPago_stro")
                                 'Funciones.EjecutaFuncion("fn_ImprimirOrden('" & server & "','" & "234777" & "');")
                                 Funciones.EjecutaFuncion(String.Format("fn_ImprimirOrden('{0}','{1}');", server, CStr(oDatos.Tables(oDatos.Tables.Count - 1).Rows(0).Item("nro_op"))))
@@ -2147,7 +2147,7 @@ Partial Class Siniestros_OrdenPago
                         Dim ws As New ws_Generales.GeneralesClient
                         Dim server As String = ws.ObtieneParametro(3)
                         server = Replace(Replace(server, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&nro_op=@nro_op"
-                        server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros")
+                        server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                         server = Replace(server, "OrdenPago", "OrdenPago_stro")
                         'Funciones.EjecutaFuncion("fn_ImprimirOrden('" & server & "','" & "234777" & "');")
                         Funciones.EjecutaFuncion(String.Format("fn_ImprimirOrden('{0}','{1}');", server, CStr(oDatos.Tables(oDatos.Tables.Count - 1).Rows(0).Item("nro_op"))))

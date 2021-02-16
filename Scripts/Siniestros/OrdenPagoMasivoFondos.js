@@ -1,27 +1,29 @@
 ﻿jQuery(document).ready(function () {
 
 
+    var outerwidth = $("#list47").width();
+    $("#txt_width").val(outerwidth)
 
 
-   
-    
+
+
     var res = { '0': 'Sin Informacion' };
-    var Tipo_Pago = { '0':'Seleccione Opcion' , '1': 'CHEQUE', '2': 'TRANSFERENCIA'  };
+    var Tipo_Pago = { '0': 'Seleccione Opcion', '1': 'CHEQUE', '2': 'TRANSFERENCIA' };
 
 
     $("#btn_Reporte").click(function () {
 
-  
+
         $("#btn_Guardar").addClass("hidden");
         $("[id*=btn_Enviar]").addClass("hidden");
-        $("[id*=btn_Revisar]").addClass("hidden");  
-    
-        
+        $("[id*=btn_Revisar]").addClass("hidden");
+
+
         var txt_fecha_ini = $("[id*=txt_fecha_ini]").val();
 
         var txt_fecha_fin = $("[id*=txt_fecha_fin]").val();
 
-        
+
 
         var Folio_OnBase = $("[id*=txt_folio_onbase_Desde]").val();
 
@@ -40,13 +42,11 @@
         var cod_analista = $("[id*=cmbAnalistaSolicitante]").val();
         var VariasFacturas = $("[id*=chkVariasFacturas]").val();
         var FondosSinIVA = $("[id*=chkFondosSinIVA]").val();
-        
-        if (VariasFacturas == 'on')
-        {            
+
+        if (VariasFacturas == 'on') {
             VariasFacturas = "Y"
         }
-        else
-        {
+        else {
             VariasFacturas = "N"
         }
 
@@ -54,14 +54,12 @@
         if (FondosSinIVA == 'on') {
             FondosSinIVA = "Y"
         }
-        else
-        {
+        else {
             FondosSinIVA = "N"
         }
 
-        
-        if (txt_fecha_fin == "")
-        {
+
+        if (txt_fecha_fin == "") {
             fn_MuestraMensaje("Atencion", "Favor de capturar el rango Fecha de aceptación del documento", 0);
             return;
         }
@@ -76,14 +74,14 @@
         $("#loading").removeClass("hidden");
         $("#list47").jqGrid("clearGridData");
         $("#list47").jqGrid("GridUnload")
-        
 
-        
-        
+
+
+
 
         $.ajax({
-            url: "../Siniestros/OrdenPagoMasivo.ashx?fecha_ini=" + txt_fecha_ini + "&fecha_fin=" + txt_fecha_fin + "&PagarA=" + PagarA + "&Folio_OnBase=" + Folio_OnBase + "&Folio_OnBase_hasta=" + Folio_OnBase_hasta + "&TipoPago=" + TipoPago + "&TipoComprobante=" + TipoComprobante + "&MonedaPago=" + MonedaPago + "&RFC=" + RFC + "&SubSiniestro=" + SubSiniestro + "&VariasFacturas" + VariasFacturas + "&cod_analista=" + cod_analista + "&FondosSinIVA=" + FondosSinIVA ,
-            type: "POST",            
+            url: "../Siniestros/OrdenPagoMasivo.ashx?fecha_ini=" + txt_fecha_ini + "&fecha_fin=" + txt_fecha_fin + "&PagarA=" + PagarA + "&Folio_OnBase=" + Folio_OnBase + "&Folio_OnBase_hasta=" + Folio_OnBase_hasta + "&TipoPago=" + TipoPago + "&TipoComprobante=" + TipoComprobante + "&MonedaPago=" + MonedaPago + "&RFC=" + RFC + "&SubSiniestro=" + SubSiniestro + "&VariasFacturas" + VariasFacturas + "&cod_analista=" + cod_analista + "&FondosSinIVA=" + FondosSinIVA,
+            type: "POST",
             success: function (result) {
 
 
@@ -124,7 +122,7 @@
     $("#btn_Guardar").click(function () {
 
         var myGrid = $('#list47');
-        var myArray = [];  
+        var myArray = [];
         var myIDs = myGrid.jqGrid('getDataIDs');
         $("#loading").removeClass("hidden");
 
@@ -135,9 +133,9 @@
         ////var selectedRowData = myGrid.getRowData(selectedRowId);
         ////var selectedRowIds = myGrid.jqGrid("getGridParam", 'selarrrow');
         ////var selectedRowData;
-        
 
-     
+
+
 
         ////for (selectedRowIndex = 0; selectedRowIndex < selectedRowIds.length; selectedRowIndex++) {
 
@@ -180,8 +178,7 @@
             myRow.Folio_Onbase = myRow.FolioOnbaseHidden
             myRow.Folio_Onbase_cuenta = myRow.Folio_Onbase_cuentaHidden
             myRow.Fec_pago = Fec_pago;
-            if (myRow.Concepto_Pago.indexOf('input') > 0)
-            {
+            if (myRow.Concepto_Pago.indexOf('input') > 0) {
                 myRow.Concepto_Pago = "";
             }
 
@@ -207,21 +204,20 @@
 
 
             myArray[i] = myRow;
-            
+
         }
 
         var json = JSON.stringify(myArray)
-        if (txt_NumLote == "")
-        {
+        if (txt_NumLote == "") {
             txt_NumLote = "0";
         }
 
 
 
-        
+
         $.ajax({
-            url: "../LocalServices/OrdenPagoMasiva.asmx/SetOP" ,
-            data: "{ 'myArray': " + json + ",'Lote':"+txt_NumLote+"}",
+            url: "../LocalServices/OrdenPagoMasiva.asmx/SetOP",
+            data: "{ 'myArray': " + json + ",'Lote':" + txt_NumLote + "}",
             dataType: "json",
             type: "POST",
             contentType: "application/json; charset=utf-8",
@@ -233,19 +229,19 @@
                 $("#loading2").addClass("hidden");
                 $("[id*=btn_Revisar]").removeClass("hidden");
                 $("[id*=btn_Enviar]").removeClass("hidden");
-           
+
             },
             error: function (response) {
 
                 $("#loading").addClass("hidden");
-                
+
                 fn_MuestraMensaje('Error', response.responseText, 0, "")
-                
+
             },
         });
 
 
-     
+
 
 
     });
@@ -259,20 +255,20 @@
         var txt_NumLote = $("[id*=txt_NumLote]").val();
         $("#btn_Guardar").addClass("hidden");
         $("[id*=btn_Enviar]").addClass("hidden");
-        $("[id*=btn_Revisar]").addClass("hidden");        
-       
-
-        
+        $("[id*=btn_Revisar]").addClass("hidden");
 
 
-        
+
+
+
+
         if (txt_NumLote == "") {
             fn_MuestraMensaje("Atencion", "Favor de capturar el Numero de lote a recuperar", 0);
             return;
         }
 
 
-        
+
 
 
 
@@ -281,7 +277,7 @@
         $("#list47").jqGrid("GridUnload")
         var lastsel2;
 
-    
+
 
 
         $.ajax({
@@ -292,7 +288,7 @@
             contentType: "application/json; charset=utf-8",
             success: function (result) {
 
-              
+
 
                 var mydata = $.parseJSON(result.d);
                 $("[id*=txtFechaEstimadaPago]").val(mydata[0].Fec_pago);
@@ -328,23 +324,23 @@
 
     });
 
-   
+
 
     function LoadGrid(mydata) {
         var lastsel2;
         var lastSel = -1;
-    
+
         jQuery("#list47").jqGrid({
-    
+
             data: mydata,
             datatype: "local",
             height: 280,
-            width: 1024,
+            width: $("#txt_width").val(),
             rowNum: 8000,
-            rowList: [10, 20, 30],           
-            colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_concepto_pago', 'Concepto de pago', 'cod_clas_Pago', 'Clase de Pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden','Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '','','Poliza','Fec_pago','Accion'],
+            rowList: [10, 20, 30],
+            colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_concepto_pago', 'Concepto de pago', 'cod_clas_Pago', 'Clase de Pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', 'Fec_pago', 'Accion'],
             colModel: [
-                
+
                 { name: 'Folio_Onbase', index: 'Folio_Onbase', width: 100, frozen: false },
                 { name: 'Num_Pago', index: 'Num_Pago', width: 100 },
                 { name: 'Tipo_comprobante', index: 'Tipo_comprobante', width: 182 },
@@ -453,7 +449,7 @@
 
 
 
-                { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 45 , hidden: true },
+                { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 45, hidden: true },
                 {
                     name: 'Clase_pago',
                     hidden: true,
@@ -469,7 +465,7 @@
                     editoptions: {
                         value: res,
 
-                           dataEvents: [
+                        dataEvents: [
                             {
                                 type: 'change',
                                 fn: function (e) {
@@ -496,13 +492,13 @@
                                 }
                             }
                         ]
-                        },
+                    },
 
 
 
 
 
-                    
+
 
                 }
                 ,
@@ -557,15 +553,15 @@
 
 
 
-                
-   
+
+
 
 
 
 
                 {
                     name: 'myac', width: 60, fixed: true, sortable: false, resize: false, formatter: 'actions',
-                    formatoptions: { keys: true }, frozen: false 
+                    formatoptions: { keys: true }, frozen: false
                 },
 
 
@@ -573,7 +569,7 @@
             onSelectRow: function (id) {
                 if (id && id !== lastsel2) {
                     jQuery('#list47').jqGrid('restoreRow', lastsel2);
-                   // jQuery('#list47').jqGrid('editRow', id, true);
+                    // jQuery('#list47').jqGrid('editRow', id, true);
                     lastsel2 = id;
                 }
             },
@@ -604,18 +600,18 @@
                     jQuery("#list47").setColProp('Importe', { editable: true });
                     jQuery("#list47").setColProp('Importe_concepto', { editable: true });
 
-                    
+
                 }
 
 
 
                 jQuery("#list47").editRow(id, true, null, null, '../LocalServices/OrdenPagoMasiva.asmx/Apoyo', null,
                     function (rowid, response) {  // aftersavefunc
-                      //  grid.setColProp('State', { editoptions: { value: states } });
+                        //  grid.setColProp('State', { editoptions: { value: states } });
 
                         jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: false });
-                        jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: false });                                               
-                        
+                        jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: false });
+
                     });
                 return;
             },
@@ -631,10 +627,10 @@
             multiselect: false,
             rownumbers: true,
             editurl: '../LocalServices/OrdenPagoMasiva.asmx/Apoyo',
-            
+
             ajaxSelectOptions: {
                 error: function (xhr, status, error) {
-                    
+
                     alert(error);
                 }
             },
@@ -643,16 +639,16 @@
 
         jQuery("#list47").jqGrid('setFrozenColumns')
 
-      
 
 
-        
+
+
 
         $("#loading").addClass("hidden");
         $("#btn_Guardar").removeClass("hidden");
- 
 
-        
+
+
 
 
 
@@ -679,8 +675,8 @@
                     { name: 'Num_Pago', index: 'Num_Pago', width: 100 },
                     { name: 'Tipo_comprobante', index: 'Tipo_comprobante', width: 182 },
                     { name: 'PagarA', index: 'PagarA', width: 90 },
-                    { name: 'CodigoCliente', index: 'CodigoCliente', width: 90, editable: true},
-                    { name: 'RFC', index: 'RFCc', width: 120 ,editable:true},
+                    { name: 'CodigoCliente', index: 'CodigoCliente', width: 90, editable: true },
+                    { name: 'RFC', index: 'RFCc', width: 120, editable: true },
                     { name: 'Nombre_Razon_Social', index: 'Nombre_Razon_Social', width: 300 },
                     { name: 'AltaTercero', index: 'AltaTercero', width: 40 },
 

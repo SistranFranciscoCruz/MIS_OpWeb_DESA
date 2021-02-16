@@ -1,6 +1,40 @@
 ﻿$(document).ready(function () {
     $("#contenedor_principal").addClass("table OP_stro");
     $("#lbl_Titulo").text("SINIESTROS");
+
+    //JLC Mejoras Tipo de Cambio Pactado - Inicio 
+    $("#btn_Aceptar").click(function () {
+
+        var txt_tipoCambioConsultado = $("[id*=txt_tipoCambioConsultado]").val();
+
+        $("[id*=txtTipoCambio]").val(txt_tipoCambioConsultado);
+
+    });
+    //JLC Mejoras Tipo de Cambio Pactado -Fin
+
+    //var bPreguntar = true;
+    //window.onunload = eliminar;
+    window.onbeforeunload = eliminar;
+    function eliminar() { //FJCP 10290 MEJORAS FOLIO BLOQUEADO PARA DISTINTOS USUARIOS A LA VEZ
+        //if (bPreguntar)
+        //    return "¿El folio bloqueado se liberará?";
+        var usuario = $("[id*=hidCodUsuario]").val();
+        var usuarioo = usuario;
+        alert(usuario);
+        $.ajax({
+            url: "../LocalServices/OrdenPagoMasiva.asmx/folioOnbaseBloqueado",
+            data: "{ 'codUsuario': '" + usuario + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                return;
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
 });
 
 $("body").on("click", ".contraer", function () {
@@ -40,7 +74,7 @@ $("body").on("change", "[id*=cmbTipoUsuario]", function () {
 
 $("body").on('focusout', '[id*=txtBeneficiario_stro]', function (e) {
 
-    if ($("[id*=cmbTipoUsuario]").val() == "10" ) { //Asegurado o Proveedor
+    if ($("[id*=cmbTipoUsuario]").val() == "10") { //Asegurado o Proveedor
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
     }
     else {
@@ -51,7 +85,7 @@ $("body").on('focusout', '[id*=txtBeneficiario_stro]', function (e) {
 
 $("body").on('focusout', '[id*=txtRFC]', function (e) {
 
-    if ($("[id*=cmbTipoUsuario]").val() == "10" ) { //Asegurado o Proveedor
+    if ($("[id*=cmbTipoUsuario]").val() == "10") { //Asegurado o Proveedor
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
     }
     else {
@@ -62,7 +96,7 @@ $("body").on('focusout', '[id*=txtRFC]', function (e) {
 
 $("body").on('keydown', '[id*=txtBeneficiario_stro]', function (e) {
 
-    if ($("[id*=cmbTipoUsuario]").val() == "10" ) { //Asegurado o Proveedor
+    if ($("[id*=cmbTipoUsuario]").val() == "10") { //Asegurado o Proveedor
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
     }
     else {
@@ -180,7 +214,7 @@ function ValidarBeneficiario() {
 
 function fn_ImprimirOrden(Server, strOrden) {
     var nro_op = strOrden.split(",");
-    for (i = 0 ; i < nro_op.length; i++) {
+    for (i = 0; i < nro_op.length; i++) {
         window.open(Server.replace('@nro_op', nro_op[i]));
     }
 }
@@ -245,3 +279,40 @@ function CargarBeneficiario(e) {
 
 
 
+function FormatCurrency(ctrlx) {
+
+    //if (event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40) {
+    //    return;
+    //}
+
+    //var ctrl = $("[id*=txt_pago]");
+    var ctrl = $("#cph_principal_grd_txt_pago_" + ctrlx);
+
+    var val = ctrl.val();
+
+
+    var x = val.indexOf(",");
+    if (x > 0) {
+        val = val.replace(/,/g, "")
+    }
+    ctrl.value = "";
+    val += '';
+    x = val.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+
+    var rgx = /(\d+)(\d{3})/;
+
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+
+    //ctrl.value = x1 + x2;
+    ctrl.val(x1 + x2);
+
+
+}
+
+function CheckNumeric() {
+    return event.keyCode >= 48 && event.keyCode <= 57;
+} 

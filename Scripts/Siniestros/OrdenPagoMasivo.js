@@ -3,6 +3,8 @@ jQuery(document).ready(function () {
 
 
 
+    var outerwidth = $("#list47").width();
+    $("#txt_width").val(outerwidth)
 
    
     
@@ -358,7 +360,7 @@ jQuery(document).ready(function () {
                                 datatype: "local",
 
                                 height: 280,
-                                width: 1024,
+                                   width: $("#txt_width").val(),
                                 rowNum: 8000,
                                 rowList: [10, 20, 30],
                                 colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden','Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '','','Poliza','','Accion'],

@@ -429,9 +429,9 @@ Partial Class Siniestros_CancelacionOpsFondos
 
                 Dim ws As New ws_Generales.GeneralesClient
 
-                server = ws.ObtieneParametro(9)
+                server = ws.ObtieneParametro(3)
                 server = Replace(Replace(server, "@Reporte", "OrdenPago"), "@Formato", "PDF") & "&nro_op=@nro_op"
-                server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros")
+                server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                 server = Replace(server, "OrdenPago", "OrdenPago_stro")
 
 

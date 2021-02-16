@@ -26,18 +26,18 @@
                             <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="20%">Folio Carta</asp:Label>
                             <asp:TextBox runat="server" ID="txt_folio_desde" CssClass="col-md-1 estandar-control" Width="36%" onkeypress="return soloNumeros(event)" PlaceHolder="Ej: 10"></asp:TextBox>
 
-                               <asp:Label runat="server" class="col-md-1 etiqueta-control">A</asp:Label>
+                            <asp:Label runat="server" class="col-md-1 etiqueta-control">A</asp:Label>
                             <asp:TextBox runat="server" ID="txt_folio_hasta" CssClass="col-md-1 estandar-control" Width="35.5%" onkeypress="return soloNumeros(event)" PlaceHolder="Folio hasta"></asp:TextBox>
 
                         </div>
 
-                        <div class="col-md-6">                          
+                        <div class="col-md-6">
                         </div>
                     </div>
 
                     <div class="clear padding5"></div>
 
-                    <div class="row">                        
+                    <div class="row">
                         <div class="col-md-6">
 
                             <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="20%">Num Cheque</asp:Label>
@@ -49,11 +49,11 @@
 
                         <div class="col-md-6">
 
-                            <asp:label runat="server" class="col-md-1 etiqueta-control" Width="25%">Fecha Genera</asp:label>
-                            <asp:TextBox runat="server" ID="txt_fec_gen_desde" CssClass="col-md-1 estandar-control Fecha Centro" Width="33.2%" ></asp:TextBox>
+                            <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="25%">Fecha Genera</asp:Label>
+                            <asp:TextBox runat="server" ID="txt_fec_gen_desde" CssClass="col-md-1 estandar-control Fecha Centro" Width="33.2%"></asp:TextBox>
 
-                            <asp:label runat="server" class="col-md-1 etiqueta-control">A</asp:label>
-                            <asp:TextBox runat="server" ID="txt_fec_gen_hasta" CssClass="estandar-control Fecha Centro" Width="33.2%" ></asp:TextBox>
+                            <asp:Label runat="server" class="col-md-1 etiqueta-control">A</asp:Label>
+                            <asp:TextBox runat="server" ID="txt_fec_gen_hasta" CssClass="estandar-control Fecha Centro" Width="33.2%"></asp:TextBox>
                         </div>
                     </div>
 
@@ -75,35 +75,45 @@
 
                     <div class="clear padding20"></div>
 
-                    <div class="row cuadro-subtitulo"  style="text-align: center">
+                    <div class="row cuadro-subtitulo" style="text-align: center">
                         <div class="col-md-3"></div>
                         <div class="col-md-6" style="text-align: center">
-                                <table style="width:100%; text-align:center">
-                                    <tr>
-                                        <td></td>
-                                        <td><asp:label runat="server" class="etiqueta-control">Estatus:</asp:label></td>
-                                        
-                                       <%--  <td><asp:RadioButton runat="server" ID="chk_Rechazadas" Text="&nbspRechazadas" CssClass="etiqueta-control"  Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Rechazadas_CheckedChanged" /></td>--%>
-                                        
-                                        <td><asp:RadioButton runat="server" ID="chk_Ninguno" Text="&nbspTodas" CssClass="etiqueta-control" Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Ninguno_CheckedChanged"/></td>
+                            <table style="width: 100%; text-align: center">
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <asp:Label runat="server" class="etiqueta-control">Estatus:</asp:Label>
+                                    </td>
 
-                                        <td><asp:RadioButton runat="server" ID="chk_Pendientes" Text="&nbspPendientes de Entregar" CssClass="etiqueta-control" Width="160px" AutoPostBack="true" OnCheckedChanged="chk_Pendientes_CheckedChanged" /></td>                                      
-                                        <td><asp:RadioButton runat="server" ID="chk_Entregadas"  Text="&nbspEntregadas" CssClass="etiqueta-control" Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Entregadas_CheckedChanged" /></td>                                                                               
-                                    </tr>
-                                </table>
-                                
-                            </div>
+                                    <td>
+                                        <asp:RadioButton runat="server" ID="chk_Ninguno" Text="&nbspTodas" CssClass="etiqueta-control" Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Ninguno_CheckedChanged" />
+                                    </td>
+
+                                    <td>
+                                        <asp:RadioButton runat="server" ID="chk_Pendientes" Text="&nbspPendientes de Entregar" CssClass="etiqueta-control" Width="160px" AutoPostBack="true" OnCheckedChanged="chk_Pendientes_CheckedChanged" />
+                                    </td>
+
+                                    <td>
+                                        <asp:RadioButton runat="server" ID="chk_Entregadas" Text="&nbspEntregadas" CssClass="etiqueta-control" Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Entregadas_CheckedChanged" />
+                                    </td>
+
+                                    <%--FJCP 10267 - CC - OPs Web_Cartas_Cheque--%>
+                                    <td>
+                                        <asp:RadioButton runat="server" ID="chk_Rechazadas" Text="&nbspRechazadas" CssClass="etiqueta-control" Width="100px" AutoPostBack="true" OnCheckedChanged="chk_Rechazadas_CheckedChanged" />
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
                         <div class="col-md-3"></div>
                     </div>
-
-
                     <div class="padding5"></div>
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
     </div>
 
-   <div style="width: 100%; text-align: right;" >
+    <div style="width: 100%; text-align: right;">
         <div class="padding10">
             <asp:UpdatePanel runat="server" ID="upBusqueda">
                 <ContentTemplate>
@@ -113,7 +123,7 @@
                             <img class="btn-buscar"/>&nbsp Buscar
                         </span>
                     </asp:LinkButton>
-                     <asp:LinkButton ID="btnLimpiar" runat="server" class="btn botones" BorderWidth="2" BorderColor="White" Width="130px">
+                    <asp:LinkButton ID="btnLimpiar" runat="server" class="btn botones" BorderWidth="2" BorderColor="White" Width="130px">
                         <span>
                             <img class="btn-limpiar"/>&nbsp&nbsp Limpiar Filtros
                         </span>
@@ -124,69 +134,87 @@
         </div>
     </div>
 
-    
+
     <div class="padding5">
         <asp:UpdatePanel runat="server" ID="updGrd" UpdateMode="Conditional" Width="25%">
             <ContentTemplate>
-                <asp:Panel runat="server" ID="pnlUsuario" Width="99%" Height="280" ScrollBars="Auto" >
-                    <div style="width: 99%; text-align: right;" class="padding10" >
-                        <asp:GridView ID="grd" runat="server" AutoGenerateColumns="False" CssClass="table grid-view table-condensed" Font-Size="11px" GridLines="Vertical" HeaderStyle-CssClass="header" Height="35px" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" AlternatingRowStyle-CssClass="altern">                          
+                <asp:Panel runat="server" ID="pnlUsuario" Width="99%" Height="280" ScrollBars="Auto">
+                    <div style="width: 99%; text-align: right;" class="padding10">
+                        <asp:GridView ID="grd" runat="server" AutoGenerateColumns="False" CssClass="table grid-view table-condensed" Font-Size="11px" GridLines="Vertical" HeaderStyle-CssClass="header" Height="35px" HorizontalAlign="Center" ShowHeaderWhenEmpty="True" AlternatingRowStyle-CssClass="altern">
                             <Columns>
 
-                                
-
-                               <%-- <asp:BoundField DataField="folio_carta" HeaderText="FOLIO" ItemStyle-Width="0px" HeaderStyle-Width="0px">
+                                <%-- <asp:BoundField DataField="folio_carta" HeaderText="FOLIO" ItemStyle-Width="0px" HeaderStyle-Width="0px">
                                 <ControlStyle Font-Size="0px" />
                                 <FooterStyle Font-Size="0px" />
                                 <HeaderStyle Font-Size="0px" HorizontalAlign="Center" />
                                 <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Font-Size="0px" />
                                 </asp:BoundField>--%>
 
-                                <asp:TemplateField HeaderText="IMPRIMIR" ItemStyle-HorizontalAlign="Center" ShowHeader="False" >
+                                <asp:TemplateField HeaderText="IMPRIMIR" ItemStyle-HorizontalAlign="Center" ShowHeader="False">
                                     <ItemTemplate>
-                                    <asp:CheckBox ID="chk_Print" runat="server" Checked="False"  />
-                                </ItemTemplate>
-                                     <HeaderStyle Font-Size="12px" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-                                                                
-                                <asp:BoundField DataField="folio_carta_gmx" HeaderText="FOLIO CARTA">
-                                <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
-                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
-                                </asp:BoundField>
-
-                                <asp:BoundField DataField="imp_total" DataFormatString="{0:N2}" HeaderStyle-HorizontalAlign="Center" HeaderText="MONTO TOTAL">
-                                <HeaderStyle Font-Size="12px" />
-                                <ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" />
-                                </asp:BoundField>
-
-                                <asp:BoundField DataField="fecha_creacion" DataFormatString="{0:dd/MM/yyyy}" HeaderText="FECHA GENERADA">
-                                <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
-                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
-                                </asp:BoundField>
-
-                                <asp:BoundField DataField="txt_status" HeaderText="ESTADO">
-                                <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
-                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
-                                </asp:BoundField>
-                                <asp:TemplateField HeaderText="MARCAR ENTREGADO" ItemStyle-HorizontalAlign="Center" ShowHeader="False">
-                                  
-                                    <ItemTemplate>
-                                        <%--<asp:CheckBox ID="Chk_Entregado" runat="server" Checked="False" />--%>
-                                        <asp:CheckBox ID="Chk_Entregado" runat="server" Checked="False"  Enabled='<%# Eval("chk") %>' OnCheckedChanged="Chk_Entregado_CheckedChanged" AutoPostBack="true"/>
+                                        <asp:CheckBox ID="chk_Print" runat="server" Checked="False" />
                                     </ItemTemplate>
                                     <HeaderStyle Font-Size="12px" />
                                     <ItemStyle HorizontalAlign="Center" />
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="FECHA ENTREGA">
+
+                                <asp:BoundField DataField="folio_carta_gmx" HeaderText="FOLIO CARTA">
+                                    <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
+                                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                </asp:BoundField>
+
+                                <asp:BoundField DataField="imp_total" DataFormatString="{0:N2}" HeaderStyle-HorizontalAlign="Center" HeaderText="MONTO TOTAL">
+                                    <HeaderStyle Font-Size="12px" />
+                                    <ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" />
+                                </asp:BoundField>
+
+                                <asp:BoundField DataField="fecha_creacion" DataFormatString="{0:dd/MM/yyyy}" HeaderText="FECHA GENERADA">
+                                    <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
+                                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                </asp:BoundField>
+
+                                <asp:BoundField DataField="txt_status" HeaderText="ESTADO">
+                                    <HeaderStyle Font-Size="12px" HorizontalAlign="Center" />
+                                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                </asp:BoundField>
+
+                                <asp:TemplateField HeaderText="MARCAR ENTREGADO" ItemStyle-HorizontalAlign="Center" ShowHeader="False">
                                     <ItemTemplate>
-                                       <%-- <asp:TextBox ID="txt_fec_entrega" runat="server"  CssClass="col-md-1 estandar-control Fecha Centro" Height="20px" Width="90px" Text='<%# Eval("fecha_entrega_ch") %>' Enabled='<%# Eval("chk") %>'></asp:TextBox> --%>
-                                        <asp:TextBox ID="txt_fec_entrega" runat="server"  CssClass="col-md-1 estandar-control Fecha Centro" Height="85%" Width="100%" Text='<%# Eval("fecha_entrega_ch") %>' Enabled='false'></asp:TextBox>
-                                       
+                                        <asp:CheckBox ID="Chk_Entregado" runat="server" Checked="False" Enabled='<%# Eval("chk") %>' OnCheckedChanged="Chk_Entregado_CheckedChanged" AutoPostBack="true" />
+                                    </ItemTemplate>
+                                    <%--FJCP 10267 - CC - OPs Web_Cartas_Cheque ini--%>
+                                    <HeaderStyle Font-Size="12px" CssClass="hidden" />
+                                    <ItemStyle HorizontalAlign="Center" CssClass=" hidden" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="ACCION">
+                                    <ItemTemplate>
+                                        <asp:DropDownList runat="server" ID="dropEstado" AutoPostBack="true" OnSelectedIndexChanged="dropEstado_SelectedIndexChanged" Enabled='<%# Eval("chk") %>'>
+                                            <asp:ListItem Text="...." Value="-1" Selected="true" />
+                                            <asp:ListItem Text="Entregar" Value="4" />
+                                            <asp:ListItem Text="Rechazar" Value="3" />
+                                        </asp:DropDownList>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Center" />
+                                    <HeaderStyle Font-Size="12px" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="FECHA DE ENTREGA O RECHAZO">
+                                    <ItemTemplate>
+                                        <asp:TextBox ID="txt_fec_entrega" runat="server" CssClass="col-md-1 estandar-control Fecha Centro" Height="20px" Width="100%" Text='<%# Eval("fecha_entrega_ch") %>' Enabled='false'></asp:TextBox>
                                     </ItemTemplate>
                                     <HeaderStyle Font-Size="12px" Width="10%" />
                                     <ItemStyle HorizontalAlign="Center" />
                                 </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="MOTIVO RECHAZO">
+                                    <ItemTemplate>
+                                        <asp:TextBox ID="txt_mot_rech" runat="server" CssClass="col-md-1 estandar-control  Centro" Height="20px" Text='<%# Eval("motivo_rechazo") %>' Width="100%" Enabled='false'></asp:TextBox>
+                                    </ItemTemplate>
+                                    <HeaderStyle Font-Size="12px" Width="20%" HorizontalAlign="Center" />
+                                    <ItemStyle HorizontalAlign="Center" />
+                                </asp:TemplateField>
+                                <%--FJCP 10267 - CC - OPs Web_Cartas_Cheque fin--%>
                             </Columns>
                             <HeaderStyle CssClass="header" />
                             <RowStyle BorderStyle="Solid" BorderWidth="1px" Height="28px" />
@@ -199,7 +227,7 @@
                 <asp:AsyncPostBackTrigger ControlID="btn_Todas" EventName="Click" />
                 <asp:AsyncPostBackTrigger ControlID="btn_Ninguna" EventName="Click" />
                 <asp:AsyncPostBackTrigger ControlID="btnGuardar" EventName="Click" />
-                
+
             </Triggers>
         </asp:UpdatePanel>
     </div>
@@ -213,12 +241,12 @@
                         <%--<div class="col-md-1"></div>--%>
                         <div class="col-md-6">
                             <div style="width: 100%; text-align: left">
-                                 <asp:LinkButton ID="btn_Imprimir" runat="server" class="btn botones"  BorderWidth="2" BorderColor="White"  Width="105px" Visible="false">
+                                <asp:LinkButton ID="btn_Imprimir" runat="server" class="btn botones" BorderWidth="2" BorderColor="White" Width="105px" Visible="false">
                                 <span>
                                     <img class="btn-imprimir"/>
                                     Imprimir
                                 </span>
-                            </asp:LinkButton>
+                                </asp:LinkButton>
                                 <asp:LinkButton ID="btn_Todas" runat="server" class="btn botones Centrado" BorderWidth="2" BorderColor="White" Width="110px" Visible="false">
                                     <span>
                                         <img class="btn-todos"/>&nbsp Todas Imp.
@@ -230,18 +258,16 @@
                                         <img class="btn-ninguno"/>&nbsp Ninguna Imp.
                                     </span>
                                 </asp:LinkButton>
-                                
+
                             </div>
                         </div>
-                         
-                        <div class="col-md-6">
 
+                        <div class="col-md-6">
                             <div style="text-align: right">
-                                
                                 <asp:LinkButton ID="btnGuardar" runat="server" class="btn botones Centrado" BorderWidth="2" BorderColor="White" Width="110px" Visible="false">
-                              <span>
-																<img class="btn-guardar"/>&nbsp Guardar
-														</span>
+                                    <span>
+                                        <img class="btn-guardar"/>&nbsp Guardar
+									</span>
                                 </asp:LinkButton>
                             </div>
                         </div>
@@ -256,9 +282,9 @@
         </asp:UpdatePanel>
     </div>
 
-     <div class="padding53"></div>
+    <div class="padding53"></div>
 
-    <div id="ModConfirmar" class="modal-catalogo" >
+    <div id="ModConfirmar" class="modal-catalogo">
         <div class="cuadro-titulo-flotante">
             <div class="padding5"></div>
             <button type="button" data-dismiss="modal" class="close" hidden="hidden">&times;</button>
@@ -281,8 +307,8 @@
                 </div>
                 <div style="width: 100%; text-align: right;">
                     <asp:Button runat="server" ID="btnSi" class="btn botones" Text="SI" />
-                     <asp:Button runat="server" ID="btnNo" class="btn botones" data-dismiss="modal" Text="NO" />
-                </div>               
+                    <asp:Button runat="server" ID="btnNo" class="btn botones" data-dismiss="modal" Text="NO" />
+                </div>
             </ContentTemplate>
         </asp:UpdatePanel>
     </div>
@@ -290,19 +316,19 @@
     <br />
     <br />
     <br />
-     <br />
     <br />
     <br />
     <br />
-     <br />
     <br />
     <br />
     <br />
-     <br />
     <br />
     <br />
     <br />
-     <br />
+    <br />
+    <br />
+    <br />
+    <br />
     <br />
     <br />
     <br />

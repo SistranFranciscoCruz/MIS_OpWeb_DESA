@@ -443,5 +443,23 @@ Public Class OrdenPagoMasiva
 
     End Function
 
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function folioOnbaseBloqueado(codUsuario As String) As String
+
+        Dim oParametros As New Dictionary(Of String, Object)
+        Dim serializer As New JavaScriptSerializer
+        Dim OP As New OrdenPagoMasivoClass
+
+        serializer.MaxJsonLength = 500000000
+
+        oParametros.Add("Accion", 3)
+        oParametros.Add("folioOnbase", 999)
+        oParametros.Add("cod_usuario", codUsuario)
+
+        Funciones.ObtenerDatos("usp_bloqueoFolioOnbase_stro", oParametros)
+
+        Return Nothing
+    End Function
 
 End Class

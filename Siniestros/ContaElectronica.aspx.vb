@@ -5,7 +5,7 @@ Partial Class Siniestros_ContaElectronica
 
     Private Sub btn_Reporte_Click(sender As Object, e As EventArgs) Handles btn_Reporte.Click
         Dim ws As New ws_Generales.GeneralesClient
-        Dim server As String = ws.ObtieneParametro(9)
+        Dim server As String = ws.ObtieneParametro(3)
         Try
 
 
@@ -17,7 +17,7 @@ Partial Class Siniestros_ContaElectronica
                     RptFilters = RptFilters & "&Fechafin=" & CDate(txtFecGeneraA.Text).ToString("yyyyMMdd")
 
                     server = Replace(Replace(server, "@Reporte", "ContaElect"), "@Formato", "EXCEL")
-                    server = Replace(server, "ReportesGMX_UAT", "ReportesOPSiniestros")
+                    server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
                     server = server & RptFilters
                     Funciones.EjecutaFuncion("window.open('" & server & "');")
                 Else

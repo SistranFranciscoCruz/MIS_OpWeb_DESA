@@ -22,28 +22,28 @@ function PageLoadMaster() {
         numberOfMonths: 1,
         dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
         monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
-                        'Junio', 'Julio', 'Agosto', 'Septiembre',
-                        'Octubre', 'Noviembre', 'Diciembre'],
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
         monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
-                            'May', 'Jun', 'Jul', 'Ago',
-                            'Sep', 'Oct', 'Nov', 'Dic'],
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'],
         autoclose: true
     });
 
 
     //Botón Aceptar en Catalogo
     $("[id*=btn_Aceptar_Catalogo]").click(function () {
-       
+
         var varSeleccion = '';
         var Filas = $("[id*=gvd_Catalogo]")[0].rows;
 
         for (i = 0; i <= Filas.length - 2; i++) {
             if ($('[id*=chk_Cat]')[i].checked == true) {
                 varSeleccion = varSeleccion + Filas[i + 1].cells[1].innerText + '~' +
-                                              Filas[i + 1].cells[2].innerText + '~' +
-                                              Filas[i + 1].cells[3].innerText + '~' +
-                                              Filas[i + 1].cells[4].innerText + '~' +
-                                              Filas[i + 1].cells[5].innerText + '|';
+                    Filas[i + 1].cells[2].innerText + '~' +
+                    Filas[i + 1].cells[3].innerText + '~' +
+                    Filas[i + 1].cells[4].innerText + '~' +
+                    Filas[i + 1].cells[5].innerText + '|';
             }
         }
 
@@ -116,9 +116,9 @@ function PageLoadMaster() {
         var title = $(this).attr('title');
         $(this).data('tipText', title).removeAttr('title');
         $('<p class="tooltip"></p>')
-        .text(title)
-        .appendTo('body')
-        .fadeIn('slow');
+            .text(title)
+            .appendTo('body')
+            .fadeIn('slow');
     }, function () {
         // Hover out code
         $(this).attr('title', $(this).data('tipText'));
@@ -127,7 +127,7 @@ function PageLoadMaster() {
         var mousex = e.pageX + 20; //Get X coordinates
         var mousey = e.pageY + 10; //Get Y coordinates
         $('.tooltip')
-        .css({ top: mousey, left: mousex })
+            .css({ top: mousey, left: mousex })
     });
 
     //FORMATEO DE CAMPOS EN LA VISTA
@@ -189,9 +189,9 @@ function PageLoadMaster() {
             var Filas = $("[id*=gvd_Catalogo]")[0].rows;
 
             for (i = 0; i <= Filas.length - 2; i++) {
-                var Clave =       Filas[i + 1].cells[1].innerText.toLowerCase()
+                var Clave = Filas[i + 1].cells[1].innerText.toLowerCase()
                 var Descripcion = Filas[i + 1].cells[2].innerText.toLowerCase()
-                var nro_nit =     Filas[i + 1].cells[3].innerText.toLowerCase()
+                var nro_nit = Filas[i + 1].cells[3].innerText.toLowerCase()
 
                 if (Clave.indexOf(searchKey) >= 0 || Descripcion.indexOf(searchKey) >= 0) {
                     $(Filas[i + 1]).show();
@@ -348,22 +348,21 @@ function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo,
                 $("input[id$='hid_Prefijo']")[0].value = Catalogo;
                 fn_AbrirModal('#Catalogo');
 
-                if (display_adicional == undefined)
-                {
+                if (display_adicional == undefined) {
                     display_adicional = 'none';
                 }
 
                 $("[id*=gvd_Catalogo] tr").not($("[id*=gvd_Catalogo] tr:first")).remove();
                 for (var i = 0; i < response.d.length; i++) {
                     $("[id*=gvd_Catalogo]").append('<tr>' +
-                                                        '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(' + "'gvd_Catalogo'" + ',this,' + "'" + Tipo + "','chk_Cat'" + ')" /></td>' +
-                                                        '<td><label id="lbl_ClaveCat" class="texto-catalogo" style="Width:75px;">' + response.d[i].Clave + '</label></td>' +
-                                                        '<td><label id="lbl_DesCat" class="texto-catalogo" style="Width:205px;">' + response.d[i].Descripcion + '</label></td>' +
-                                                        
-                                                        '<td><label id="lbl_Oculta1" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo1 + '</label></td>' +
-                                                        '<td><label id="lbl_Oculta2" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo2 + '</label></td>' +
-                                                        '<td><label id="lbl_Oculta3" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo3 + '</label></td>' +
-                                                   '</tr>')
+                        '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(' + "'gvd_Catalogo'" + ',this,' + "'" + Tipo + "','chk_Cat'" + ')" /></td>' +
+                        '<td><label id="lbl_ClaveCat" class="texto-catalogo" style="Width:75px;">' + response.d[i].Clave + '</label></td>' +
+                        '<td><label id="lbl_DesCat" class="texto-catalogo" style="Width:205px;">' + response.d[i].Descripcion + '</label></td>' +
+
+                        '<td><label id="lbl_Oculta1" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo1 + '</label></td>' +
+                        '<td><label id="lbl_Oculta2" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo2 + '</label></td>' +
+                        '<td><label id="lbl_Oculta3" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo3 + '</label></td>' +
+                        '</tr>')
                 };
                 //Reference the GridView.
                 var gridView = $("[id*=gvd_Catalogo]");
@@ -412,9 +411,9 @@ function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, Condicion, mi
     }
 
     $("input[id$='" + ControlBusqueda + "']").css("color", "#555");
-    
+
     var strSel = Condicion;
-   
+
     $('[id$=' + ControlBusqueda + ']').autocomplete({
         minLength: minChar,
         source: function (request, response) {
@@ -447,7 +446,7 @@ function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, Condicion, mi
 function fn_SeleccionTodos(ControlGrid, chkControlAll, chkControl) {
 
     var controles = $("[id*=" + ControlGrid + "]").find("[id*=" + chkControl + "]");
-    for (i = 0 ; i < controles.length ; i++) {
+    for (i = 0; i < controles.length; i++) {
         if (controles[i].isDisabled == false) {
             controles[i].checked = chkControlAll.checked;
         }
@@ -493,7 +492,7 @@ function fn_SeleccionGread(Control, Valor, TargetChildControl) {
 
 
 //Selecciona solo un elemento en caso de ser seleccion Unica
-function fn_SeleccionarElemento(ControlGrid,rowIndex) {
+function fn_SeleccionarElemento(ControlGrid, rowIndex) {
     $("[id*=" + ControlGrid + "] tr").each(function (e) {
         var row = $(this).closest("tr");
         if (row[0].rowIndex == rowIndex) {
@@ -667,7 +666,7 @@ function fn_NoDesplazable(control, control_base) {
 }
 
 //Formato de comas a N posiciones decimales
-function fn_FormatoMonto(Monto, decimales , porcentaje) {
+function fn_FormatoMonto(Monto, decimales, porcentaje) {
     if (isNaN(Monto) == true) {
         return '0.00';
     }
@@ -677,7 +676,7 @@ function fn_FormatoMonto(Monto, decimales , porcentaje) {
         }
         else {
             return Monto.toFixed(decimales)
-        } 
+        }
     }
 }
 
@@ -728,7 +727,7 @@ function fn_DateDiff(date1, date2, interval) {
 }
 
 function fn_IsDate(date) {
-    return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) )  ? true : false;
+    return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date))) ? true : false;
 }
 
 
@@ -772,7 +771,7 @@ function fn_MovimientoFlechas(tecla, ctrIzq, ctrDer, ctrAba, ctrArr) {
 //    }
 //}
 
-function fn_EstadoFilas(ControlGrid,blnVentana) {
+function fn_EstadoFilas(ControlGrid, blnVentana) {
     $("[id*=" + ControlGrid + "] .Estado").each(function (e) {
         var row = $(this).closest("tr");
 
@@ -834,7 +833,7 @@ function fn_Restaurar(id) {
 //Imprimir Ordenes de Pago
 function fn_Imprime_OP(Server, strOrden) {
     var nro_op = strOrden.split(",");
-    for (i = 0 ; i < nro_op.length; i++) {
+    for (i = 0; i < nro_op.length; i++) {
         window.open(Server.replace('@nro_op', nro_op[i]));
     }
 }
@@ -842,7 +841,7 @@ function fn_Imprime_OP(Server, strOrden) {
 //Imprimir Soporte de Ordenes de Pago
 function fn_Imprime_SoporteOP(Server, strOrden) {
     var nro_op = strOrden.split(",");
-    for (i = 0 ; i < nro_op.length; i++) {
+    for (i = 0; i < nro_op.length; i++) {
         window.open(Server.replace('@nro_op', nro_op[i]));
     }
 }
@@ -855,6 +854,99 @@ function fn_Imprime_Reporte(url) {
 //JJIMENEZ
 function CargarRegistroTerceros() {
     fn_AbrirModal('#EsperaModal');
-    fn_AbrirModal('#CatalogoRegistroTerceros');
+    fn_AbrirModal('#RegistroTerceros'); //FCJP MEJORAS 10290 REGISTRO DE TERCEROS DATOS MINIMOS
     fn_CerrarModal('#EsperaModal');
 };
+
+function obtenerEdad() {
+    let hoy = new Date();
+    var fechaNac = $("[id*=txt_fecNacmTer]").val();
+    var fechaNacFto = fechaNac.substring(3, 5) + "/" + fechaNac.substring(0, 2) + "/" + fechaNac.substring(6, 10);
+    let fechaNacimiento = new Date(fechaNacFto);
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (diferenciaMeses < 0 || (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+    $("[id*=hidEdadmTer]").val(edad)
+}
+
+
+function convMayusculas(control) {
+    var str = $("[id*=" + control + "]").val();
+    var strMayus = str.toUpperCase();
+    $("[id*=" + control + "]").val(strMayus);
+}
+
+
+function selecTercero() {
+
+    //alert("Alerta JavaScript")
+    var codTercero = $("[id*=hidCodTercero]").val();
+    var nomTercero = $("[id*=hidNomTercero]").val();
+    var rfcTercero = $("[id*=hidrfcTercero]").val();
+
+    $("[id*=txtCodigoBeneficiario_stro]").val(codTercero);
+    $("[id*=txtBeneficiario_stro]").val(nomTercero);
+    $("[id*=txtRFC]").val(rfcTercero);
+
+}
+
+
+
+function llenarCpto2() {
+    var cpto2 = $("[id*=HiddenFieldPI]").val();
+    $("[id*=txtcpto2]").val(cpto2);
+}
+
+
+function cuenta(e, control) {
+    var key;
+    if (window.event) // IE
+    {
+        key = e.keyCode;
+    }
+    else if (e.which) // Netscape/Firefox/Opera
+    {
+        key = e.which;
+    }
+
+    //if (key < 48 || key > 57) {
+    //    return false;
+    //}
+
+    var tipoCuenta = $("[id*=cmbTipoCuentaT_stro]").val();
+
+    if (tipoCuenta == 2) {
+        if (LengthCheck(control)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+}
+
+
+function LengthCheck(control) {
+    var dato = $("[id*=" + control + "]").val();
+    var long = dato.length;
+
+    if (long > 17) {
+        return false;
+    }
+    return true;
+}
+
+function validaLong(control) {
+    var dato = $("[id*=" + control + "]").val();
+    var long = dato.length;
+    var tipoCuenta = $("[id*=cmbTipoCuentaT_stro]").val();
+
+    if (tipoCuenta == 2) {
+        if (long < 17) {
+            fn_MuestraMensaje('Validación', 'Se deben capturar 18 digitos', 2);
+            $("[id*=" + control + "]").val("");
+        }
+    }
+}
