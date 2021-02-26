@@ -560,8 +560,12 @@ Partial Class Pages_SiteMaster
                                     'gvd_GridView.DataBind()
 
                                 End If
+                            Case 4
+                                'VZAVALETA_10290_CC_INICIO
+                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
 
-
+                                txt_Clave.Text = Split(Datos(0), "~")(0)
+                                'VZAVALETA_10290_CC_FIN
                         End Select
                     End If
 

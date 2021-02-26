@@ -175,8 +175,8 @@
             // nos traemos renglon a renglon           
 
             var myRow = myGrid.jqGrid('getRowData', myIDs[i]);
-            myRow.Folio_Onbase = myRow.FolioOnbaseHidden
-            myRow.Folio_Onbase_cuenta = myRow.Folio_Onbase_cuentaHidden
+            myRow.Folio_Onbase = myRow.FolioOnbaseHidden;
+            myRow.Folio_Onbase_cuenta = myRow.Folio_Onbase_cuentaHidden;
             myRow.Fec_pago = Fec_pago;
             if (myRow.Concepto_Pago.indexOf('input') > 0) {
                 myRow.Concepto_Pago = "";
@@ -324,8 +324,37 @@
 
     });
 
+    function CargarConceptoPago(TipoUsuario, ClasePago, CodigoPres) {
 
+        $.ajax({
+            url: "../Siniestros/Catalogos.ashx?Catalgo=ConceptoPago",
+            data: "{ 'TipoUsuario': " + TipoUsuario + ",'ClasePago':" + ClasePago + " ,'CodigoPres':" + CodigoPres  +"}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
 
+               
+                var s = '<option value="0">Seleccione Opcion</option>';
+                
+                for (var i = 0; i < result.length; i++) {
+
+                    s += '<option value="' + result[i].Concepto + '">' + result[i].Descripcion + '</option>';
+                
+                }
+             
+             
+                res = s;
+                return s;
+
+            },
+            error: function (err) {
+                debugger
+                alert(err);
+
+            }
+        });
+    };
     function LoadGrid(mydata) {
         var lastsel2;
         var lastSel = -1;
@@ -352,7 +381,7 @@
                 { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                 { name: 'Moneda', index: 'Moneda', width: 180 },
                 { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", sorttype: "int" },
-                { name: 'Reserva', index: 'Reserva', width: 90 },
+                { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", sorttype: "int" },
                 { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
                 { name: 'Importe', index: 'Importe', width: 90, formatter: "number", sorttype: "int" },
                 { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", sorttype: "int" },
@@ -452,7 +481,7 @@
                 { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 45, hidden: true },
                 {
                     name: 'Clase_pago',
-                    hidden: true,
+                    hidden: false,
                     //sortable: true,,
 
                     index: 'Clase_pago',
@@ -506,7 +535,7 @@
 
                 ,
                 { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 },
-                { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: true, editoptions: { size: "30", maxlength: "100" } },
+                { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: false, editoptions: { size: "30", maxlength: "100" } },
                 { name: 'Tipo_Pago2', index: 'Tipo_Pago2', width: 90, hidden: true },
                 { name: 'Folio_Onbase_cuenta', index: 'Folio_Onbase_cuenta', width: 90 },
                 { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
@@ -665,7 +694,7 @@
                 datatype: "local",
 
                 height: 280,
-                width: 1024,
+                width: $("#txt_width").val(),
                 rowNum: 8000,
                 rowList: [10, 20, 30],
                 colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', '', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', '', 'Accion'],
@@ -684,14 +713,14 @@
                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                     { name: 'Moneda', index: 'Moneda', width: 180 },
                     { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Reserva', index: 'Reserva', width: 90 },
+                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", sorttype: "int" },
                     { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
                     { name: 'Importe', index: 'Importe', width: 90, formatter: "number", sorttype: "int" },
                     { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", sorttype: "int" },
                     { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", sorttype: "int" },
                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
                     { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
-                    { name: 'Clase_pago', index: 'Clase_pago', width: 45, hidden: true },
+                    { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
                     { name: 'Cod_concepto_pago', index: 'Cod_concepto_pago', width: 180, hidden: true }
                     ,
                     {
@@ -733,7 +762,7 @@
                     ,
                     { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 }
                     ,
-                    { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: true, editoptions: { size: "30", maxlength: "100" } },
+                    { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: false, editoptions: { size: "30", maxlength: "100" } },
                     { name: 'Tipo_Pago2', index: 'Tipo_Pago2', width: 90, hidden: true },
                     { name: 'Folio_Onbase_cuenta', index: 'Folio_Onbase_cuenta', width: 90 },
                     { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
