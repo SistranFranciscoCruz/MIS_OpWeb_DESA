@@ -56,6 +56,7 @@
                         <div class="form-group col-md-2">
                             <asp:Label runat="server" class="etiqueta-control">Pagar a</asp:Label>
                             <asp:DropDownList AutoPostBack="true" ID="cmbTipoUsuario" runat="server" ClientIDMode="Static" CssClass="estandar-control tipoUsuario Tablero" OnSelectedIndexChanged="cmb_SelectedIndexChanged">
+                                <asp:ListItem Value="1">SELECCIONAR</asp:ListItem> <%--VZAVALETA_10290_INICIO--%>
                                 <asp:ListItem Value="7">ASEGURADO</asp:ListItem>
                                 <%--A--%>
                                 <asp:ListItem Value="8">TERCERO</asp:ListItem>

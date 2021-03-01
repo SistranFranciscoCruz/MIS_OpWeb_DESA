@@ -66,7 +66,7 @@
                             <asp:Label runat="server" class="etiqueta-control">Estatus</asp:Label>
                             <asp:DropDownList ID="ddl_estatus" runat="server" ClientIDMode="Static" CssClass="estandar-control tipoUsuario Tablero" >
                                 <asp:ListItem Value="-1">Activo</asp:ListItem> <%--A--%>
-                                <asp:ListItem Value="0">InActivo</asp:ListItem>   <%--T--%>
+                                <asp:ListItem Value="0">Inactivo</asp:ListItem>   <%--T--%>
                                
                             </asp:DropDownList>
                         </div>

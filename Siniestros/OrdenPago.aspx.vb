@@ -79,10 +79,13 @@ Partial Class Siniestros_OrdenPago
         End Set
     End Property
     Public Enum eTipoUsuario
+        Ninguno = 1 'VZAVALETA_10290_INICIO
         Asegurado = 7
         Tercero = 8
         Proveedor = 10
     End Enum
+
+    Dim Salir As Integer 'VZAVALETA_10290_INICIO
 
 #End Region
 
@@ -1951,6 +1954,7 @@ Partial Class Siniestros_OrdenPago
     Private Function ObtenerPagarA(folioOnBAse As Integer, numPago As Integer) As Boolean 'FJCP 10290
         Dim oParametros As New Dictionary(Of String, Object)
         Dim oDatos As DataSet
+
         Try
             Dim onBase As Integer
             Dim checkedFac As Boolean 'chkVariasFacturas
@@ -1968,16 +1972,30 @@ Partial Class Siniestros_OrdenPago
             ' If Not IsNothing(folioOnBAse) Then
             oParametros.Add("folioOnbase", folioOnBAse)
             oParametros.Add("num_pago", numPago)
-
+            'VZAVALETA_10290_INICIO
+            If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Ninguno Then
+                oParametros.Add("PagarA", cmbTipoUsuario.SelectedValue)
+            End If
+            'VZAVALETA_10290_FIN
             'End If
             'If Not IsNothing(nro_stro) Then
             '    oParametros.Add("nro_stro", nro_stro)
             'End If
             oDatos = Funciones.ObtenerDatos("usp_pagarA_folioOnbase_Stro", oParametros)
             If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
-                Me.cmbTipoUsuario.SelectedValue = oDatos.Tables(0).Rows(0).Item("id_Pagar_A").ToString()
-
-                habilitarCampos()
+                'VZAVALETA_10290_INICIO
+                If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows(0).Item("id_Pagar_A").ToString() = -1 Then
+                    Mensaje.MuestraMensaje("ObtenerPagarA", "Seleccione el combo Pagar A:", TipoMsg.Falla)
+                    Limpiartodo()
+                    Salir = 0
+                    ObtenerPagarA = False
+                Else
+                    ' If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Ninguno Then
+                    Me.cmbTipoUsuario.SelectedValue = oDatos.Tables(0).Rows(0).Item("id_Pagar_A").ToString()
+                    ' End If
+                    habilitarCampos()
+                End If
+                'VZAVALETA_10290_FIN
             Else
                 ObtenerPagarA = False
                 'MuestraMensaje("ObtenerPagarA", "No fue posible obtener el dato Pagar A", TipoMsg.Falla)
@@ -2048,7 +2066,7 @@ Partial Class Siniestros_OrdenPago
             CargarCatalogosCuentasBancarias()
 
             Me.cmbTipoUsuario.Enabled = True
-            Me.cmbTipoUsuario.SelectedValue = eTipoUsuario.Asegurado
+            Me.cmbTipoUsuario.SelectedValue = eTipoUsuario.Ninguno 'VZAVALETA_10290_INICIO
 
             Me.txtSiniestro.Text = String.Empty
 
@@ -3725,7 +3743,11 @@ Partial Class Siniestros_OrdenPago
 
             Dim nPAgo As Integer = IIf(cmbNumPago.SelectedValue.ToString() = "", 1, cmbNumPago.SelectedValue)
             'FJCP 10290 MEJORAS Pagar A ini
+            Salir = 1
             If Not ObtenerPagarA(Me.txtOnBase.Text, nPAgo) Then
+                If Salir = 0 Then
+                    Exit Function
+                End If
                 MuestraMensaje("Pagar", "No existe dato para campo Pagar A", TipoMsg.Falla)
                 'Exit Sub
                 Exit Function
