@@ -990,6 +990,8 @@ Partial Class Siniestros_OrdenPago
                                 oFila("ImportePagos") = 0
                                 oFila("CodigoAsegurado") = 0
                                 oFila("MonedaFactura") = 0
+                                oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2) 'VZAVALETA_1090_CC
+
                             Case eTipoUsuario.Proveedor
                                 oFila("Factura") = oFilaSeleccion(0).Item("folio_GMX")
                                 oFila("CodigoTercero") = 0
@@ -3366,7 +3368,13 @@ Partial Class Siniestros_OrdenPago
                                     Me.txtCodigoBeneficiario_stro.Text = .Item("cod_pres")
 
                                     Me.txtTipoCambio.Text = IIf(cmbMonedaPago.SelectedValue = 0, "1.00", IIf(.Item("cod_moneda") = 0, "1.00", ObtenerTipoCambio.ToString()))
-
+                                    'VZAVALETA_10290_CC INI
+                                    If cmbMonedaPago.SelectedValue = 0 AndAlso Me.txtTipoCambio.Text = 1 Then
+                                        txtTipoCambio.Enabled = False
+                                    Else
+                                        txtTipoCambio.Enabled = True
+                                    End If
+                                    'VZAVALETA_10290_CC FIN
                                     'Mostrar los importes de la factura de conta electronica
                                     Me.txtTotalAutorizacionNacionalFac.Text = String.Format("{0:0,0.00}", Math.Round(.Item("imp_subtotal"), 2))
                                     Me.txtTotalAutorizacionFac.Text = String.Format("{0:0,0.00}", Math.Round(.Item("imp_subtotal"), 2))

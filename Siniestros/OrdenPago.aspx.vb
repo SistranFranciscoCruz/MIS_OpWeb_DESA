@@ -863,6 +863,7 @@ Partial Class Siniestros_OrdenPago
         Dim oFilaSeleccion() As DataRow
         Dim oFilaSeleccion2() As DataRow
         Dim oFilaSeleccion3() As DataRow
+
         Try
 
             If cmbNumPago.SelectedValue = -1 Then
@@ -1110,6 +1111,12 @@ Partial Class Siniestros_OrdenPago
                             oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2)
                         Else
                             oFila("FastTrack") = oFilaSeleccion(0).Item("Fast_track")
+                            If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then
+                                oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2) 'VZAVALETA_1090_CC
+                            Else
+                                oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("imp_subtotal")), CDbl(oFilaSeleccion(0).Item("imp_subtotal"))), 2)
+                            End If
+
                         End If
 
                         oTabla.Rows.Add(oFila)
@@ -1866,6 +1873,12 @@ Partial Class Siniestros_OrdenPago
             Dim sDia As Int16
             Dim sMes As Int16
             Dim sAnio As Int16
+            'VZAVALETA_10290_CC INI
+            If txt_tipoCambioConsultado.Text <> "" Then
+                ObtenerTipoCambio = txt_tipoCambioConsultado.Text
+                Exit Function
+            End If
+            'VZAVALETA_10290_CC FIN
 
             sDia = DateTime.Now.Day
             sMes = DateTime.Now.Month
@@ -2246,7 +2259,6 @@ Partial Class Siniestros_OrdenPago
         Dim dcod_clase_pago As Int16 = 0
         Dim dcod_cpto As Int16 = 0
         Try
-
             If txtMonedaPoliza.Text = "NACIONAL" Then
                 'JLC Mejoras Moneda Pago -Inicio
                 'cmbMonedaPago.SelectedValue = 0
@@ -2264,12 +2276,9 @@ Partial Class Siniestros_OrdenPago
                 dTipoCambio = ObtenerTipoCambio()
             End If
 
-
-
-
-
-
             Me.txtTipoCambio.Text = dTipoCambio
+
+            Valida_Tipo_Pago() 'VZAVALETA_10290_CC
 
             For Each oFila In oGrdOrden.Rows
 
@@ -2285,18 +2294,18 @@ Partial Class Siniestros_OrdenPago
                     If dPago > 0 Then
 
                         'Si es un proveedor cuya factura haya sido registrada en pesos, se tomara la moneda de pago en pesos
+                        'VZAVALETA_10290_INICIO
+                        'If oFila("MonedaFactura") = 0 Then
 
-                        If oFila("MonedaFactura") = 0 Then
+                        '    If Not dTipoCambio = 1 Then
+                        '        Mensaje.MuestraMensaje("Calculo de totales", "Factura capturada en pesos, se utilizará tipo de cambio nacional.", TipoMsg.Advertencia)
+                        '        'dTipoCambio = 1
+                        '        'Me.txtTipoCambio.Text = dTipoCambio
+                        '        cmbMonedaPago.SelectedValue = 0
+                        '    End If
 
-                            If Not dTipoCambio = 1 Then
-                                Mensaje.MuestraMensaje("Calculo de totales", "Factura capturada en pesos, se utilizará tipo de cambio nacional.", TipoMsg.Advertencia)
-                                'dTipoCambio = 1
-                                'Me.txtTipoCambio.Text = dTipoCambio
-                                cmbMonedaPago.SelectedValue = 0
-                            End If
-
-                        End If
-
+                        'End If
+                        'VZAVALETA_10290_FIN
                         'ObtenerImpuestos(CInt(Me.txtCodigoBeneficiario_stro.Text), CInt(oFila("ClasePago")), CInt(oFila("ConceptoPago")), CInt(oFila("IdSiniestro")), dPago, dImporteImpuesto, dImporteRetencion)
                         ObtenerImpuestos(CInt(Me.txtCodigoBeneficiario_stro.Text), dcod_clase_pago, dcod_cpto, CInt(oFila("IdSiniestro")), dPago, dImporteImpuesto, dImporteRetencion)
 
@@ -2574,11 +2583,24 @@ Partial Class Siniestros_OrdenPago
                             Me.txtTotalNacional.Text = String.Format("{0:0,0.00}", dTotalAutorizacionNacional)
                         End If
                     Else
-                        Me.txtTotalAutorizacion.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion, 2))
-                        Me.txtTotalImpuestos.Text = String.Format("{0:0,0.00}", Math.Round(dTotalImpuestos, 2))
-                        Me.txtTotalRetenciones.Text = String.Format("{0:0,0.00}", Math.Round(dTotalRetenciones, 2))
-                        Me.txtTotal.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion + dTotalImpuestos - dTotalRetenciones, 2))
-                        Me.txtTotalNacional.Text = String.Format("{0:0,0.00}", dTotalAutorizacionNacional)
+                        'JLC Mejoras Moneda Pago-Inicio
+                        If cmbMonedaPago.SelectedValue = 0 Then
+                            Me.txtTotalAutorizacion.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion, 2))
+                            Me.txtTotalImpuestos.Text = String.Format("{0:0,0.00}", Math.Round(dTotalImpuestos, 2))
+                            Me.txtTotalRetenciones.Text = String.Format("{0:0,0.00}", Math.Round(dTotalRetenciones, 2))
+                            Me.txtTotal.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion + dTotalImpuestos - dTotalRetenciones, 2))
+                            Me.txtTotalNacional.Text = String.Format("{0:0,0.00}", dTotalAutorizacionNacional)
+                        Else
+
+                            Me.txtTotalAutorizacion.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion * txtTipoCambio.Text, 2))
+                            Me.txtTotalImpuestos.Text = String.Format("{0:0,0.00}", Math.Round(dTotalImpuestos * txtTipoCambio.Text, 2))
+                            Me.txtTotalRetenciones.Text = String.Format("{0:0,0.00}", Math.Round(dTotalRetenciones * txtTipoCambio.Text, 2))
+                            Me.txtTotal.Text = String.Format("{0:0,0.00}", Math.Round((dTotalAutorizacion * txtTipoCambio.Text) + dTotalImpuestos - dTotalRetenciones, 2))
+                            Me.txtTotalNacional.Text = String.Format("{0:0,0.00}", dTotalAutorizacionNacional * txtTipoCambio.Text)
+
+                        End If
+                        'JLC Mejoras Moneda Pago-Fin
+
                     End If
 
                     Me.iptxtTotalAutorizacion.Text = String.Format("{0:0,0.00}", Math.Round(dTotalAutorizacion, 2))
@@ -3521,7 +3543,6 @@ Partial Class Siniestros_OrdenPago
         Dim oDatos As DataSet
 
         Dim oParametros As New Dictionary(Of String, Object)
-
         Try
             oParametros = New Dictionary(Of String, Object)
 
@@ -3788,6 +3809,7 @@ Partial Class Siniestros_OrdenPago
 
 
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
+                    oParametros.Add("id_PagarA", Me.cmbTipoUsuario.SelectedValue) 'VZAVALETA_10290_CC
 
                     oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase", oParametros)
 
@@ -3970,23 +3992,26 @@ Partial Class Siniestros_OrdenPago
                 Case Else
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
                     oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    oParametros.Add("id_PagarA", Me.cmbTipoUsuario.SelectedValue) 'VZAVALETA_10290_CC
 
                     oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase", oParametros)
                     If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
                         oSeleccionActual = oDatos.Tables(0)
                         With oDatos.Tables(0).Rows(0)
-                            ' If (oDatos.Tables(0).Rows(0).Item("sn_relacionado") = "-1") Then
-                            '    Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(0).Rows(0).Item("fecha_relacion").ToString() + " Usuario relacion: " + oDatos.Tables(0).Rows(0).Item("cod_usuario_relacion").ToString() + " Fecha de Comprobante: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
-                            '    Limpiartodo()
-                            ' Else
-                            'If (oDatos.Tables(0).Rows(0).Item("fec_fact") = "1") Then
-                            Me.txtSiniestro.Text = .Item("nro_stro")
-                            Me.txt_clase.Text = .Item("cod_clase_pago")
-                            '     Else
-                            ' Mensaje.MuestraMensaje("Fecha Comprobante menor al año fiscal: ", "Fecha del comprobante Fiscal: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
-                            ' Limpiartodo()
-                            'End If
-                            ' End If
+                            'VZAVALETA_10290_CC_INICIO
+                            If (oDatos.Tables(0).Rows(0).Item("sn_relacionado") = "-1") Then
+                                Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(0).Rows(0).Item("fecha_relacion").ToString() + "<br>" + "Usuario relacion: " + oDatos.Tables(0).Rows(0).Item("cod_usuario_relacion").ToString() + "<br>" + "Fecha de Comprobante: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString() + "<br>" + "OP Relacionada: " + oDatos.Tables(0).Rows(0).Item("Nro_OP").ToString(), TipoMsg.Falla) 'FJCP 10290 MEJORAS Folio OnBase Relacionado
+                                Limpiartodo()
+                            Else
+                                'If (oDatos.Tables(0).Rows(0).Item("fec_fact") = "1") Then
+                                Me.txtSiniestro.Text = .Item("nro_stro")
+                                Me.txt_clase.Text = .Item("cod_clase_pago")
+                                '     Else
+                                ' Mensaje.MuestraMensaje("Fecha Comprobante menor al año fiscal: ", "Fecha del comprobante Fiscal: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
+                                ' Limpiartodo()
+                                'End If
+                            End If
+                            'VZAVALETA_10290_CC_FIN
                         End With
                         'valida los datos de numero de siniestro
                         oParametros.Clear()
@@ -4209,6 +4234,53 @@ Partial Class Siniestros_OrdenPago
             Mensaje.MuestraMensaje("Exepcion", ex.Message, TipoMsg.Falla)
             Return Nothing
         End Try
+    End Function
+
+    Private Sub btnTipoCambio_Click(sender As Object, e As EventArgs) Handles btnTipoCambio.Click
+        Try
+            If Valida_Tipo_Pago() Then
+                Funciones.AbrirModal("#Modal")
+            Else
+                Mensaje.MuestraMensaje("Tipo de Cambio", "La moneda de pago y de la póliza, no permiten modificar el tipo de cambio.", TipoMsg.Advertencia)
+            End If
+            'txtTipoCambio.Enabled = True
+            'txt_tipoCambioConsultado.Enabled = True
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Function Valida_Tipo_Pago() As Boolean
+        Try
+            'VZAVALETA_10290_CC INI
+            'Cuando la moneda de pago y de la póliza sea pesos el tipo de cambio sea 1 y debe estar bloqueado
+            'Cuando la moneda de pago y de la póliza sea dólares tipo de cambio sea 1 y debe estar bloqueado
+            'Cuando la moneda de pago  sea pesos y de la póliza sea dólares  se puede seleccionar tipo de cambio 
+            'Cuando la moneda de pago  sea dólares y de la póliza sea pesos  se puede seleccionar tipo de cambio 
+            If txtMonedaPoliza.Text = "NACIONAL" Then
+                If cmbMonedaPago.SelectedValue = 0 Then
+                    'Mensaje.MuestraMensaje("Tipo de Cambio", "La moneda de pago y de la póliza, no permiten modificar el tipo de cambio.", TipoMsg.Advertencia)
+                    txtTipoCambio.Text = 1
+                    txtTipoCambio.Enabled = False
+                    txt_tipoCambioConsultado.Enabled = False
+                    Return False
+                End If
+            End If
+
+            If txtMonedaPoliza.Text = "DOLAR AMERICANO" Then
+                If cmbMonedaPago.SelectedValue = 1 Then
+                    ' Mensaje.MuestraMensaje("Tipo de Cambio", "La moneda de pago y de la póliza, no permiten modificar el tipo de cambio.", TipoMsg.Advertencia)
+                    txtTipoCambio.Text = 1
+                    txtTipoCambio.Enabled = False
+                    txt_tipoCambioConsultado.Enabled = False
+                    Return False
+                End If
+            End If
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+
     End Function
 
 End Class

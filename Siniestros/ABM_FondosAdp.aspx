@@ -57,13 +57,22 @@
                                 <asp:LinkButton ID="btnAgregar" runat="server" class="btn btn-primary btn-xs pull-left Tablero" Style="background-color: #003A5D;">Agregar</asp:LinkButton>
                            </div>
 
-      
                   
     
 
              </div>
                 <div style="width:100%; text-align:right; border-top-style:inset; border-width:1px; border-color:#003A5D"></div>
             <br />
+              <div class="row">
+             <div class="col-md-12" style="text-align: right">
+                                 <asp:LinkButton ID="btnExportar" runat="server" class="btn botones" Width="150px" Height="30px" >
+                                <span>
+                                    <img class="btn-excel"/>&nbsp&nbsp Exportar Catálogo
+                                </span>
+                            </asp:LinkButton>
+                        </div>
+                  </div>
+              <br />
               <div class="row">
                   <center>
                    <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Conditional" >
