@@ -112,7 +112,7 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
 
             oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase_Masivo", oParametros)
             oTabla = oDatos.Tables(0)
-
+                
             ID = 1
             For Each row As DataRow In oTabla.Rows
 

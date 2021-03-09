@@ -284,7 +284,7 @@
                                                
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Reserva" Visible="false">
                                                 <ItemTemplate>
-                                                    <asp:TextBox ReadOnly="true" runat="server" Text='<%# Eval("Reserva") %>' CssClass="estandar-control Reserva"></asp:TextBox>
+                                                    <asp:TextBox ReadOnly="true" runat="server" Text='<%# String.Format("{0:N2}", Decimal.Parse(Eval("Reserva")), 2) %>' CssClass="estandar-control Reserva"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="ImportePagos" Visible="false">
@@ -316,13 +316,13 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Pago">
                                                 <ItemTemplate>
-                                                    <asp:TextBox AutoPostBack="True" OnSelectedIndexChanged="cmb_SelectedIndexChanged" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Pago") %>' CssClass="estandar-control pago" autocomplete="off" placeholder="0.00" ID="txt_pago"></asp:TextBox>
+                                                    <asp:TextBox AutoPostBack="True" OnSelectedIndexChanged="cmb_SelectedIndexChanged" OnTextChanged="grid_TextChanged" runat="server" Text='<%# String.Format("{0:N2}", Decimal.Parse(Eval("Pago")), 2) %>' CssClass="estandar-control pago" autocomplete="off" placeholder="0.00" ID="txt_pago"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <%--<asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Descuentos">--%>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Deducible">
                                                 <ItemTemplate>
-                                                    <asp:TextBox AutoPostBack="True" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Descuentos") %>' CssClass="estandar-control Descuentos" autocomplete="off" placeholder="0.00"></asp:TextBox>
+                                                    <asp:TextBox AutoPostBack="True" OnTextChanged="grid_TextChanged" runat="server" Text='<%# String.Format("{0:N2}", Decimal.Parse(Eval("Descuentos")), 2) %>' CssClass="estandar-control Descuentos" autocomplete="off" placeholder="0.00"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="RFC">

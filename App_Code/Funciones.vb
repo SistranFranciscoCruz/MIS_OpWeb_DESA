@@ -722,6 +722,7 @@ Public Class Funciones
 
             oComando = New SqlCommand(sProcedimiento, oConexion)
             oComando.CommandType = CommandType.StoredProcedure
+            oComando.CommandTimeout = 0 'VZAVALETA_10290_CC
 
             If Not oParametros Is Nothing Then
 
@@ -859,4 +860,8 @@ Public Class Funciones
 
     End Enum
 
+
 End Class
+
+
+

@@ -49,7 +49,7 @@ Partial Class Siniestros_ABM_FondosAdp
             CargarGrid()
             CargarCombo()
             ddl_concepto_pago.Items.Clear()
-
+            txtNombre.Text = "" 'FJCP_10290_CC
 
 
             Return
@@ -161,19 +161,9 @@ Partial Class Siniestros_ABM_FondosAdp
             Concepto = row.Cells(0).Text
             Clase = row.Cells(2).Text
 
-
-
-
             oParametros.Add("Accion", "2")
             oParametros.Add("cod_cpto", Concepto)
             oParametros.Add("cod_clase_pago", Clase)
-
-
-
-
-
-
-
 
             oDatos = Funciones.ObtenerDatos("sp_grabar_conceptos_fondosAdp", oParametros)
             CargarGrid()
@@ -183,4 +173,25 @@ Partial Class Siniestros_ABM_FondosAdp
             MuestraMensaje("Exception", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
+
+    Private Sub btnExportar_Click(sender As Object, e As EventArgs) Handles btnExportar.Click 'FJCP_10290_CC
+        generaReporte()
+    End Sub
+
+    Private Sub generaReporte() 'FJCP_10290_CC
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim server As String = ws.ObtieneParametro(3)
+        Dim Random As New Random()
+        Dim numero As Integer = Random.Next(1, 1000)
+
+        Dim RptFilters As String
+        RptFilters = "&numero=" & numero.ToString()
+        server = Replace(Replace(server, "@Reporte", "Fondos_ADP"), "@Formato", "EXCEL")
+        server = Replace(server, "ReportesGMX_DESA", "ReportesOPSiniestros_DESA")
+        server = server & RptFilters
+        Funciones.EjecutaFuncion("window.open('" & server & "');")
+
+    End Sub
+
+
 End Class

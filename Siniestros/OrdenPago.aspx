@@ -180,11 +180,15 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-5">
-                                        <asp:TextBox ID="txtTipoCambio" runat="server" CssClass=" col-md-5 estandar-control Tablero Centro" placeholder="1.00" Width="95%"></asp:TextBox>
+                                        <asp:TextBox ID="txtTipoCambio" runat="server" CssClass=" col-md-5 estandar-control Tablero Centro" placeholder="1.00" Width="95%" Enabled ="false" ></asp:TextBox>
                                     </div>
                                     <div class="col-md-7">
-
-                                        <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#Modal" style="background-color: #003A5D; height: 18px; vertical-align: top; padding: 1px; font-size: 8px; width: 95%">Tipo de Cambio</a>
+                                        <%--<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#Modal" style="background-color: #003A5D; height: 18px; vertical-align: top; padding: 1px; font-size: 8px; width: 95%" >Tipo de Cambio</a>--%>
+                                        <asp:LinkButton ID="btnTipoCambio" runat="server" class="btn btn-primary btn-xs" style="background-color: #003A5D; height: 18px; vertical-align: top; padding: 1px; font-size: 8px; width: 95%">
+                                            <span>
+                                                Tipo de Cambio
+                                            </span>
+                                        </asp:LinkButton>
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +299,9 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Reserva" Visible="True">
                                                 <ItemTemplate>
-                                                    <asp:TextBox ReadOnly="true" runat="server" Text='<%# Eval("Reserva") %>'  CssClass="estandar-control Reserva" ></asp:TextBox>
+                                                   <%-- <asp:TextBox ReadOnly="true" runat="server" Text='<%# Eval("Reserva") %>'  CssClass="estandar-control Reserva" ></asp:TextBox>--%>
+                                                    <asp:TextBox ReadOnly="true" runat="server" Text='<%# String.Format("{0:N2}", Decimal.Parse(Eval("Reserva")), 2) %>'  CssClass="estandar-control Reserva" ></asp:TextBox>
+
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="ImportePagos" Visible="false">
@@ -327,13 +333,15 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Pago">
                                                 <ItemTemplate>
-                                                    <asp:TextBox AutoPostBack="True" OnSelectedIndexChanged="cmb_SelectedIndexChanged" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Pago") %>' CssClass="estandar-control pago" autocomplete="off" placeholder="0.00 "  ID="txt_pago"></asp:TextBox>
+                                                   <%--<asp:TextBox AutoPostBack="True" OnSelectedIndexChanged="cmb_SelectedIndexChanged" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Pago") %>' CssClass="estandar-control pago" autocomplete="off" placeholder="0.00 "  ID="txt_pago"></asp:TextBox>--%>
+                                                   <asp:TextBox AutoPostBack="True" OnSelectedIndexChanged="cmb_SelectedIndexChanged" OnTextChanged="grid_TextChanged" runat="server" Text= '<%# String.Format("{0:N2}", Decimal.Parse(Eval("Pago")), 2) %>' CssClass="estandar-control pago" autocomplete="off" placeholder="0.00 "  ID="txt_pago"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <%--<asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Descuentos">--%>
                                             <asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Deducible">
                                                 <ItemTemplate>
-                                                    <asp:TextBox AutoPostBack="True" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Descuentos") %>' CssClass="estandar-control Descuentos" autocomplete="off" placeholder="0.00"></asp:TextBox>
+                                                    <%--<asp:TextBox AutoPostBack="True" OnTextChanged="grid_TextChanged" runat="server" Text='<%# Eval("Descuentos") %>' CssClass="estandar-control Descuentos" autocomplete="off" placeholder="0.00"></asp:TextBox>--%>
+                                                    <asp:TextBox AutoPostBack="True" OnTextChanged="grid_TextChanged" runat="server" Text='<%# String.Format("{0:N2}", Decimal.Parse(Eval("Descuentos")), 2) %>' CssClass="estandar-control Descuentos" autocomplete="off" placeholder="0.00"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <%--<asp:TemplateField HeaderStyle-HorizontalAlign="Left" HeaderText="Deducible">s
@@ -597,7 +605,7 @@
                 <div class="form-group col-md-8">
                     <asp:UpdatePanel runat="server" ID="upCatalogo" UpdateMode="Conditional">
                         <ContentTemplate>
-                            <asp:TextBox ID="txt_tipoCambioConsultado" runat="server" CssClass="estandar-control  Centro" placeholder="1.00"></asp:TextBox>
+                            <asp:TextBox ID="txt_tipoCambioConsultado" runat="server" CssClass="estandar-control  Centro" placeholder="1.00" Enabled ="false"></asp:TextBox>
                         </ContentTemplate>
                         <Triggers>
                             <asp:AsyncPostBackTrigger ControlID="txt_fecha_ini" EventName="TextChanged" />
