@@ -7,26 +7,12 @@ Partial Class Siniestros_OrdenPagoMasivoFondos
 
     Sub Page_Load(ByVal Sender As Object, ByVal e As EventArgs) Handles Me.Load
 
-        cmbTipoComprobante.Items.Clear()
-        Dim dt As New DataTable
-        Funciones.fn_Consulta("sp_Catalogos_OPMasivas 'COMPROBANTE','',''", dt)
-
-        If cmbTipoComprobante.Items.Count = 0 Then
-
-            cmbTipoComprobante.DataSource = dt
-            cmbTipoComprobante.DataTextField = "Descripcion"
-            cmbTipoComprobante.DataValueField = "CodigoComprobante"
-            cmbTipoComprobante.DataBind()
-
-
-        End If
-
-        CargarAnalistasFondos()
-
         If Not IsPostBack Then
             Me.txtFechaEstimadaPago.Text = FechaEstimPago()
         End If
 
+        CargarAnalistasFondos()
+        Cargar_combos() 'FJCP_10290_CC	INI 
 
     End Sub
 
@@ -185,4 +171,28 @@ Partial Class Siniestros_OrdenPagoMasivoFondos
 
         FechaEstimPago = result
     End Function
+    Private Sub Cargar_combos() 'FJCP_10290_CC	
+
+        cmbTipoPago.Items.Clear()
+        Dim dt As New DataTable
+        Funciones.fn_Consulta("sp_Catalogos_OPMasivas 'MIS_Tipo_Pago','',''", dt)
+
+        If cmbTipoPago.Items.Count = 0 Then
+            cmbTipoPago.DataSource = dt
+            cmbTipoPago.DataTextField = "Descripcion_Tipo_pago"
+            cmbTipoPago.DataValueField = "Id_Tipo_pago"
+            cmbTipoPago.DataBind()
+        End If
+
+        cmbTipoComprobante.Items.Clear()
+        Dim dts As New DataTable
+        Funciones.fn_Consulta("sp_Catalogos_OPMasivas 'COMPROBANTE','',''", dtS)
+
+        If cmbTipoComprobante.Items.Count = 0 Then
+            cmbTipoComprobante.DataSource = dts
+            cmbTipoComprobante.DataTextField = "Descripcion"
+            cmbTipoComprobante.DataValueField = "CodigoComprobante"
+            cmbTipoComprobante.DataBind()
+        End If
+    End Sub
 End Class

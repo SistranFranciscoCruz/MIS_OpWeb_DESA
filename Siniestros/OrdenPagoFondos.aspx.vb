@@ -92,7 +92,15 @@ Partial Class Siniestros_OrdenPago
             Master.Titulo = "OP Fondos"
             InicializarValores()
             linkOnBase.HRef = "" 'FJCP 12090 MEJORAS Folio OnBase
+            'FJCP_10290_CC INI
+            hidBloqueoOnbase.Value = 1
+            Master.InformacionGeneral()
+        Else
+            hidBloqueoOnbase.Value = 0
         End If
+
+        hidCodUsuario.Value = Master.cod_usuario
+        'FJCP_10290_CC FIN
 
         If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
             'Onbase.Style("display") = ""
@@ -607,6 +615,7 @@ Partial Class Siniestros_OrdenPago
 
                             oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
 
+
                             oSeleccionActual = oDatos.Tables(0)
 
                             If Not oDatos.Tables(2) Is Nothing AndAlso oDatos.Tables(2).Rows.Count > 0 Then
@@ -779,11 +788,14 @@ Partial Class Siniestros_OrdenPago
         Dim oFilaSeleccion3() As DataRow
 
         Try
-
-            If cmbNumPago.SelectedValue = -1 Then
-                Mensaje.MuestraMensaje("OrdenPagoSiniestros", "Numero de Pago no seleccionado", TipoMsg.Advertencia)
-                Return
+            'comentar esta 
+            If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
+                If cmbNumPago.SelectedValue = -1 Then
+                    Mensaje.MuestraMensaje("OrdenPagoSiniestros", "Numero de Pago no seleccionado", TipoMsg.Advertencia)
+                    Return
+                End If
             End If
+
 
 
 
@@ -935,35 +947,39 @@ Partial Class Siniestros_OrdenPago
                         oTabla = oGrdOrden
 
                         oFila = oTabla.NewRow()
-                        oFila("NumeroPago") = cmbNumPago.SelectedValue.ToString() 'FJCP MEJORAS FASE II NUMERO PAGO
+                        If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
+                            oFila("NumeroPago") = cmbNumPago.SelectedValue.ToString() 'FJCP MEJORAS FASE II NUMERO PAGO
+                        End If
                         'FJCP MULTIPAGO -INI
-                        oFila("FolioOnbase") = txtOnBase.Text.Trim()
+                        oFila("FolioOnbase") = IIf(txtOnBase.Text.Trim() = "", 0, txtOnBase.Text.Trim())
                         'FJCP MULTIPAGO - FIN
                         oFila("Siniestro") = txtSiniestro.Text.Trim()
-                        oFila("RFC") = txtRFC.Text.Trim()
-                        oFila("Subsiniestro") = cmbSubsiniestro.SelectedValue.ToString()
-                        oFila("Moneda") = cmbMonedaPago.SelectedValue
-                        'SE VA AGREGAR EL METODO PARA CARGAR LOS CONCEPTOS POR DEFAULT FFUENTES
-                        ''JLC Mejoras Clase de Pago -Inicio
-                        oFila("ClasePago") = "26"
-                        'oFila("ClasePago") = txt_clase.Text
-                        ''JLC Mejoras Clase de Pago -Fin
+                            oFila("RFC") = txtRFC.Text.Trim()
+                            oFila("Subsiniestro") = cmbSubsiniestro.SelectedValue.ToString()
+                            oFila("Moneda") = cmbMonedaPago.SelectedValue
+                            'SE VA AGREGAR EL METODO PARA CARGAR LOS CONCEPTOS POR DEFAULT FFUENTES
+                            ''JLC Mejoras Clase de Pago -Inicio
+                            oFila("ClasePago") = "26"
+                            'oFila("ClasePago") = txt_clase.Text
+                            ''JLC Mejoras Clase de Pago -Fin
 
-                        oFila("ConceptoPago") = "350"
-                        oFila("Poliza") = txtPoliza.Text.Trim()
-                        'oFila("TipoMoneda") = oFilaSeleccion(0).Item("Moneda_poliza") 'se comenta por tema de fondos 
-                        oFila("TipoMoneda") = 0
-                        oFila("Descuentos") = 0
-                        oFila("Deducible") = 0
+                            oFila("ConceptoPago") = "350"
+                            oFila("Poliza") = txtPoliza.Text.Trim()
+                            'oFila("TipoMoneda") = oFilaSeleccion(0).Item("Moneda_poliza") 'se comenta por tema de fondos 
+                            oFila("TipoMoneda") = 0
+                            oFila("Descuentos") = 0
+                            oFila("Deducible") = 0
 
-                        'oFila("IdSiniestro") = oFilaSeleccion(0).Item("id_stro")'se comenta por tema de fondos 
-                        oFila("IdSiniestro") = 1
-                        If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
-                            oFila("IdPersona") = oFilaSeleccion(0).Item("id_persona")
-                        Else
-                            oFila("IdPersona") = txtCodigoBeneficiario_stro.Text
-                        End If
-                        oFila("FastTrack") = oFilaSeleccion(0).Item("Fast_track")
+                            'oFila("IdSiniestro") = oFilaSeleccion(0).Item("id_stro")'se comenta por tema de fondos 
+                            oFila("IdSiniestro") = 1
+                            If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
+                                oFila("IdPersona") = oFilaSeleccion(0).Item("id_persona")
+                            Else
+                                oFila("IdPersona") = txtCodigoBeneficiario_stro.Text
+                            End If
+                        'oFila("Fast_track") = IIf(oFilaSeleccion(0).Item("Fast_track").ToString() = "", "NO", oFilaSeleccion(0).Item("Fast_track"))
+
+
                         'oFila("IdPersona") = oFilaSeleccion(0).Item("id_persona") 'se comenta por el tema de fondos
                         'se comenta por el tema de fondos
 
@@ -975,106 +991,106 @@ Partial Class Siniestros_OrdenPago
 
                         Select Case cmbTipoUsuario.SelectedValue
 
-                            Case eTipoUsuario.Asegurado, eTipoUsuario.Tercero
-                                oFila("Factura") = String.Empty
-                                oFila("FechaComprobante") = String.Empty
-                                oFila("NumeroComprobante") = String.Empty
-                                oFila("CodigoTercero") = txtCodigoBeneficiario_stro.Text
-                                oFila("CodIndCob") = 0
-                                oFila("SnCondusef") = 0
-                                oFila("NumeroOficioCondusef") = 0
-                                oFila("FechaOficioCondusef") = 0
-                                oFila("NumeroCorrelaEstim") = 0
-                                oFila("Estimacion") = 0
-                                oFila("Reserva") = 0
-                                oFila("ImportePagos") = 0
-                                oFila("CodigoAsegurado") = 0
-                                oFila("MonedaFactura") = 0
+                                Case eTipoUsuario.Asegurado, eTipoUsuario.Tercero
+                                    oFila("Factura") = String.Empty
+                                    oFila("FechaComprobante") = String.Empty
+                                    oFila("NumeroComprobante") = String.Empty
+                                    oFila("CodigoTercero") = txtCodigoBeneficiario_stro.Text
+                                    oFila("CodIndCob") = 0
+                                    oFila("SnCondusef") = 0
+                                    oFila("NumeroOficioCondusef") = 0
+                                    oFila("FechaOficioCondusef") = 0
+                                    oFila("NumeroCorrelaEstim") = 0
+                                    oFila("Estimacion") = 0
+                                    oFila("Reserva") = 0
+                                    oFila("ImportePagos") = 0
+                                    oFila("CodigoAsegurado") = 0
+                                    oFila("MonedaFactura") = 0
                                 oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2) 'VZAVALETA_1090_CC
 
                             Case eTipoUsuario.Proveedor
-                                oFila("Factura") = oFilaSeleccion(0).Item("folio_GMX")
-                                oFila("CodigoTercero") = 0
-                                oFila("CodIndCob") = 0
-                                oFila("SnCondusef") = 0
-                                oFila("NumeroOficioCondusef") = ""
-                                oFila("FechaOficioCondusef") = ""
-                                oFila("NumeroCorrelaEstim") = 0
-                                ' oFila("Estimacion") = oFilaSeleccion(0).Item("Estimacion")'se comenta por tema de fondos
-                                ' oFila("Reserva") = oFilaSeleccion(0).Item("Reserva")'se comenta por tema de fondos
-                                'Importes e impuestos
-                                'SE AGREGA LA VALIDACION PARA LOS VARIOS CONCEPTOS
-                                If chkVariosConceptos.Checked = False Then
-                                    oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("imp_subtotal")), CDbl(oFilaSeleccion(0).Item("imp_subtotal"))), 2)
-                                Else
-                                    oFila("Pago") = 0
-                                End If
-                                'Verificar si se queda
-                                oFila("Impuestos") = CDbl(oFilaSeleccion(0).Item("imp_impuestos"))
-                                oFila("Retenciones") = CDbl(oFilaSeleccion(0).Item("imp_retencion"))
-                                'oFila("PagoSinIva") = CDbl(oFilaSeleccion(0).Item("PagoSinIva"))
-                                'oFila("PagoConIva") = CDbl(oFilaSeleccion(0).Item("PagoConIva"))
+                                    oFila("Factura") = oFilaSeleccion(0).Item("folio_GMX")
+                                    oFila("CodigoTercero") = 0
+                                    oFila("CodIndCob") = 0
+                                    oFila("SnCondusef") = 0
+                                    oFila("NumeroOficioCondusef") = ""
+                                    oFila("FechaOficioCondusef") = ""
+                                    oFila("NumeroCorrelaEstim") = 0
+                                    ' oFila("Estimacion") = oFilaSeleccion(0).Item("Estimacion")'se comenta por tema de fondos
+                                    ' oFila("Reserva") = oFilaSeleccion(0).Item("Reserva")'se comenta por tema de fondos
+                                    'Importes e impuestos
+                                    'SE AGREGA LA VALIDACION PARA LOS VARIOS CONCEPTOS
+                                    If chkVariosConceptos.Checked = False Then
+                                        oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("imp_subtotal")), CDbl(oFilaSeleccion(0).Item("imp_subtotal"))), 2)
+                                    Else
+                                        oFila("Pago") = 0
+                                    End If
+                                    'Verificar si se queda
+                                    oFila("Impuestos") = CDbl(oFilaSeleccion(0).Item("imp_impuestos"))
+                                    oFila("Retenciones") = CDbl(oFilaSeleccion(0).Item("imp_retencion"))
+                                    'oFila("PagoSinIva") = CDbl(oFilaSeleccion(0).Item("PagoSinIva"))
+                                    'oFila("PagoConIva") = CDbl(oFilaSeleccion(0).Item("PagoConIva"))
 
-                                oFila("FechaComprobante") = Me.txtFechaComprobante.Text.Trim
-                                oFila("NumeroComprobante") = Me.txtNumeroComprobante.Text.Trim
-                                oFila("CodigoAsegurado") = oFilaSeleccion(0).Item("cod_pres")
-                                oFila("MonedaFactura") = oFilaSeleccion(0).Item("cod_moneda")
-                        End Select
+                                    oFila("FechaComprobante") = Me.txtFechaComprobante.Text.Trim
+                                    oFila("NumeroComprobante") = Me.txtNumeroComprobante.Text.Trim
+                                    oFila("CodigoAsegurado") = oFilaSeleccion(0).Item("cod_pres")
+                                    oFila("MonedaFactura") = oFilaSeleccion(0).Item("cod_moneda")
+                            End Select
 
-                        ' oFila("CodItem") = oFilaSeleccion(0).Item("cod_item")'se comenta por tema de fondos 
-                        'oFila("CodigoRamo") = oFilaSeleccion(0).Item("Cod_ramo") 'se comenta por tema de fondos 
-                        'oFila("CodigoSubRamo") = oFilaSeleccion(0).Item("cod_subramo") 'se comenta por tema de fondos 
-                        'oFila("CodigoTipoStro") = oFilaSeleccion(0).Item("cod_tipo_stro") 'se comenta por tema de fondos 
+                            ' oFila("CodItem") = oFilaSeleccion(0).Item("cod_item")'se comenta por tema de fondos 
+                            'oFila("CodigoRamo") = oFilaSeleccion(0).Item("Cod_ramo") 'se comenta por tema de fondos 
+                            'oFila("CodigoSubRamo") = oFilaSeleccion(0).Item("cod_subramo") 'se comenta por tema de fondos 
+                            'oFila("CodigoTipoStro") = oFilaSeleccion(0).Item("cod_tipo_stro") 'se comenta por tema de fondos 
 
-                        oFila("TipoPago") = 1
+                            oFila("TipoPago") = 1
 
-                        oTabla.Columns("Pago").ReadOnly = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, True, False)
+                            oTabla.Columns("Pago").ReadOnly = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, True, False)
 
-                        oTabla.Rows.Add(oFila)
+                            oTabla.Rows.Add(oFila)
 
-                        oGrdOrden = oTabla
+                            oGrdOrden = oTabla
 
-                        grd.DataSource = oTabla
-                        grd.DataBind()
+                            grd.DataSource = oTabla
+                            grd.DataBind()
 
-                        grd.Columns(2).Visible = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, True, False)
-                        grd.Columns(13).Visible = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, False, True) 'FJCP 10290 MEJORAS Deducible
+                            grd.Columns(2).Visible = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, True, False)
+                            grd.Columns(13).Visible = IIf(cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor, False, True) 'FJCP 10290 MEJORAS Deducible
 
-                        cmbTipoUsuario.Enabled = False
+                            cmbTipoUsuario.Enabled = False
 
-                        'If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then
-                        'txtConceptoOP.Text = ""
-                        'Dim substroDetalle As Integer = 0
-                        'For Each oFila In oTabla.Rows
+                            'If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then
+                            'txtConceptoOP.Text = ""
+                            'Dim substroDetalle As Integer = 0
+                            'For Each oFila In oTabla.Rows
 
-                        '    If txtConceptoOP.Text.Trim = String.Empty Then
-                        '        'txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
-                        '        txtConceptoOP.Text = String.Format("{0} {1} {2}", txtConceptoOP.Text.Trim, oFila("Siniestro"), oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
-                        '        substroDetalle = CInt(oFila("Subsiniestro"))
-                        '    Else
-                        '        'txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
-                        '        If substroDetalle <> CInt(oFila("Subsiniestro")) Then
-                        '            txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
-                        '        End If
-                        '    End If
-                        'Next
+                            '    If txtConceptoOP.Text.Trim = String.Empty Then
+                            '        'txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                            '        txtConceptoOP.Text = String.Format("{0} {1} {2}", txtConceptoOP.Text.Trim, oFila("Siniestro"), oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                            '        substroDetalle = CInt(oFila("Subsiniestro"))
+                            '    Else
+                            '        'txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                            '        If substroDetalle <> CInt(oFila("Subsiniestro")) Then
+                            '            txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                            '        End If
+                            '    End If
+                            'Next
 
 
-                        '    'lo comente pero si debe de ir
-                        '    txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim.ToString(), oClavesPago.Select(String.Format("cod_clase_pago = '{0}'", oTabla.Rows(0)("ClasePago")))(0)("txt_desc").ToString())
+                            '    'lo comente pero si debe de ir
+                            '    txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim.ToString(), oClavesPago.Select(String.Format("cod_clase_pago = '{0}'", oTabla.Rows(0)("ClasePago")))(0)("txt_desc").ToString())
 
-                        'End If
+                            'End If
 
-                        If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
-                            CalcularTotales()
-                        End If
+                            If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
+                                CalcularTotales()
+                            End If
 
-                        Me.txtBeneficiario.Text = Me.txtBeneficiario_stro.Text.Trim
+                            Me.txtBeneficiario.Text = Me.txtBeneficiario_stro.Text.Trim
 
-                        Me.txtBeneficiario_stro.Enabled = False
+                            Me.txtBeneficiario_stro.Enabled = False
 
-                    Else
-                        Mensaje.MuestraMensaje("OrdenPagoSiniestros", "No se pudo agregar la fila", TipoMsg.Advertencia)
+                        Else
+                            Mensaje.MuestraMensaje("OrdenPagoSiniestros", "No se pudo agregar la fila", TipoMsg.Advertencia)
                     End If
 
                 Else
@@ -1132,7 +1148,7 @@ Partial Class Siniestros_OrdenPago
             bExisteCtaGob = False
             If grd.Rows.Count > 0 AndAlso cmbTipoPagoOP.SelectedValue = "T" Then
 
-                'FJCP 10290 MEJORAS Cuentas bancarias en pagos a asegurados y terceros FAST TRACK ini
+                'FJCP 10290 MEJORAS Cuentas bancarias en pagos a asegurados y terceros FAST TRACK ini  'QUITAR ESTA PARTE EN FONDOS
 
                 folioOnBase = txtOnBase.Text.Trim
                 oDatos = New DataSet
@@ -1177,7 +1193,7 @@ Partial Class Siniestros_OrdenPago
                         oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                         oParametros.Add("Plaza", oPlazaT_stro.Value)
                         oParametros.Add("ABA", oAbaT_stro.Value)
-                        oParametros.Add("Fasttrack", oGrdOrden.Rows(0).Item("FastTrack")) 'se agrega por proyecto de inter
+                        'oParametros.Add("Fast_track", oGrdOrden.Rows(0).Item("Fast_track")) 'se agrega por proyecto de inter
 
                         bTieneDatosBancarios = True
 
@@ -1231,7 +1247,7 @@ Partial Class Siniestros_OrdenPago
                     oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                     oParametros.Add("Plaza", oPlazaT_stro.Value)
                     oParametros.Add("ABA", oAbaT_stro.Value)
-                    oParametros.Add("Fasttrack", oGrdOrden.Rows(0).Item("FastTrack")) 'se agrega por proyecto de inter
+                    'oParametros.Add("Fast_track", oGrdOrden.Rows(0).Item("Fast_track")) 'se agrega por proyecto de inter
 
                     bTieneDatosBancarios = False
 
@@ -2489,6 +2505,10 @@ Partial Class Siniestros_OrdenPago
         chkVariasFacturas.Checked = False
         chkVariosConceptos.Checked = False
         chkFondosSinIVA.Checked = False
+
+        Dim dt1 As New DataTable
+        cmbNumPago.DataSource = dt1
+        cmbNumPago.DataBind()
     End Sub
     Public Sub LimpiarOrdenPago() Handles btnLimpiar.Click
         Limpiartodo()
@@ -3136,7 +3156,7 @@ Partial Class Siniestros_OrdenPago
             dt.Columns.Add("CondicionCED", Type.GetType("System.Int32"))
             dt.Columns.Add("MonedaFactura", Type.GetType("System.Int32"))
             'campos de fasttrack
-            dt.Columns.Add("FastTrack", Type.GetType("System.String"))
+            'dt.Columns.Add("Fast_track", Type.GetType("System.String"))
             'campos multipago y numero pago
             dt.Columns.Add("FolioOnbase", Type.GetType("System.Int32")) 'FJCP MULTIPAGO AGREGAR 
             dt.Columns.Add("NumeroPago", Type.GetType("System.Int32")) 'FJCP MEJORAS FASE II NUMERO PAGO
@@ -3512,6 +3532,7 @@ Partial Class Siniestros_OrdenPago
                     oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
                     If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
                         oSeleccionActual = oDatos.Tables(0)
+
                         With oDatos.Tables(0).Rows(0)
                             ' If (oDatos.Tables(0).Rows(0).Item("sn_relacionado") = "-1") Then
                             '    Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(0).Rows(0).Item("fecha_relacion").ToString() + " Usuario relacion: " + oDatos.Tables(0).Rows(0).Item("cod_usuario_relacion").ToString() + " Fecha de Comprobante: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
@@ -3525,6 +3546,7 @@ Partial Class Siniestros_OrdenPago
                             'End If
                             ' End If
                         End With
+
                         'valida los datos de numero de siniestro
 
                         '''''''''se comenta por el tema de fondos 
@@ -3605,6 +3627,10 @@ Partial Class Siniestros_OrdenPago
 
                         'Onbase.Style("display") = "none" 'FFUENTES none
                         pnlProveedor.Style("display") = "none"
+
+                    Else 'FJCP_10290_CC
+                        Limpiartodo()
+                        Return False
                     End If
             End Select
 

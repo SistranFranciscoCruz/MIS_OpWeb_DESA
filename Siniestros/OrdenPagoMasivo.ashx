@@ -35,7 +35,8 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
         Dim VariasFacturas As String
         Dim aux_pagaA As String
         Dim ID As Int32
-
+        Dim cta_pagoInter As String
+        Dim cta_pagoTesofe As String
         Dim funciones As Funciones
 
 
@@ -112,11 +113,16 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
 
             oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase_Masivo", oParametros)
             oTabla = oDatos.Tables(0)
-                
+
             ID = 1
             For Each row As DataRow In oTabla.Rows
+                'FJCP_10290_CC
+                cta_pagoInter = obt_cta_pagoInter()
+                cta_pagoTesofe = obt_cta_pagoTesofe()
+                If row("Cuenta_Bancaria").ToString().Trim() <> cta_pagoInter AndAlso row("Cuenta_Bancaria").ToString().Trim() <> cta_pagoTesofe Then
 
-                OP = New OrdenPagoMasivoClass
+                    OP = New OrdenPagoMasivoClass
+                    'FJCP_10290_CC
 
                 OP.ID = row("ID").ToString()
                 ' OP.Folio_Onbase = "<a href=""http://172.16.40.66/AppNet/docpop/docpop.aspx?KT1419_0_0_0=" + row("Folio_Onbase").ToString() + "&clienttype=html&cqid=203""  target=""_blank""><i class=""fa fa-newspaper-o""></i>&nbsp; " + row("Folio_Onbase").ToString() + "</a>"
@@ -153,6 +159,7 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
                 OP.Concepto_Factura = row("Concepto_Facturado").ToString()
                 OP.Cod_concepto_pago = row("Cod_concepto_pago").ToString()
                 OP.Concepto_Pago = row("Concepto_Pago").ToString()
+                OP.Cod_clas_pago = row("Cod_Clase_pago").ToString()
                 OP.Clase_pago = row("Clase_pago").ToString()
                 OP.Tipo_Pago = row("Tipo_Pago").ToString()
                 OP.Concepto2 = row("Concepto2").ToString()
@@ -205,7 +212,7 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
 
 
                 lstOp.Add(OP)
-
+  End If
 
 
 
@@ -261,4 +268,27 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
 
     End Function
 
+    Public Function obt_cta_pagoInter() As String
+        Try
+            Dim ctaParam As String
+            ctaParam = Funciones.fn_EjecutaStr("usp_CargarDatosBancariosDepGob_stro @Accion = 10") 'FJCP_10290_CC
+
+            Return ctaParam
+        Catch ex As Exception
+            Return ""
+        End Try
+
+    End Function
+
+    Public Function obt_cta_pagoTesofe() As String
+        Try
+            Dim ctaParam As String
+            ctaParam = Funciones.fn_EjecutaStr("usp_CargarDatosBancariosDepGob_stro @Accion = 2") 'FJCP_10290_CC
+
+            Return ctaParam
+        Catch ex As Exception
+            Return ""
+        End Try
+
+    End Function
 End Class

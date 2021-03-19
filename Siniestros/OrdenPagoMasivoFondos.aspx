@@ -16,7 +16,6 @@
     
     <%--<link href="../Content/JQGRID/tableexport.css" rel="stylesheet" type="text/css"/>--%>
 
-    <script src="../Scripts/Siniestros/OrdenPago.js"></script>
     <script src="../Scripts/Siniestros/OrdenPagoMasivoFondos.js"></script>
     
     
@@ -130,11 +129,7 @@
                         </div>
                              <div class="form-group col-md-2">
                                 <asp:Label runat="server" class="etiqueta-control">Tipo Pago</asp:Label>
-                                <asp:DropDownList ID="cmbTipoPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" >
-                                    <asp:ListItem Value="9">TODOS</asp:ListItem> <%--A--%>
-                                    <asp:ListItem Value="0">Cheque</asp:ListItem> <%--A--%>
-                                    <asp:ListItem Value="-1">Transferencia</asp:ListItem> <%--A--%>
-                                </asp:DropDownList>
+                                <asp:DropDownList ID="cmbTipoPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" > </asp:DropDownList>
                             </div>
 
                              <div class="form-group col-md-2">
