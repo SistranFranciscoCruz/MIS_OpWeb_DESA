@@ -66,6 +66,10 @@ Partial Class Pages_Login
             Dim dtUsuario As New DataTable
             Dim MenuUsuStr As String
 
+            Dim oParametros As New Dictionary(Of String, Object)
+
+
+
             'Validadción en Active Directory
             If Funciones.IsAuthenticated("GMX.COM.MX", txt_usuario.Text, txt_contraseña.Text) = True Then
                 'Validadción en SII
@@ -103,6 +107,12 @@ Partial Class Pages_Login
                     Else
                         Response.Redirect("Inicio.aspx", False)
                     End If
+
+                    oParametros.Add("Accion", 3)
+                    oParametros.Add("folioOnbase", 999)
+                    oParametros.Add("cod_usuario", dtUsuario.Rows(0).Item("cod_usuario").ToString())
+
+                    Funciones.ObtenerDatos("usp_bloqueoFolioOnbase_stro", oParametros)
 
                 Else
                     Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)

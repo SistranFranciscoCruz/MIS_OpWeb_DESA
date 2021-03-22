@@ -96,7 +96,15 @@ Partial Class Siniestros_OrdenPago
             Master.Titulo = "OP Tradicional"
             InicializarValores()
             linkOnBase.HRef = "" 'FJCP 12090 MEJORAS Folio OnBase
+            'FJCP_10290_CC INI
+            hidBloqueoOnbase.Value = 1
+            Master.InformacionGeneral()
+        Else
+            hidBloqueoOnbase.Value = 0
         End If
+
+        hidCodUsuario.Value = Master.cod_usuario
+        'FJCP_10290_CC FIN
 
         If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
             'Onbase.Style("display") = ""
@@ -1878,6 +1886,7 @@ Partial Class Siniestros_OrdenPago
                 ObtenerTipoCambio = txt_tipoCambioConsultado.Text
                 Exit Function
             End If
+
             'VZAVALETA_10290_CC FIN
 
             sDia = DateTime.Now.Day
@@ -3025,6 +3034,7 @@ Partial Class Siniestros_OrdenPago
                 If ValidaVacios(dt.Rows(0)("banco").ToString) Then oParametros.Add("banco", dt.Rows(0)("banco").ToString)
                 If ValidaVacios(dt.Rows(0)("num_banco").ToString) Then oParametros.Add("num_banco", dt.Rows(0)("num_banco").ToString)
                 If ValidaVacios(dt.Rows(0)("domicilio").ToString) Then oParametros.Add("domicilio", dt.Rows(0)("domicilio").ToString)
+                If ValidaVacios(dt.Rows(0)("cuenta").ToString) Then oParametros.Add("cuenta", dt.Rows(0)("cuenta").ToString) 'FJCP_10290_CC
                 If ValidaVacios(dt.Rows(0)("aba_routing").ToString) Then oParametros.Add("aba_routing", dt.Rows(0)("aba_routing").ToString)
                 If ValidaVacios(dt.Rows(0)("swift").ToString) Then oParametros.Add("swift", dt.Rows(0)("swift").ToString)
                 If ValidaVacios(dt.Rows(0)("transit").ToString) Then oParametros.Add("transit", dt.Rows(0)("transit").ToString)
@@ -3900,6 +3910,11 @@ Partial Class Siniestros_OrdenPago
                                         'Me.txtTipoCambio.Text = "1.00"
                                         Me.cmbMonedaPago.SelectedValue = 0
                                     End If
+                                    If txtMonedaPoliza.Text = cmbMonedaPago.SelectedItem.ToString() Then  'FJCP 10290_CC
+                                        txtTipoCambio.Text = "1"
+                                    Else
+                                        Me.txtTipoCambio.Text = IIf(Me.txtMonedaPoliza.Text = "NACIONAL", "1.00", ObtenerTipoCambio.ToString())
+                                    End If
                                     'Se agrega por el tema de 4 campos mas
                                     If .Item("sn_transferencia") <> .Item("Forma_Hara_Pago") Then
                                         Mensaje.MuestraMensaje("Moneda", "No coincide la forma del pago MIS vs SIIGMX (OP WEB) ", TipoMsg.Falla)
@@ -4123,7 +4138,13 @@ Partial Class Siniestros_OrdenPago
 
                             End If
 
-                            Me.txtTipoCambio.Text = IIf(Me.txtMonedaPoliza.Text = "NACIONAL", "1.00", ObtenerTipoCambio.ToString())
+                            If txtMonedaPoliza.Text = cmbMonedaPago.SelectedItem.ToString() Then  'FJCP 10290_CC
+                                txtTipoCambio.Text = "1"
+                            Else
+                                Me.txtTipoCambio.Text = IIf(Me.txtMonedaPoliza.Text = "NACIONAL", "1.00", ObtenerTipoCambio.ToString())
+                            End If
+
+
 
                         Else
 

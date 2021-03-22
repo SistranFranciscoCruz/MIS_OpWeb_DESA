@@ -111,7 +111,7 @@ Public Class OrdenPagoMasiva
 
                 oParametros.Add("IdSiniestro", ValidarParametros(OP.IdSiniestro))
                 oParametros.Add("CodigoTercero", ValidarParametros(OP.CodigoTercero))
-                oParametros.Add("Subtotal", ValidarParametros(OP.Subtotal))
+                oParametros.Add("Subtotal", ValidarParametros(OP.Importe))
                 oParametros.Add("Iva", ValidarParametros(OP.Iva))
                 oParametros.Add("Total", ValidarParametros(OP.Total))
                 oParametros.Add("Retencion", ValidarParametros(OP.Retencion))
@@ -406,11 +406,6 @@ Public Class OrdenPagoMasiva
         Try
 
 
-
-
-
-
-
             serializer.MaxJsonLength = 500000000
             oParametros.Add("strCatalogo", "Tercero")
 
@@ -445,7 +440,7 @@ Public Class OrdenPagoMasiva
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
-    Public Function folioOnbaseBloqueado(codUsuario As String) As String
+    Public Function folioOnbaseBloqueado(codUsuario As String, bloqueo As Integer) As String
 
         Dim oParametros As New Dictionary(Of String, Object)
         Dim serializer As New JavaScriptSerializer
@@ -457,7 +452,10 @@ Public Class OrdenPagoMasiva
         oParametros.Add("folioOnbase", 999)
         oParametros.Add("cod_usuario", codUsuario)
 
-        Funciones.ObtenerDatos("usp_bloqueoFolioOnbase_stro", oParametros)
+        If bloqueo <> 0 Then
+            Funciones.ObtenerDatos("usp_bloqueoFolioOnbase_stro", oParametros)
+        End If
+
 
         Return Nothing
     End Function

@@ -1065,8 +1065,15 @@ Partial Class Pages_SiteMaster
 
     Private Sub lnk_CerrarSesion_Click(sender As Object, e As EventArgs) Handles lnk_CerrarSesion.Click
         Try
+            Dim oParametros As New Dictionary(Of String, Object)
             FormsAuthentication.SignOut()
             Response.Redirect("../Pages/Login.aspx", False)
+            oParametros.Add("Accion", 3)
+            oParametros.Add("folioOnbase", 999)
+            oParametros.Add("cod_usuario", cod_usuario)
+
+            Funciones.ObtenerDatos("usp_bloqueoFolioOnbase_stro", oParametros)
+
         Catch ex As Exception
             Mensaje.MuestraMensaje(Titulo, ex.Message, TipoMsg.Falla)
             Funciones.fn_InsertaExcepcion(cod_modulo, cod_submodulo, cod_usuario, "lnk_CerrarSesion_Click: " & ex.Message)
@@ -2243,7 +2250,12 @@ Partial Class Pages_SiteMaster
                                                         Optional ByVal sn_submod_web As Integer = -1)
 
         Try
-
+            'VZAVALETA_10290_CC_INI
+            If chkPagoInter.Checked Then
+                Funciones.AbrirModal("#Transferencias_stro")
+                Exit Sub
+            End If
+            'VZAVALETA_10290_CC_FIN
             'Carga de catalogos de bancos
             If cmbBancoT_stro.Items.Count > 0 Then
                 cmbBancoT_stro.Items.Clear()
@@ -2540,12 +2552,19 @@ Partial Class Pages_SiteMaster
 
                 Dim ctaParam As String
                 ctaParam = Funciones.fn_EjecutaStr("usp_CargarDatosBancariosDepGob_stro @Accion = 10") 'FJCP MEJORAS PAGO INTERNACIONAL 
-                txtCuentaBancariaT_stro.Text = ctaParam
-                txtCuentaBancariaT_stro_Confirmacion.Text = ctaParam
 
                 Funciones.CerrarModal("#PagoInternacional")
                 Funciones.AbrirModal("#Transferencias_stro")
                 'Response.Redirect("Eliminar.aspx")
+                'VZAVALETA_10290_CC_INI
+                Me.txtCuentaBancariaT_stro.Enabled = False
+                Me.txtCuentaBancariaT_stro_Confirmacion.Enabled = False
+                Me.txtCuentaBancariaT_stro.TextMode = TextBoxMode.Number
+                Me.txtCuentaBancariaT_stro_Confirmacion.TextMode = TextBoxMode.Number
+
+                txtCuentaBancariaT_stro.Text = ctaParam
+                txtCuentaBancariaT_stro_Confirmacion.Text = ctaParam
+                'VZAVALETA_10290_CC_FIN
 
             Else
                 MuestraMensaje("Validación", "Falta capturar campos", TipoMsg.Falla)

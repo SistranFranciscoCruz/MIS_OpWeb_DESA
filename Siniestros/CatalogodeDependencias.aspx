@@ -86,13 +86,15 @@
                     </div>
                     <div class="form-group-sm col-md-2">
                         <asp:Label runat="server" class="etiqueta-control">Clabe</asp:Label>
-                        <asp:TextBox ID="txt_clabe" runat="server" CssClass="estandar-control Tablero" placeholder="Clabe" MaxLength="18"></asp:TextBox>
+                        <asp:TextBox ID="txt_clabe" runat="server" CssClass="estandar-control Tablero" placeholder="Clabe" MaxLength="18" OnFocusOut="validaLong('txt_clabe')"></asp:TextBox>
+
 
                     </div>
 
                     <div class="form-group-sm col-md-2">
                         <asp:Label runat="server" class="etiqueta-control">Dependencia</asp:Label>
-                        <asp:TextBox ID="txt_dependencia" runat="server" CssClass="estandar-control Tablero" placeholder="Dependencia"></asp:TextBox>
+                        <asp:TextBox ID="txt_dependencia" runat="server" CssClass="estandar-control Tablero" placeholder="Dependencia"  ></asp:TextBox>
+                        
 
                     </div>
 
