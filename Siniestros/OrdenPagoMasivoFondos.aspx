@@ -23,7 +23,7 @@
     <script src="../Scripts/JQGRID/jquery.layout.js" type="text/javascript"></script>   
     <script src="../Scripts/JQGRID/grid.locale-en.js" type="text/javascript"></script>
     <script src="../Scripts/JQGRID/ui.multiselect.js" type="text/javascript"></script>
-    <script src="../Scripts/JQGRID/jquery.jqGrid.js" type="text/javascript"></script>
+    <script src="../Scripts/JQGRID/Mijquery.jqGrid.js" type="text/javascript"></script>
 
 
 
@@ -254,9 +254,8 @@
     <div class="row">
 
         <%--<table id="list47" >--%>
-        <table id="list47" width="98%">
-        </table>
-        <div id="plist47"></div>
+        <table id="list47" width="98%"> </table>
+        <div id="page_columnas"></div>
     </div>
  
     <br />

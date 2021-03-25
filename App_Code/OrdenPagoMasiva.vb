@@ -83,8 +83,10 @@ Public Class OrdenPagoMasiva
                 oParametros.Add("Concepto2", ValidarParametros(OP.Concepto2))
                 oParametros.Add("Tipo_Pago2", ValidarParametros(OP.Tipo_Pago2))
                 oParametros.Add("Folio_Onbase_cuenta", ValidarParametros(OP.Folio_Onbase_cuenta))
-                oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria))
-                oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta))
+                ' oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria))
+                ' oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta))
+                oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria_ok))
+                oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta_ok))
                 oParametros.Add("Solicitante", ValidarParametros(OP.Solicitante))
                 oParametros.Add("Notas", ValidarParametros(OP.Notas))
                 oParametros.Add("Observaciones", ValidarParametros(OP.Observaciones))
@@ -254,6 +256,8 @@ Public Class OrdenPagoMasiva
                 OP.Folio_Onbase_cuenta = Webservices(row("Folio_Onbase_cuenta").ToString())
                 OP.Cuenta_Bancaria = row("Cuenta_Bancaria").ToString()
                 OP.Confirmar_Cuenta = row("Confirmar_Cuenta").ToString()
+                OP.Cuenta_Bancaria_ok = row("Cuenta_Bancaria").ToString()
+                OP.Confirmar_Cuenta_ok = row("Confirmar_Cuenta").ToString()
                 OP.Solicitante = row("Solicitante").ToString()
                 OP.Notas = row("Notas").ToString()
                 OP.Observaciones = row("Observaciones").ToString()
@@ -340,7 +344,8 @@ Public Class OrdenPagoMasiva
         oParametros.Add("CodigoPres", "52260")
 
 
-        oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+        'oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+        oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro_OPWEB", oParametros) 'FJCP_10290_CC
 
         oTabla = oDatos.Tables(0)
 

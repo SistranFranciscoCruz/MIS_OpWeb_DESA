@@ -1134,35 +1134,31 @@ Partial Class Siniestros_OrdenPago
     Public Sub VerCuentasTransferencia() Handles btnVerCuentas.Click
 
         Dim oParametros As New Dictionary(Of String, Object)
-
         Dim oDatos As DataSet
-
         Dim bTieneDatosBancarios As Boolean
 
-        Dim folioOnBase As String 'fjcp cuentas bancarias
-        Dim ctaClabe As String
         Dim folioOnbase_edoCta As String
         Dim dt As New DataTable
         Dim bExisteCtaGob As Boolean
+        Dim folioOnBase As String 'fjcp cuentas bancarias
+
         Try
-            bExisteCtaGob = False
+
             If grd.Rows.Count > 0 AndAlso cmbTipoPagoOP.SelectedValue = "T" Then
 
-                'FJCP 10290 MEJORAS Cuentas bancarias en pagos a asegurados y terceros FAST TRACK ini  'QUITAR ESTA PARTE EN FONDOS
-
+                'FJCP 10290 MEJORAS Folio Onbase Edo Cta Ini
                 folioOnBase = txtOnBase.Text.Trim
                 oDatos = New DataSet
-
                 oParametros = New Dictionary(Of String, Object)
                 oParametros.Add("folioOnBase", CInt(folioOnBase.ToString()))
                 oDatos = Funciones.ObtenerDatos("usp_obtenerNroCta_FolioOnBase", oParametros)
-                ctaClabe = oDatos.Tables(0).Rows(0).Item("Cuenta_Clabe").ToString
                 folioOnbase_edoCta = oDatos.Tables(0).Rows(0).Item("Folio_Onbase_est_cuenta").ToString()
+                'FJCP 10290 MEJORAS Folio Onbase Edo Cta Fin
 
-                'End If
-                'FJCP 10290 MEJORAS Cuentas bancarias en pagos a asegurados y terceros FAST TRACK fin
                 oDatos = New DataSet
+
                 oParametros = New Dictionary(Of String, Object)
+
                 oParametros.Add("Codigo", CInt(oGrdOrden.Rows(0).Item("IdPersona")))
 
 
@@ -1175,9 +1171,7 @@ Partial Class Siniestros_OrdenPago
                         oBancoT_stro.Value = .Item("CodigoBanco")
                         oMonedaT_stro.Value = .Item("CodigoMoneda")
                         oTipoCuentaT_stro.Value = .Item("TipoCuenta")
-                        'oCuentaBancariaT_stro.Value = .Item("NumeroCuenta")
-                        If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then oCuentaBancariaT_stro.Value = .Item("NumeroCuenta")
-                        If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then oCuentaBancariaT_stro.Value = ctaClabe
+                        oCuentaBancariaT_stro.Value = .Item("NumeroCuenta")
                         oBeneficiarioT_stro.Value = .Item("Beneficiario")
 
                         oSucursalT_stro.Value = "CIUDAD DE MEXICO"
@@ -1193,7 +1187,6 @@ Partial Class Siniestros_OrdenPago
                         oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                         oParametros.Add("Plaza", oPlazaT_stro.Value)
                         oParametros.Add("ABA", oAbaT_stro.Value)
-                        'oParametros.Add("Fast_track", oGrdOrden.Rows(0).Item("Fast_track")) 'se agrega por proyecto de inter
 
                         bTieneDatosBancarios = True
 
@@ -1247,7 +1240,6 @@ Partial Class Siniestros_OrdenPago
                     oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                     oParametros.Add("Plaza", oPlazaT_stro.Value)
                     oParametros.Add("ABA", oAbaT_stro.Value)
-                    'oParametros.Add("Fast_track", oGrdOrden.Rows(0).Item("Fast_track")) 'se agrega por proyecto de inter
 
                     bTieneDatosBancarios = False
 
@@ -3015,7 +3007,8 @@ Partial Class Siniestros_OrdenPago
                 oParametros.Add("ClasePago", CInt(sValor))
                 oParametros.Add("CodigoPres", Me.txtCodigoBeneficiario_stro.Text)
 
-                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+                'oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro_OPWEB", oParametros) 'FJCP_10290_CC
 
                 If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
 

@@ -1,5 +1,4 @@
-﻿
-jQuery(document).ready(function () {
+﻿jQuery(document).ready(function () {
 
 
 
@@ -296,6 +295,15 @@ jQuery(document).ready(function () {
                     PagarA = 7;
                 }
 
+                //FJCP_10290_CC INI
+                if (mydata[0].PagarA == "Proveedor") {
+                    PagarA = 10;
+                }
+
+                $("[id*=cmbPagarA]").val(PagarA);
+                //FJCP_10290_CC FIN
+
+
                 if (PagarA == 8) {
                     LoadGridTerceros(mydata);
                 }
@@ -388,12 +396,12 @@ jQuery(document).ready(function () {
                                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", sorttype: "int" },
-                                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", sorttype: "int" },
+                                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                                     { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
-                                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", sorttype: "int" },
-                                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", sorttype: "int" },
-                                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", sorttype: "int" },
+                                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
                                     { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
                                     { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
@@ -524,7 +532,7 @@ jQuery(document).ready(function () {
                                 },
 
 
-                                // pager: "#plist47",
+                                pager: "#page_columnas",
                                 viewrecords: true,
                                 caption: "Listado de Folios",
                                 autowidth: false,
@@ -543,6 +551,23 @@ jQuery(document).ready(function () {
                                 },
                                 // height: 'auto'
                             });
+
+
+                            //FJCP_10290_CC INI
+                            
+                                jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false });
+                            //jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false, position: "left", cloneToTop: true });
+
+                            jQuery("#list47").jqGrid('navButtonAdd', '#page_columnas', {
+                                caption: "Ocultar/Mostrar Columnas",
+                                title: "Reorder Columns",
+                                //position: "last",
+                                onClickButton: function () {
+                                    jQuery("#list47").jqGrid('columnChooserTradProv');
+                                }
+                            });
+                            //FJCP_10290_CC FIN
+
 
                             jQuery("#list47").jqGrid('setFrozenColumns')
 
@@ -564,8 +589,7 @@ jQuery(document).ready(function () {
 
     };
 
-
-    function LoadGridAsegurados(mydata) {
+function LoadGridAsegurados(mydata) {
         var lastsel2;
         var lastSel = -1;
 
@@ -579,75 +603,58 @@ jQuery(document).ready(function () {
                 width: $("#txt_width").val(),
                 rowNum: 8000,
                 rowList: [10, 20, 30],
-                colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', '', 'Accion'],
+                colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Cuenta_Bancaria_ok', 'Confirmar Cuenta', 'Confirmar_Cuenta_ok', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', '', 'Accion'], //FJCP_10290_CC
                 colModel: [
 
                     { name: 'Folio_Onbase', index: 'Folio_Onbase', width: 100, frozen: false },
                     { name: 'Num_Pago', index: 'Num_Pago', width: 100 },
                     { name: 'Tipo_comprobante', index: 'Tipo_comprobante', width: 182 },
                     { name: 'PagarA', index: 'PagarA', width: 90 },
-                    { name: 'CodigoCliente', index: 'CodigoCliente', width: 90},
+                    { name: 'CodigoCliente', index: 'CodigoCliente', width: 90 },
                     { name: 'RFC', index: 'RFCc', width: 120 },
                     { name: 'Nombre_Razon_Social', index: 'Nombre_Razon_Social', width: 300 },
                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", sorttype: "int" },
+                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
-                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", sorttype: "int" },
+                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
                     { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
                     { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
-                    { name: 'Cod_concepto_pago', index: 'Cod_concepto_pago', width: 180, hidden: true }
-                    ,
+                    { name: 'Cod_concepto_pago', index: 'Cod_concepto_pago', width: 180, hidden: true },
                     {
-                        name: 'Concepto_Pago', index: 'Concepto_Pago', align: 'center', width: 270, editable: true, edittype: "select", editoptions: {
+                        name: 'Concepto_Pago', index: 'Concepto_Pago', align: 'center', width: 270, editable: true, edittype: "select",
+                        editoptions: {
                             value: res,
                             dataEvents: [
                                 {
                                     type: 'change',
                                     fn: function (e) {
-                                        
                                         var v = parseInt($(e.target).val(), 10);
-
-
-
-
-
                                         var row = $(e.target).closest('tr.jqgrow');
                                         var rowId = row.attr('id');
-
-
-
-
-
                                         jQuery("#list47").jqGrid('setCell', rowId, 'Cod_concepto_pago', v);
-
-
-
-
-
-
                                     }
                                 }
                             ]
 
                         }
-                    }
-                    ,
-                    { name: 'Cod_tipo_pago', index: 'Cod_tipo_pago', width: 45, hidden: true }
-
-                    ,
-                    { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 }
-                    ,
+                    },
+                    { name: 'Cod_tipo_pago', index: 'Cod_tipo_pago', width: 45, hidden: true },
+                    { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 },
                     { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: false, editoptions: { size: "30", maxlength: "100" } },
                     { name: 'Tipo_Pago2', index: 'Tipo_Pago2', width: 90, hidden: false },
                     { name: 'Folio_Onbase_cuenta', index: 'Folio_Onbase_cuenta', width: 90 },
-                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
-                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+
+                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Cuenta_Bancaria_ok', index: 'Cuenta_Bancaria_ok', width: 180, hidden: true }, //FJCP_10290_CC                
+                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, formatter: MascaraPwdCta,  editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Confirmar_Cuenta_ok', index: 'Confirmar_Cuenta_ok', width: 180, hidden: true }, //FJCP_10290_CC
+
                     { name: 'Solicitante', index: 'Solicitante', width: 90 },
                     { name: 'Notas', index: 'Notas', width: 180, editable: true, editoptions: { size: "30", maxlength: "100" } },
                     { name: 'Observaciones', index: 'Observaciones', width: 260, editable: true, editoptions: { size: "50", maxlength: "100" } },
@@ -743,7 +750,7 @@ jQuery(document).ready(function () {
                 },
 
 
-                // pager: "#plist47",
+                pager: "#page_columnas",
                 viewrecords: true,
                 caption: "Listado de Folios",
                 autowidth: false,
@@ -762,6 +769,21 @@ jQuery(document).ready(function () {
                 },
                 // height: 'auto'
             });
+
+            //FJCP_10290_CC INI
+
+            jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false });
+            //jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false, position: "left", cloneToTop: true });
+
+            jQuery("#list47").jqGrid('navButtonAdd', '#page_columnas', {
+                caption: "Ocultar/Mostrar Columnas",
+                title: "Reorder Columns",
+                //position: "last",
+                onClickButton: function () {
+                    jQuery("#list47").jqGrid('columnChooserTradAseg');
+                }
+            });
+            //FJCP_10290_CC FIN
 
             jQuery("#list47").jqGrid('setFrozenColumns')
 
@@ -783,8 +805,24 @@ jQuery(document).ready(function () {
 
     };
 
+    
 
-    function LoadGridTerceros(mydata) {
+    function MascaraPwdCta(cellvalue, options, rowObject, columnName) { //FJCP_10290_CC
+        var id = options.rowId;
+        var pwdEncript = "******************";
+
+        if (cellvalue == undefined || cellvalue == null || cellvalue == "") {
+            return "";
+        }
+        else {
+            return pwdEncript;
+        }     
+    }
+      
+    
+   
+
+      function LoadGridTerceros(mydata) {
         var lastsel2;
         var lastSel = -1;
 
@@ -798,7 +836,7 @@ jQuery(document).ready(function () {
                 width: $("#txt_width").val(),
                 rowNum: 8000,
                 rowList: [10, 20, 30],
-                colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social','', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', '', 'Accion'],
+                colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', '', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_clas_Pago', 'Clase de Pago', 'cod_concepto_pago', 'Concepto de pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Cuenta_Bancaria_ok', 'Confirmar Cuenta', 'Confirmar Cuenta_ok', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', '', 'Accion'], //FJCP_10290_CC
                 colModel: [
 
                     { name: 'Folio_Onbase', index: 'Folio_Onbase', width: 100, frozen: false },
@@ -812,12 +850,12 @@ jQuery(document).ready(function () {
                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", sorttype: "int" },
+                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
-                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", sorttype: "int" },
-                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", sorttype: "int" },
+                    { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
                     { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
                     { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
@@ -831,24 +869,12 @@ jQuery(document).ready(function () {
                                     type: 'change',
                                     fn: function (e) {
                                         debugger
-                                        var v = parseInt($(e.target).val(), 10);
-
-
-
-
+                                        var v = parseInt($(e.target).val(), 10);                                       
 
                                         var row = $(e.target).closest('tr.jqgrow');
                                         var rowId = row.attr('id');
 
-
-
-
-
                                         jQuery("#list47").jqGrid('setCell', rowId, 'Cod_concepto_pago', v);
-
-
-
-
 
 
                                     }
@@ -858,16 +884,17 @@ jQuery(document).ready(function () {
                         }
                     }
                     ,
-                    { name: 'Cod_tipo_pago', index: 'Cod_tipo_pago', width: 45, hidden: true }
-
-                    ,
-                    { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 }
-                    ,
+                    { name: 'Cod_tipo_pago', index: 'Cod_tipo_pago', width: 45, hidden: true },
+                    { name: 'Tipo_Pago', index: 'Tipo_Pago', width: 180 },
                     { name: 'Concepto2', index: 'Concepto2', width: 180, editable: true, hidden: false, editoptions: { size: "30", maxlength: "100" } },
                     { name: 'Tipo_Pago2', index: 'Tipo_Pago2', width: 90, hidden: false },
                     { name: 'Folio_Onbase_cuenta', index: 'Folio_Onbase_cuenta', width: 90 },
-                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
-                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+
+                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Cuenta_Bancaria_ok', index: 'Cuenta_Bancaria_ok', width: 180, hidden: true }, //FJCP_10290_CC
+                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Confirmar_Cuenta_ok', index: 'Confirmar_Cuenta_ok', width: 180, hidden: true }, //FJCP_10290_CC
+
                     { name: 'Solicitante', index: 'Solicitante', width: 90 },
                     { name: 'Notas', index: 'Notas', width: 180, editable: true, editoptions: { size: "30", maxlength: "100" } },
                     { name: 'Observaciones', index: 'Observaciones', width: 260, editable: true, editoptions: { size: "50", maxlength: "100" } },
@@ -907,15 +934,7 @@ jQuery(document).ready(function () {
                     { name: 'Cod_objeto', index: 'Cod_objeto', width: 90, hidden: true },
                     { name: 'Poliza', index: 'Poliza', width: 90, hidden: true },
                     { name: 'Fec_pago', index: 'Fec_pago', width: 180, hidden: true },
-
-
-
-
-
-
-
-
-
+                                                          
 
                     {
                         name: 'myac', width: 60, fixed: true, sortable: false, resize: false, formatter: 'actions',
@@ -963,7 +982,7 @@ jQuery(document).ready(function () {
                 },
 
 
-                // pager: "#plist47",
+                pager: "#page_columnas",
                 viewrecords: true,
                 caption: "Listado de Folios",
                 autowidth: false,
@@ -982,6 +1001,22 @@ jQuery(document).ready(function () {
                 },
                 // height: 'auto'
             });
+
+            //FJCP_10290_CC INI
+
+            jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false });
+            //jQuery("#list47").jqGrid('navGrid', '#page_columnas', { add: false, edit: false, del: false, search: false, refresh: false, position: "left", cloneToTop: true });
+
+            jQuery("#list47").jqGrid('navButtonAdd', '#page_columnas', {
+                caption: "Ocultar/Mostrar Columnas",
+                title: "Reorder Columns",
+                //position: "last",
+                onClickButton: function () {
+                    jQuery("#list47").jqGrid('columnChooserTradTer');
+                }
+            });
+            //FJCP_10290_CC FIN
+
 
             jQuery("#list47").jqGrid('setFrozenColumns')
 
@@ -1026,8 +1061,8 @@ jQuery(document).ready(function () {
                     jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: false });
                 }
                 else {
-                    jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: true });
-                    jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: true });
+                    jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: true, edittype: "password" });
+                    jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: true,  edittype: "password" });
                 }
             }
             else
@@ -1211,6 +1246,9 @@ jQuery(document).ready(function () {
                 if (Cuenta_Bancaria == "999000000000000000") {
                     return [false, "No se pude usar la cuenta para pagos tesofe"];
                 }
+		
+		        jQuery("#list47").jqGrid('setCell', id, 'Cuenta_Bancaria_ok', Cuenta_Bancaria);
+                jQuery("#list47").jqGrid('setCell', id, 'Confirmar_Cuenta_ok', valor)
 
 
             }

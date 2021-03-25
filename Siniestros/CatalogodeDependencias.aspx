@@ -211,7 +211,7 @@
                 <div class="input-group">
                     <br />
                     <div class="padding10"></div>
-                    <asp:Label runat="server" class="col-md-12 etiqueta-control" Font-Size="13px">¿Desea elimnar este registro?
+                    <asp:Label runat="server" class="col-md-12 etiqueta-control" Font-Size="13px">¿Desea eliminar este registro?
                     </asp:Label>
                     <div class="padding30"></div>
                     <br />

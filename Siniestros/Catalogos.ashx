@@ -69,13 +69,19 @@ Public Class Prueba : Implements IHttpHandler
                 oParametros.Add("Accion", "2")
                 oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos2", oParametros)
                 oTabla = oDatos.Tables(1)
-            Case "ConceotoPagoFondos"
 
-
-
+            Case "CptoPagoFondosProv"
                 oParametros.Add("Fondos", "1")
+                oParametros.Add("TipoUsuario", 10)
                 oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
                 oTabla = oDatos.Tables(0)
+
+            Case "CptoPagoFondosAse"
+                oParametros.Add("Fondos", "1")
+                oParametros.Add("TipoUsuario", 8)
+                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
+                oTabla = oDatos.Tables(0)
+
             Case "FigurasPoliza"
                 Dim param As String
                 Dim poliza As String
