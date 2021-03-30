@@ -1116,7 +1116,8 @@ Partial Class Siniestros_OrdenPago
                             oFila("FastTrack") = oFilaSeleccion(0).Item("Fast_track")
                             oTipoCuentaT_stro.Value = oFilaSeleccion(0).Item("Cuenta")
                             oCuentaBancariaT_stro.Value = oFilaSeleccion(0).Item("Cuenta_Clabe")
-                            oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2)
+                            'oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2)
+                            oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Total")), CDbl(oFilaSeleccion(0).Item("Total"))), 2) 'cambiar todos subtotal por total
                         Else
                             oFila("FastTrack") = oFilaSeleccion(0).Item("Fast_track")
                             If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then
@@ -3279,7 +3280,8 @@ Partial Class Siniestros_OrdenPago
                 oParametros.Add("ClasePago", CInt(sValor))
                 oParametros.Add("CodigoPres", Me.txtCodigoBeneficiario_stro.Text)
 
-                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+                'oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro", oParametros)
+                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPago_stro_OPWEB", oParametros) 'FJCP_10290_CC
 
                 If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
 
