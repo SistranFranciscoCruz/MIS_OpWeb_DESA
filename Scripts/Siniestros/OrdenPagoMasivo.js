@@ -396,7 +396,7 @@
                                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                                    {name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number.toFixed(4)", align: 'right', sorttype: "int" },
                                     { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                                     { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
                                     { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
@@ -419,7 +419,7 @@
                                                         var row = $(e.target).closest('tr.jqgrow');
                                                         var rowId = row.attr('id');
                                                         jQuery("#list47").jqGrid('setCell', rowId, 'Cod_concepto_pago', v);
-
+                                                        RecuperarClasePago(rowId, v, -1)
                                                     }
                                                 }
                                             ]
@@ -616,14 +616,18 @@ function LoadGridAsegurados(mydata) {
                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number.toFixed(4)", align: 'right', sorttype: "int" },
                     { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
-                    { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
+                    {
+                        name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180, editable: true, edittype: "select", editoptions: {
+                            value: "0:NACIONAL;1:DOLAR AMERICANO"
+                        }
+                    },
                     { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", align: 'right', sorttype: "int" },
-                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int", hidden: true},
                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
-                    { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
+                    { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true},
                     { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
                     { name: 'Cod_concepto_pago', index: 'Cod_concepto_pago', width: 180, hidden: true },
                     {
@@ -638,10 +642,14 @@ function LoadGridAsegurados(mydata) {
                                         var row = $(e.target).closest('tr.jqgrow');
                                         var rowId = row.attr('id');
                                         jQuery("#list47").jqGrid('setCell', rowId, 'Cod_concepto_pago', v);
+
+                                       
+
+                                        RecuperarClasePago(rowId, v, 0)
                                     }
                                 }
                             ]
-
+                               
                         }
                     },
                     { name: 'Cod_tipo_pago', index: 'Cod_tipo_pago', width: 45, hidden: true },
@@ -850,12 +858,15 @@ function LoadGridAsegurados(mydata) {
                     { name: 'Siniestro', index: 'Siniestro', width: 90 },
                     { name: 'Subsiniestro', index: 'Subsiniestro', width: 90 },
                     { name: 'Moneda', index: 'Moneda', width: 180 },
-                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Tipo_Cambio', index: 'Tipo_Cambio', width: 90, formatter: "number.toFixed(4)", align: 'right', sorttype: "int" },
                     { name: 'Reserva', index: 'Reserva', width: 90, formatter: "number", align: 'right', sorttype: "int" },
-                    { name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180 },
+                    {
+                        name: 'Moneda_Pago', index: 'Moneda_Pago', width: 180, editable: true, edittype: "select", editoptions: {
+                            value: "0:NACIONAL;1:DOLAR AMERICANO"
+                        }},
                     { name: 'Importe', index: 'Importe', width: 90, formatter: "number", align: 'right', sorttype: "int" },
                     { name: 'Deducible', index: 'Deducible', width: 90, formatter: "number", align: 'right', sorttype: "int" },
-                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int" },
+                    { name: 'Importe_concepto', index: 'Importe_concepto', width: 90, formatter: "number", align: 'right', sorttype: "int", hidden: true },
                     { name: 'Concepto_Factura', index: 'Concepto_Factura', width: 90 },
                     { name: 'Cod_clas_pago', index: 'Cod_clas_pago', width: 180, hidden: true },
                     { name: 'Clase_pago', index: 'Clase_pago', width: 180, hidden: false },
@@ -876,7 +887,7 @@ function LoadGridAsegurados(mydata) {
 
                                         jQuery("#list47").jqGrid('setCell', rowId, 'Cod_concepto_pago', v);
 
-
+                                        RecuperarClasePago(rowId, v, 0)
                                     }
                                 }
                             ]
@@ -1088,17 +1099,31 @@ function LoadGridAsegurados(mydata) {
             success: function (result) {
 
 
-                var s = '<option value="0">Seleccione valor</option>';
-
+                //var s = '<option value="0">Seleccione valor</option>';
+                var vhid_cpto_pago = $("#hid_cpto_pago").val();
+                var vhid_cpto_pago_desc = $("#hid_cpto_pago_desc").val();
+                var s = '';
                 for (var i = 0; i < result.length; i++) {
 
 
-                    if (Concepto_Pago == result[i].Descripcion) {
-                        s += '<option value="' + result[i].Concepto + '"  selected = "selected">' + result[i].Descripcion + '</option>';
+                    if (vhid_cpto_pago == "") {
+                        if (Concepto_Pago == result[i].Descripcion) {
+                            s += '<option value="' + result[i].Concepto + '"  selected = "selected">' + result[i].Descripcion + '</option>';
+                        }
+                        else {
+                            s += '<option value="' + result[i].Concepto + '">' + result[i].Descripcion + '</option>';
+                        }
                     }
                     else {
-                        s += '<option value="' + result[i].Concepto + '">' + result[i].Descripcion + '</option>';
+                        if (vhid_cpto_pago_desc == result[i].Descripcion) {
+                            s += '<option value="' + result[i].Concepto + '"  selected = "selected">' + result[i].Descripcion + '</option>';
+                        }
+                        else {
+                            s += '<option value="' + result[i].Concepto + '">' + result[i].Descripcion + '</option>';
+                        }
                     }
+
+                    
 
 
                 }
@@ -1107,6 +1132,8 @@ function LoadGridAsegurados(mydata) {
                 res = s;
                 $("select#" + id + "_Concepto_Pago", row[0]).html(res);
 
+                $("#hid_cpto_pago").val("");
+                $("#hid_cpto_pago_desc").val("");
 
 
             },
@@ -1165,8 +1192,8 @@ function LoadGridAsegurados(mydata) {
                 success: function (result) {
 
 
-                    var s = '<option value="0">Seleccione valor</option>';
-
+                    //var s = '<option value="0">Seleccione valor</option>';
+                    var s = '';
                     for (var i = 0; i < result.length; i++) {
 
 
@@ -1256,6 +1283,36 @@ function LoadGridAsegurados(mydata) {
         }
 
         return [true, ""];
+    };
+
+
+    function Validar2(valor, columnName, length) {
+
+        var savedRow = jQuery("#list47").getGridParam("savedRow");
+        var id = jQuery("#list47").jqGrid('getGridParam', 'selrow');
+        var Concepto_Pago = $("#" + id + "_Cod_concepto_pago").val();
+
+        //if (valor.length != 18) {
+        //    return [false, "El campo debe contener 18 caracteres"];
+        //}
+
+        //if (columnName == "Confirmar Cuenta") {
+
+        //    if (Concepto_Pago != valor) {
+        //        return [false, "Las Cuentas Bancarias no coinciden"];
+        //    }
+        //    else { //FJCP_10290_CC
+        //        if (Cuenta_Bancaria == "912000000000000000") {
+        //            return [false, "No se pude usar la cuenta para pago internacional"];
+        //        }
+        //        if (Cuenta_Bancaria == "999000000000000000") {
+        //            return [false, "No se pude usar la cuenta para pagos tesofe"];
+        //        }
+        //        jQuery("#list47").jqGrid('setCell', id, 'Cuenta_Bancaria_ok', Cuenta_Bancaria);
+        //        jQuery("#list47").jqGrid('setCell', id, 'Confirmar_Cuenta_ok', valor)
+        //    }
+        //}
+        //return [true, ""];
     };
 
 
@@ -1652,7 +1709,7 @@ function LoadGridCatTerceros(mydata) {
             colModel: [
 
                 { name: 'cod_tercero', index: 'cod_tercero', width: 100, frozen: false },
-                { name: 'nombre', index: 'nombre', width: 100 },
+                { name: 'nombre', index: 'nombre', width: 50 },
                 { name: 'nro_nit', index: 'nro_nit', width: 182 },
                
 
@@ -1718,3 +1775,29 @@ function LoadGridCatTerceros(mydata) {
 
 };
 
+
+function RecuperarClasePago(ID, Cpto_pago, Prestador) {  
+    $.ajax({
+        url: "../LocalServices/OrdenPagoMasiva.asmx/RecuperarClasePago",
+        data: "{ 'Cpto_pago': '" + Cpto_pago + "', 'sn_prestador': '" + Prestador + "' }",
+        dataType: "json",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            var mydata = $.parseJSON(result.d);
+            if (mydata.length != 0) {
+                var vCod_clase_pago = mydata[0].cod_clase_pago
+                var vClase_pago = mydata[0].clase_pago_desc
+                var vcod_cpto_desc = mydata[0].cod_cpto_desc
+                jQuery("#list47").jqGrid('setCell', ID, 'Cod_clas_pago', vCod_clase_pago);
+                jQuery("#list47").jqGrid('setCell', ID, 'Clase_pago', vClase_pago);  
+                
+                $("#hid_cpto_pago").val(Cpto_pago);
+                $("#hid_cpto_pago_desc").val(vcod_cpto_desc);
+            }
+            return;
+        },
+        error: function (err) {
+        }
+    });
+};

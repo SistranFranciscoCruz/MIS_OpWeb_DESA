@@ -61,6 +61,35 @@ Public Class Prueba : Implements IHttpHandler
 
                 oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
                 oTabla = oDatos.Tables(0)
+            Case "ConceptoPagoFondos"
+
+                TipoUsuario = context.Request.QueryString("TipoUsuario")
+                id_tipo_pago = context.Request.QueryString("id_tipo_pago")
+                CodigoPres = context.Request.QueryString("CodigoPres")
+
+
+                Select Case TipoUsuario
+                    Case "Asegurado"
+                        TipoUsuario = "7"
+                    Case "Tercero"
+                        TipoUsuario = "8"
+                    Case "Proveedor"
+                        TipoUsuario = "10"
+                End Select
+
+
+                oParametros.Add("TipoUsuario", TipoUsuario)
+                oParametros.Add("Fondos", "1")
+
+                If TipoUsuario = "10" Then
+                    If String.IsNullOrEmpty(CodigoPres) = False Then
+                        oParametros.Add("CodigoPres", CodigoPres)
+                    End If
+                End If
+
+
+                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
+                oTabla = oDatos.Tables(0)
 
             Case "ClasePagoFondos"
                 FolioOnbase = context.Request.QueryString("FolioOnbase")
@@ -70,17 +99,21 @@ Public Class Prueba : Implements IHttpHandler
                 oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos2", oParametros)
                 oTabla = oDatos.Tables(1)
 
-            Case "CptoPagoFondosProv"
-                oParametros.Add("Fondos", "1")
-                oParametros.Add("TipoUsuario", 10)
-                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
-                oTabla = oDatos.Tables(0)
+            'Case "CptoPagoFondosProv"
+            '    'CodigoPres = context.Request.QueryString("CodigoPres")
+            '    oParametros.Add("Fondos", "1")
+            '    oParametros.Add("TipoUsuario", 10)
+            '    'If String.IsNullOrEmpty(CodigoPres) = False Then
+            '    '    oParametros.Add("CodigoPres", CodigoPres)
+            '    'End If
+            '    oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
+            '    oTabla = oDatos.Tables(0)
 
-            Case "CptoPagoFondosAse"
-                oParametros.Add("Fondos", "1")
-                oParametros.Add("TipoUsuario", 8)
-                oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
-                oTabla = oDatos.Tables(0)
+            'Case "CptoPagoFondosAse"
+            '    oParametros.Add("Fondos", "1")
+            '    oParametros.Add("TipoUsuario", 8)
+            '    oDatos = Funciones.ObtenerDatos("usp_ObtenerConceptosPagoMasivo_stro", oParametros)
+            '    oTabla = oDatos.Tables(0)
 
             Case "FigurasPoliza"
                 Dim param As String

@@ -225,6 +225,8 @@
     <%--<input type="text" id="txt_width" hidden="hidden" />--%>
     <input type="text" id="txt_width" hidden="hidden"   />
     <input type="text" id="txt_delete_left" hidden="hidden"  />
+    <input type="text" id="hid_cpto_pago" value="" hidden="hidden" />
+    <input type="text" id="hid_cpto_pago_desc" value="" hidden="hidden" />
     <div class="row">
 
         <%--<table id="list47" >--%>

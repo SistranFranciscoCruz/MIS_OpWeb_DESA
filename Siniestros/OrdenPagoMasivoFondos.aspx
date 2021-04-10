@@ -251,6 +251,8 @@
     <br />
 
     <input type="text" id="txt_width" hidden="hidden" />
+    <input type="text" id="hid_cpto_pago" value="" hidden="hidden" />
+    <input type="text" id="hid_cpto_pago_desc" value="" hidden="hidden"/>
     <div class="row">
 
         <%--<table id="list47" >--%>
@@ -429,16 +431,18 @@
 
 
 
-            <div id="CatalogoTerceros"  class="modal-catalogo" >
+            <div id="CatalogoTerceros" style= "padding-left: 0px;" class="modal-catalogo " >
                 <div class="cuadro-titulo-flotante">
                     <button type="button" data-dismiss="modal" class="close">&times;</button>
                     <div><label>Terceros</label></div>
                 </div>
+
                 <div class="clear padding5"></div>
 
-
-                    <div class="row">
-
+                    <div class="row" style= "padding-left: 50px; padding-right: 50px;">
+                        <p>
+                            <h4>Haga doble clic para seleccionar.</h4>
+                        </p>
                         <table id="grdTercero" >
                         </table>
                         <div id="pgrdTercero"></div>
@@ -447,7 +451,7 @@
 
                     <div style="width:100%; text-align:right;">
                             <button type="button"  class="btn botones" id="btn_Nuevo" ><span>Nuevo</span></button>
-                            <asp:Button runat="server" id="Button1" class="btn botones" Text="Aceptar"  />
+                            <%--<asp:Button runat="server" id="Button1" class="btn botones" Text="Aceptar"  />--%>
                             <asp:Button runat="server" id="Button2" class="btn botones" Text="Cancelar"  data-dismiss="modal"/>
                     </div>
 
