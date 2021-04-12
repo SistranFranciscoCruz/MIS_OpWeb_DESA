@@ -1005,8 +1005,8 @@ Partial Class Siniestros_OrdenPago
                                     oFila("Reserva") = 0
                                     oFila("ImportePagos") = 0
                                     oFila("CodigoAsegurado") = 0
-                                    oFila("MonedaFactura") = 0
-                                oFila("Pago") = Math.Round(IIf(cmbMonedaPago.SelectedValue = 0, CDbl(oFilaSeleccion(0).Item("Subtotal")), CDbl(oFilaSeleccion(0).Item("Subtotal"))), 2) 'VZAVALETA_1090_CC
+                                oFila("MonedaFactura") = 0
+                                oFila("Pago") = 0 'FJCP 10290 CC-INI
 
                             Case eTipoUsuario.Proveedor
                                     oFila("Factura") = oFilaSeleccion(0).Item("folio_GMX")

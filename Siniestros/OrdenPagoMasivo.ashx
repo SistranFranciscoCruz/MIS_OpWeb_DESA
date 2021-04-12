@@ -79,7 +79,7 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
             End If
 
 
-            If TipoPago <> 9 Then
+            If TipoPago <> "-1" Then
                 oParametros.Add("TipoPago", TipoPago)
             End If
 

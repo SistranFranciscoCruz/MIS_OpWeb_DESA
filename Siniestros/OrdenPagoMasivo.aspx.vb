@@ -14,6 +14,8 @@ Partial Class Siniestros_OrdenPagoMasivo
 
         If Not IsPostBack Then
             Me.txtFechaEstimadaPago.Text = FechaEstimPago()
+            'txt_fecha_ini.Text = "01/11/2020"
+            'txt_fecha_fin.Text = "03/11/2020"
         End If
 
         Cargar_combos() 'FJCP_10290_CC	INI   		

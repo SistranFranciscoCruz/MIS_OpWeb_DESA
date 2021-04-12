@@ -83,10 +83,14 @@ Public Class OrdenPagoMasiva
                 oParametros.Add("Concepto2", ValidarParametros(OP.Concepto2))
                 oParametros.Add("Tipo_Pago2", ValidarParametros(OP.Tipo_Pago2))
                 oParametros.Add("Folio_Onbase_cuenta", ValidarParametros(OP.Folio_Onbase_cuenta))
-                ' oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria))
-                ' oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta))
-                oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria_ok))
-                oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta_ok))
+
+                If OP.PagarA = "Proveedor" Then
+                    oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria))
+                    oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta))
+                Else
+                    oParametros.Add("Cuenta_Bancaria", ValidarParametros(OP.Cuenta_Bancaria_ok))
+                    oParametros.Add("Confirmar_Cuenta", ValidarParametros(OP.Confirmar_Cuenta_ok))
+                End If
                 oParametros.Add("Solicitante", ValidarParametros(OP.Solicitante))
                 oParametros.Add("Notas", ValidarParametros(OP.Notas))
                 oParametros.Add("Observaciones", ValidarParametros(OP.Observaciones))
@@ -463,6 +467,42 @@ Public Class OrdenPagoMasiva
 
 
         Return Nothing
+    End Function
+
+
+
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function RecuperarClasePago(ByVal Cpto_pago As String, ByVal sn_prestador As String) As String
+
+
+
+        Dim oDatos As DataSet
+        Dim oTabla As DataTable
+        Dim oParametros As New Dictionary(Of String, Object)
+        Dim serializer As New JavaScriptSerializer
+
+
+        Try
+
+
+            serializer.MaxJsonLength = 500000000
+            oParametros.Add("cod_Concepto", Cpto_pago)
+
+            oParametros.Add("sn_prestador", sn_prestador)
+
+
+            oDatos = Funciones.ObtenerDatos("usp_ObtenerClasePagoMasivo_stro", oParametros)
+
+            oTabla = oDatos.Tables(0)
+
+            Return JsonConvert.SerializeObject(oTabla)
+        Catch ex As Exception
+            Return JsonConvert.SerializeObject(oTabla)
+        End Try
+
+
     End Function
 
 End Class
