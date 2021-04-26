@@ -120,8 +120,8 @@
                     <div class="row">
                         <div class="form-group col-md-2">
                             <asp:Label runat="server" class="etiqueta-control">Pagar a</asp:Label>
-                            <asp:DropDownList  ID="cmbPagarA" runat="server" ClientIDMode="Static" CssClass="estandar-control tipoUsuario ">
-                               <%-- <asp:ListItem Value="9">TODOS</asp:ListItem> <%--A---%>
+                            <asp:DropDownList  ID="cmbPagarA"  runat="server" ClientIDMode="Static" CssClass="estandar-control tipoUsuario ">
+                                <%--<asp:ListItem Value="9">TODOS</asp:ListItem> <%--A--%>
                                 <asp:ListItem Value="7">ASEGURADO</asp:ListItem> <%--A--%>
                                 <asp:ListItem Value="8">TERCERO</asp:ListItem>   <%--T--%>
                                 <asp:ListItem Value="10">PROVEEDOR</asp:ListItem> <%--P--%>
@@ -129,7 +129,7 @@
                         </div>
                              <div class="form-group col-md-2">
                                 <asp:Label runat="server" class="etiqueta-control">Tipo Pago</asp:Label>
-                                <asp:DropDownList ID="cmbTipoPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" > </asp:DropDownList>
+                                <asp:DropDownList ID="cmbTipoPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" ></asp:DropDownList>                             
                             </div>
 
                              <div class="form-group col-md-2">
@@ -138,19 +138,15 @@
                             </div>
 
                             <div class="form-group col-md-2">
-                            <asp:Label runat="server" class="etiqueta-control">Moneda de pago</asp:Label>
-                            <asp:DropDownList  ID="cmbMonedaPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" >
-                                <asp:ListItem Value="9">TODOS</asp:ListItem> <%--A--%>
-                                <asp:ListItem Value="0">NACIONAL</asp:ListItem>
-                                <asp:ListItem Value="1">DOLAR AMERICANO</asp:ListItem>
-                            </asp:DropDownList>
-
+                             <asp:Label runat="server" class="etiqueta-control">RFC</asp:Label>
+                                <asp:TextBox AutoPostBack="True" ID="txtRFC" runat="server"  CssClass="estandar-control RFC  Centro" placeholder="RFC"></asp:TextBox>
                             </div>
 
                              <div class="form-group col-md-2">
-                                <asp:Label runat="server" class="etiqueta-control">RFC</asp:Label>
-                                <asp:TextBox AutoPostBack="True" ID="txtRFC" runat="server"  CssClass="estandar-control RFC  Centro" placeholder="RFC"></asp:TextBox>
-                                
+                                <asp:Label runat="server" class="etiqueta-control">Siniestro</asp:Label>
+                                <%--<asp:TextBox AutoPostBack="True" ID="txtSiniesto" runat="server"  CssClass="estandar-control RFC  Centro" placeholder="RFC"></asp:TextBox>    --%> 
+                                 
+                                  <asp:TextBox runat="server" ID="txtSiniestro" CssClass="estandar-control"  onkeypress="return soloNumeros(event)"></asp:TextBox>
                              </div>
 
                             <div class="form-group col-md-2">
@@ -167,41 +163,66 @@
                                 <asp:ListItem Value="8">8</asp:ListItem>
                                 <asp:ListItem Value="9">9</asp:ListItem>
                                 <asp:ListItem Value="10">10</asp:ListItem>
+                                
                                 </asp:DropDownList>
                            </div>
-
-
                      </div>
-                 <div class="row">
-                        
-                         <div class="form-group col-md-4">
-                            <asp:Label runat="server" class="etiqueta-control">Analista Solicitante</asp:Label>
-                            <asp:DropDownList ID="cmbAnalistaSolicitante" runat="server" ClientIDMode="Static" CssClass="estandar-control Tablero">
+
+
+
+                  <div class="row">
+                        <div class="form-group col-md-2">
+                            <asp:Label runat="server" class="etiqueta-control">Moneda de pago</asp:Label>
+                            <asp:DropDownList  ID="cmbMonedaPago" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" >
+                                <asp:ListItem Value="9">TODOS</asp:ListItem> 
+                                <asp:ListItem Value="0">NACIONAL</asp:ListItem>
+                                <asp:ListItem Value="1">DOLAR AMERICANO</asp:ListItem>
                             </asp:DropDownList>
                         </div>
+                             <div class="form-group col-md-2">
+                                <asp:Label runat="server" class="etiqueta-control">Tipo Pago (Parcial o Total)</asp:Label>
+                                <asp:DropDownList  ID="cmbTipoPagoPoT" runat="server" ClientIDMode="Static" CssClass="estandar-control  Centro" >
+                                <%--<asp:ListItem Value="-1">TODOS</asp:ListItem> 
+                                <asp:ListItem Value="0">PARCIAL</asp:ListItem>
+                                <asp:ListItem Value="1">TOTAL</asp:ListItem>--%>
+                            </asp:DropDownList>                            
+                            </div>
 
+                           <div class="form-group col-md-4">
+                                <asp:Label runat="server" class="etiqueta-control">Analista Solicitante</asp:Label>
+                                <asp:DropDownList ID="cmbAnalistaSolicitante" runat="server" ClientIDMode="Static" CssClass="estandar-control ">
+                                </asp:DropDownList>
+                            </div>
+
+                             <div class="form-group col-md-2">
+                                <asp:Label runat="server" class="etiqueta-control">Fecha estimada de pago</asp:Label>
+                            <asp:TextBox ID="txtFechaEstimadaPago" AutoPostBack="True" OnTextChanged="txt_TextChanged" runat="server" CssClass="estandar-control fechadepago Fecha Centro" autocomplete="off" placeholder="DD/MM/YYYY"></asp:TextBox>                                   </div>
+
+                            <div class="form-group col-md-2">
+                                <asp:Label runat="server" class="etiqueta-control" Width ="100%"></asp:Label>
+                                <asp:CheckBox runat="server" ID="chkMultipago" Text="&nbsp&nbspMultipago" CssClass="etiqueta-control" />
+                            </div>
+
+                                                
+                     </div>
+                    
+                 <div class="row">
                         <div class="form-group col-md-2">
                             <div class="form-check Centrado">
                                 <asp:CheckBox runat="server" ID="chkVariasFacturas" Text="Varias facturas" CssClass="etiqueta-control hidden" />
                             </div>
                         </div>
-                        <%--<div class="form-group col-md-2">
-                            <div class="form-check Centrado">
-                                <asp:CheckBox runat="server" ID="chkVariosConceptos" Text="Varios conceptos" CssClass="etiqueta-control" />
-                            </div>
-                        </div>--%>
+                       
                         <div class="form-group col-md-2">
                             <div class="form-check Centrado">
                                 <asp:CheckBox runat="server" ID="chkFondosSinIVA" Text="Fondos Sin IVA" CssClass="etiqueta-control hidden" />
                             </div>
                         </div>  
-                     
-                                             <div class="form-group col-md-2">
-                            <asp:Label runat="server" class="etiqueta-control">Fecha estimada de pago</asp:Label>
-                            <asp:TextBox ID="txtFechaEstimadaPago" AutoPostBack="True" OnTextChanged="txt_TextChanged" runat="server" CssClass="estandar-control fechadepago Tablero Fecha Centro" autocomplete="off" placeholder="DD/MM/YYYY"></asp:TextBox>
-                        </div>
-                    
                  </div>
+
+                    
+
+
 
 
                    <div class="row">
@@ -276,11 +297,22 @@
                                     </span>
                                     </a>
 
+
                     
 
                  <asp:Button Text="Revisar" CssClass="btn botones pull-right hidden" ID="btn_Revisar" runat="server" />
                      
+            <button type="button"  class="btn botones pull-right hidden" id="btn_guardar_xls" style="width:150px">
+                 <span>
+                     <img class="btn-guardar"/>&nbsp&nbsp Guardar Datos
+                 </span>                  
+              </button>
 
+             <asp:LinkButton ID="btn_exportar_xls" runat="server" class="btn botones pull-right hidden" Width="150px">
+                <span>
+                    <img class="btn-excel"/>&nbsp&nbsp Exportar Catálogo
+                </span>
+            </asp:LinkButton>
 
                     <button type="button"  class="btn botones pull-right hidden" id="btn_Guardar" ><span>
                           <img class="btn-guardar"/>
@@ -309,6 +341,7 @@
             <asp:UpdatePanel runat="server" ID="upCatalogo">
                 <ContentTemplate>
                     <div class="input-group">
+                        <asp:HiddenField runat="server" ID="hid_nLote" Value="" />
                         <br />                        
                         <asp:label runat="server"  class="col-md-12 etiqueta-control" >¿Deseas confirmar la generacion de Ordenes de pago?</asp:label>
                         <br />

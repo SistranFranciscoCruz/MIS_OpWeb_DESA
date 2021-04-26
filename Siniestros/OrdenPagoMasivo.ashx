@@ -38,6 +38,9 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
         Dim cta_pagoInter As String
         Dim cta_pagoTesofe As String
         Dim funciones As Funciones
+        Dim TipoPago_PoT As String
+        Dim sn_multipago As String
+        Dim Siniestro As String
 
 
         fecha_ini = context.Request.QueryString("fecha_ini")
@@ -53,6 +56,11 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
         MonedaPago = context.Request.QueryString("MonedaPago")
         RFC = context.Request.QueryString("RFC")
         SubSiniestro = context.Request.QueryString("SubSiniestro")
+
+        Siniestro = context.Request.QueryString("Siniestro")
+        TipoPago_PoT = context.Request.QueryString("TipoPago_PoT")
+        sn_multipago = context.Request.QueryString("sn_multipago")
+
 
         cod_analista = context.Request.QueryString("cod_analista")
         VariasFacturas = context.Request.QueryString("VariasFacturas")
@@ -110,8 +118,23 @@ Public Class OrdenPagoMasivo : Implements IHttpHandler
                 oParametros.Add("sn_varias_facturas", VariasFacturas)
             End If
 
+            If Siniestro <> "" Then
+                oParametros.Add("Siniestro", Siniestro)
+            End If
+
+            If TipoPago_PoT <> -1 Then
+                oParametros.Add("TipoPago_PoT", TipoPago_PoT)
+            End If
+
+
+            oParametros.Add("sn_Multipago", sn_multipago)
+
+
+
+
 
             oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase_Masivo", oParametros)
+            'oDatos = Funciones.ObtenerDatos("sp_op_stro_consulta_folio_OnBase_Masivo_PBA", oParametros)
             oTabla = oDatos.Tables(0)
 
             ID = 1
