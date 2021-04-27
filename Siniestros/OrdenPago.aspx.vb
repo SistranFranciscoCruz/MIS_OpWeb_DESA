@@ -490,7 +490,8 @@ Partial Class Siniestros_OrdenPago
                 'Concepto de pago
                 If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
                     CargarConceptosPagodefault(e.Row, iIndex, oGrdOrden.Rows(iIndex)("ClasePago"), cerrado_open_stro)
-                    'FJCP Multipago- Se comenta clase de pago Ini
+
+                    'FJCP Multipago - Se comenta clase de pago Ini
                     If chkVariasFacturas.Checked = False Then
                         oGrdOrden.Rows(iIndex)("ClasePago") = oSelector.SelectedValue
                     End If
@@ -501,9 +502,12 @@ Partial Class Siniestros_OrdenPago
                     If chkVariasFacturas.Checked = False Then
                         CargarClasePago(e.Row, iIndex, txtCodigoBeneficiario_stro.Text, oSelectorcpto.SelectedValue)
                     End If
-                    'FJCP Multipago- Se comenta clase de pago Ini
+                    'FJCP Multipago - Se comenta clase de pago Ini
                     'Dim clase_pago_default As Int16 = oSelector.SelectedValue
                     'Dim cpto_default As Int16 = oSelectorcpto.SelectedValue
+
+
+
                 Else
                     If cerrado_open_stro = 0 Then
                         CargarConceptosPagodefault(e.Row, iIndex, oGrdOrden.Rows(iIndex)("ClasePago"), cerrado_open_stro)
@@ -872,6 +876,8 @@ Partial Class Siniestros_OrdenPago
         Dim oFilaSeleccion2() As DataRow
         Dim oFilaSeleccion3() As DataRow
 
+        Dim substroDetalle As Integer = 0
+
         Try
 
             If cmbNumPago.SelectedValue = -1 Then
@@ -1141,23 +1147,21 @@ Partial Class Siniestros_OrdenPago
                         cmbTipoUsuario.Enabled = False
 
                         If cmbTipoUsuario.SelectedValue <> eTipoUsuario.Proveedor Then
-                            txtConceptoOP.Text = ""
-                            Dim substroDetalle As Integer = 0
-                            For Each oFila In oTabla.Rows
+                            'txtConceptoOP.Text = ""
 
-                                If txtConceptoOP.Text.Trim = String.Empty Then
-                                    'txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
-                                    txtConceptoOP.Text = String.Format("{0} {1} {2}", txtConceptoOP.Text.Trim, oFila("Siniestro"), oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
-                                    substroDetalle = CInt(oFila("Subsiniestro"))
-                                Else
-                                    'txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
-                                    If substroDetalle <> CInt(oFila("Subsiniestro")) Then
-                                        txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
-                                    End If
-                                End If
-                            Next
+                            'For Each oFila In oTabla.Rows
 
-                            txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim.ToString(), oClavesPago.Select(String.Format("cod_clase_pago = '{0}'", oTabla.Rows(0)("ClasePago")))(0)("txt_desc").ToString())
+                            '    If txtConceptoOP.Text.Trim = String.Empty Then
+                            '        'txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                            '        txtConceptoOP.Text = String.Format("{0} {1} {2}", txtConceptoOP.Text.Trim, oFila("Siniestro"), oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                            '        substroDetalle = CInt(oFila("Subsiniestro"))
+                            '    Else
+                            '        'txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                            '        If substroDetalle <> CInt(oFila("Subsiniestro")) Then
+                            '            txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                            '        End If
+                            '    End If
+                            'Next
                             'se agrega por tema fast track
                             If (oFilaSeleccion(0).Item("Fast_track") = "SI") Then
                                 CalcularTotales()
@@ -1167,6 +1171,24 @@ Partial Class Siniestros_OrdenPago
                         If cmbTipoUsuario.SelectedValue = eTipoUsuario.Proveedor Then
                             CalcularTotales()
                         End If
+                        'FJCP MULTIPAGO
+                        txtConceptoOP.Text = ""
+
+                        For Each oFila In oTabla.Rows
+
+                            If txtConceptoOP.Text.Trim = String.Empty Then
+                                'txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                                txtConceptoOP.Text = String.Format("{0} {1} {2}", txtConceptoOP.Text.Trim, oFila("Siniestro"), oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                                substroDetalle = CInt(oFila("Subsiniestro"))
+                            Else
+                                'txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Siniestro"))
+                                If substroDetalle <> CInt(oFila("Subsiniestro")) Then
+                                    txtConceptoOP.Text = String.Format("{0}, {1}", txtConceptoOP.Text.Trim, oFila("Subsiniestro")) 'FJCP MEJORAS 10290 DETALLES
+                                End If
+                            End If
+                        Next
+                        '----------------------------------------------------
+                        txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim.ToString(), oClavesPago.Select(String.Format("cod_clase_pago = '{0}'", oTabla.Rows(0)("ClasePago")))(0)("txt_desc").ToString())
 
                         Me.txtBeneficiario.Text = Me.txtBeneficiario_stro.Text.Trim
 
@@ -3176,6 +3198,7 @@ Partial Class Siniestros_OrdenPago
                     Next
                     txtConceptoOP.Text = String.Format("{0} {1}", txtConceptoOP.Text.Trim.ToString(), oDatos.Tables(0).Rows(0).Item("clase_pago"))
                     oGrdOrden.Rows(iFila)("ClasePago") = oDatos.Tables(0).Rows(0).Item("cod_clase_pago")
+
                 Else
                     'Mensaje.MuestraMensaje("Orden de pago de siniestros", String.Format("El PROVEEDOR NO TIENE HABILITADO ESTA CLASE DE CLASE DE PAGO", "COD_CLASE_PAGO:" + sValor, "CODIGO DE PROVEEDOR" + Me.txtCodigoBeneficiario_stro.Text), TipoMsg.Advertencia)
                     oGrdOrden.Rows(iFila)("ConceptoPago") = ""
@@ -3906,6 +3929,14 @@ Partial Class Siniestros_OrdenPago
                                     iptxtTotalRetenciones.Text = 00.00
                                     iptxtTotal.Text = 00.00
                                     iptxtTotalNacional.Text = 00.00
+
+                                    If .Item("Moneda_Hara_Pago") = 1 Then
+                                        Me.cmbMonedaPago.SelectedValue = 1
+                                    Else
+                                        Me.cmbMonedaPago.SelectedValue = 0
+                                    End If
+
+
                                     'moneda nacional.
                                     If .Item("cod_moneda") = 0 And Not Me.txtMonedaPoliza.Text = "NACIONAL" Then
                                         'Mensaje.MuestraMensaje("Calculo de totales", "Factura capturada en pesos, se utilizará tipo de cambio nacional.", TipoMsg.Advertencia)

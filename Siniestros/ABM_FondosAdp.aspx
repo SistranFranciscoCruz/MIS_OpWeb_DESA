@@ -9,7 +9,7 @@
             <input type="image" src="../Images/expander_mini_inv.png" id="exVentana0" class="expandir"/>
                    &nbsp&nbsp Concepto de Fondos ADP
             </div>
-             <div class="padding10"></div>
+             <div class="padding30"></div>
 
 
              <div class="row">
@@ -18,6 +18,15 @@
                 <asp:UpdatePanel runat="server" ID="upGenerales" UpdateMode="Conditional" >
                            <ContentTemplate>
 
+                               <div class="form-group col-md-2">
+                               <%--<asp:Label runat="server" class="etiqueta-control">Abona</asp:Label>
+                               <asp:DropDownList AutoPostBack="False" ID="cmbTipoUsuario" runat="server" ClientIDMode="Static" CssClass="estandar-control tipoUsuario Tablero" >
+                                <asp:ListItem Value="1">Seleccione una opción</asp:ListItem> 
+                                <asp:ListItem Value="7">Asegurado</asp:ListItem>                                
+                                <asp:ListItem Value="8">Tercero</asp:ListItem>                                
+                                <asp:ListItem Value="10">Proveedor</asp:ListItem>                                
+                            </asp:DropDownList>--%>
+                                   </div>
                  
                                  <div class="form-group col-md-2">
                                     <asp:Label runat="server" class="etiqueta-control">Clase de Pago</asp:Label>
@@ -52,7 +61,7 @@
                     <asp:AsyncPostBackTrigger ControlID="ddl_clase_pago" EventName="SelectedIndexChanged" />
                    </Triggers>
                 </asp:UpdatePanel>  
-                         <div class="form-group col-md-2">
+                         <div class="form-group col-md-1">
                              <br />
                                 <asp:LinkButton ID="btnAgregar" runat="server" class="btn btn-primary btn-xs pull-left Tablero" Style="background-color: #003A5D;">Agregar</asp:LinkButton>
                            </div>

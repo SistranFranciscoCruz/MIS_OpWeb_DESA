@@ -7,26 +7,13 @@ Partial Class Siniestros_ABM_FondosAdp
     Sub Page_Load(ByVal Sender As Object, ByVal e As EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
-
             CargarCombo()
-
-
-
             CargarGrid()
-
         End If
-
     End Sub
 
 
-
-
-
     Protected Sub btnAgregar_Click(sender As Object, e As EventArgs) Handles btnAgregar.Click
-
-
-
-
         Dim oDatos As DataSet
         Dim oTabla As DataTable
         Dim iClave As Integer
@@ -39,18 +26,11 @@ Partial Class Siniestros_ABM_FondosAdp
             oParametros.Add("concepto_detalle", txtNombre.Text)
 
 
-
-
-
-
-
-
             oDatos = Funciones.ObtenerDatos("sp_grabar_conceptos_fondosAdp", oParametros)
             CargarGrid()
             CargarCombo()
             ddl_concepto_pago.Items.Clear()
             txtNombre.Text = "" 'FJCP_10290_CC
-
 
             Return
 
@@ -58,14 +38,11 @@ Partial Class Siniestros_ABM_FondosAdp
             MuestraMensaje("Exception", "BuscarOP: " & ex.Message, TipoMsg.Falla)
             Return
         End Try
-
-
     End Sub
 
 
 
     Private Sub CargarGrid()
-
         Dim oDatos As DataSet
         Dim oTabla As DataTable
         Dim oParametros As New Dictionary(Of String, Object)
@@ -74,65 +51,42 @@ Partial Class Siniestros_ABM_FondosAdp
 
 
         oParametros.Add("Accion", 3)
-
-
         oDatos = Funciones.ObtenerDatos("sp_catalogos_FondosADP", oParametros)
-
-
         oTabla = oDatos.Tables(0)
-
         grd.DataSource = oTabla
-
         grd.DataBind()
-
-
-
     End Sub
 
     Private Sub CargarCombo()
 
 
         Dim oDatos As DataSet
-
-
-
         Dim oParametros As New Dictionary(Of String, Object)
 
-        oParametros.Add("Accion", 2)
-        oParametros.Add("Folio_OnBase", "1")
+        oParametros.Add("Accion", 6)
+        'oParametros.Add("Folio_OnBase", "1")
 
-        oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
+        oDatos = Funciones.ObtenerDatos("sp_catalogos_FondosADP", oParametros)
 
-        cmbOrigen.DataSource = oDatos.Tables(2)
+        cmbOrigen.DataSource = oDatos.Tables(0)
         cmbOrigen.DataTextField = "DescripcionOrigenPago"
         cmbOrigen.DataValueField = "CodigoOrigenPago"
         cmbOrigen.DataBind()
-
-
-
         oDatos = New DataSet
 
 
-
         oParametros = New Dictionary(Of String, Object)
-
         oParametros.Add("Accion", 2)
-
         oDatos = Funciones.ObtenerDatos("[sp_catalogos_FondosADP]", oParametros)
 
         ddl_clase_pago.DataSource = oDatos.Tables(0)
         ddl_clase_pago.DataTextField = "txt_desc"
         ddl_clase_pago.DataValueField = "cod_clase_pago"
         ddl_clase_pago.DataBind()
-
-
     End Sub
 
     Protected Sub ddl_clase_pago_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_clase_pago.SelectedIndexChanged
         Dim oDatos As DataSet
-
-
-
         Dim oParametros As New Dictionary(Of String, Object)
 
         oParametros.Add("Accion", 1)

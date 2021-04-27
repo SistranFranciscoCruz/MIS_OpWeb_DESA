@@ -11,12 +11,19 @@
     var Tipo_Pago = { '0': 'Seleccione Opcion', '1': 'CHEQUE', '2': 'TRANSFERENCIA' };
 
 
+
+
+
+
     $("#btn_Reporte").click(function () {
 
 
         $("#btn_Guardar").addClass("hidden");
         $("[id*=btn_Enviar]").addClass("hidden");
         $("[id*=btn_Revisar]").addClass("hidden");
+        $("[id*=btn_guardar_xls]").addClass("hidden");
+        $("[id*=btn_exportar_xls]").addClass("hidden");
+        $("[id*=txt_NumLote]").val("");
 
 
         var txt_fecha_ini = $("[id*=txt_fecha_ini]").val();
@@ -35,6 +42,16 @@
         var MonedaPago = $("[id*=cmbMonedaPago]").val();
         var RFC = $("[id*=txtRFC]").val();
         var SubSiniestro = $("[id*=cmbSubsiniestro]").val();
+        var TipoPago_PoT = $("[id*=cmbTipoPagoPoT]").val();
+        var Siniestro = $("[id*=txtSiniestro]").val();
+        var sn_multipago;
+
+        if ($('[id*=chkMultipago]').is(':checked')) {
+            sn_multipago = -1;
+        }
+        else {
+            sn_multipago = 0;
+        }
 
 
         RFC = RFC.replace("&", "!");
@@ -80,7 +97,7 @@
 
 
         $.ajax({
-            url: "../Siniestros/OrdenPagoMasivo.ashx?fecha_ini=" + txt_fecha_ini + "&fecha_fin=" + txt_fecha_fin + "&PagarA=" + PagarA + "&Folio_OnBase=" + Folio_OnBase + "&Folio_OnBase_hasta=" + Folio_OnBase_hasta + "&TipoPago=" + TipoPago + "&TipoComprobante=" + TipoComprobante + "&MonedaPago=" + MonedaPago + "&RFC=" + RFC + "&SubSiniestro=" + SubSiniestro + "&VariasFacturas" + VariasFacturas + "&cod_analista=" + cod_analista + "&FondosSinIVA=" + FondosSinIVA,
+            url: "../Siniestros/OrdenPagoMasivo.ashx?fecha_ini=" + txt_fecha_ini + "&fecha_fin=" + txt_fecha_fin + "&PagarA=" + PagarA + "&Folio_OnBase=" + Folio_OnBase + "&Folio_OnBase_hasta=" + Folio_OnBase_hasta + "&TipoPago=" + TipoPago + "&TipoComprobante=" + TipoComprobante + "&MonedaPago=" + MonedaPago + "&RFC=" + RFC + "&SubSiniestro=" + SubSiniestro + "&VariasFacturas" + VariasFacturas + "&cod_analista=" + cod_analista + "&FondosSinIVA=" + FondosSinIVA + "&TipoPago_PoT=" + TipoPago_PoT + "&Siniestro=" + Siniestro + "&sn_multipago=" + sn_multipago,
             type: "POST",
             success: function (result) {
 
@@ -249,7 +266,74 @@
 
     });
 
+    $("#btn_guardar_xls").click(function () { // Boton para guardar en una tabla temporal los registros para subsiniestros varios y multipago 
+        var myGrid = $('#list47');
+        var myArray = [];
+        var myIDs = myGrid.jqGrid('getDataIDs');
+        var Fec_pago = $("[id*=txtFechaEstimadaPago]").val();
+        $("#loading").removeClass("hidden");
 
+        for (var i = 0; i < myIDs.length; i++) {
+            // nos traemos renglon a renglon           
+            var myRow = myGrid.jqGrid('getRowData', myIDs[i]);
+            myRow.Folio_Onbase = myRow.FolioOnbaseHidden;
+            myRow.Folio_Onbase_cuenta = myRow.Folio_Onbase_cuentaHidden;
+            myRow.Fec_pago = Fec_pago;
+
+            if (myRow.Concepto_Pago.indexOf('input') > 0) {
+                myRow.Concepto_Pago = "";
+            }
+
+            if (myRow.Concepto2.indexOf('input') > 0) {
+                myRow.Concepto2 = "";
+            }
+
+            if (myRow.Cuenta_Bancaria.indexOf('input') > 0) {
+                myRow.Cuenta_Bancaria = "";
+            }
+
+            if (myRow.Notas.indexOf('input') > 0) {
+                myRow.Notas = "";
+            }
+
+            if (myRow.Observaciones.indexOf('input') > 0) {
+                myRow.Observaciones = "";
+            }
+
+            if (myRow.Confirmar_Cuenta.indexOf('input') > 0) {
+                myRow.Confirmar_Cuenta = "";
+            }
+
+            myArray[i] = myRow;
+        }
+
+        var json = JSON.stringify(myArray);
+
+        txt_NumLote = -1;
+
+        $.ajax({ //Ajax para grabar temporal para siniestros varios y multipago 
+            url: "../LocalServices/OrdenPagoMasiva.asmx/Export_xls",
+            data: "{ 'myArray': " + json + ",'Lote':" + txt_NumLote + "}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                //fn_MuestraMensaje('Atencion', 'Numero de Lote Generado ' + data.d, 0, "");
+                //$("[id*=txt_NumLote]").val(data.d);
+                $("#loading").addClass("hidden");
+                $("#loading2").addClass("hidden");
+                $("[id*=btn_exportar_xls]").removeClass("hidden");
+                $("[id*=btn_guardar_xls]").addClass("hidden");
+                $("[id*=hid_nLote]").val(data.d);
+            },
+            error: function (response) {
+                $("#loading").addClass("hidden");
+                fn_MuestraMensaje('Error', response.responseText, 0, "");
+            }
+        });
+    });
+    //////////////////////////////////////////////////////////////////////////////
 
 
     $("#btn_Recuperar_lote").click(function () {
@@ -377,7 +461,7 @@
             width: $("#txt_width").val(),
             rowNum: 8000,
             rowList: [10, 20, 30],
-            colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Deducible', 'Importe del concepto', 'Concepto Facturado', 'cod_concepto_pago', 'Concepto de pago', 'cod_clas_Pago', 'Clase de Pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', 'Fec_pago', 'Accion'],
+            colNames: ['Folio Onbase', 'Num Pago', 'Tipo de comprobante', 'Pagar A', 'Codigo', 'RFC', 'Nombre /Razon Social', 'Siniestro', 'Subsinientro', 'Moneda', 'Tipo de Cambio', 'Reserva', 'Moneda de Pago', 'Importe', 'Descuentos', 'Importe del concepto', 'Concepto Facturado', 'cod_concepto_pago', 'Concepto de pago', 'cod_clas_Pago', 'Clase de Pago', 'cod_tipo_pago', 'Tipo de Pago', 'Concepto 2', 'Tipo de Pago', 'Folio Onbase Estado de cuenta', 'Cuenta Bancaria', 'Confirmar Cuenta', 'Solicitante', 'Notas', 'Observaciones', 'id_tipo_Doc', 'moneda', 'moneda pago', 'FolioOnbaseHidden', 'Folio_Onbase_cuentaHidden', 'Id_persona', '', '', , '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Poliza', 'Fec_pago', 'Accion'],
             colModel: [
 
                 { name: 'Folio_Onbase', index: 'Folio_Onbase', width: 100, frozen: false },
@@ -642,9 +726,34 @@
         jQuery("#list47").jqGrid('setFrozenColumns')
         
         
-        $("#loading").addClass("hidden");
-        $("#btn_Guardar").removeClass("hidden");
+        $("#loading").addClass("hidden");     
 
+      
+            var siniestro = $("[id*=txtSiniestro]").val();            
+            var sRFC = $("[id*=txtRFC]").val();
+
+            if (siniestro == undefined || siniestro == null) {
+                siniestro = "";
+            }
+
+            if (sRFC == undefined || sRFC == null) {
+                sRFC = "";
+            }
+
+            sRFC = sRFC.replace("&", "!");
+                    
+            if (siniestro != "" && sRFC != "") {
+                $("[id*=btn_guardar_xls]").removeClass("hidden");
+            }
+            else {
+                if ($('[id*=chkMultipago]').is(':checked')) {
+                    $("[id*=btn_guardar_xls]").removeClass("hidden");
+                }
+                else {
+                    $("#btn_Guardar").removeClass("hidden");
+                }                   
+            }               
+            
         
     };
 
@@ -1007,8 +1116,30 @@
 
 
         $("#loading").addClass("hidden");
-        $("#btn_Guardar").removeClass("hidden");
+        var siniestro = $("[id*=txtSiniestro]").val();
+        var sRFC = $("[id*=txtRFC]").val();
 
+        if (siniestro == undefined || siniestro == null) {
+            siniestro = "";
+        }
+
+        if (sRFC == undefined || sRFC == null) {
+            sRFC = "";
+        }
+
+        sRFC = sRFC.replace("&", "!");
+
+        if (siniestro != "" && sRFC != "") {
+            $("[id*=btn_guardar_xls]").removeClass("hidden");
+        }
+        else {
+            if ($('[id*=chkMultipago]').is(':checked')) {
+                $("[id*=btn_guardar_xls]").removeClass("hidden");
+            }
+            else {
+                $("#btn_Guardar").removeClass("hidden");
+            }
+        }  
 
 
 
@@ -1251,7 +1382,30 @@
 
 
             $("#loading").addClass("hidden");
-            $("#btn_Guardar").removeClass("hidden");
+            var siniestro = $("[id*=txtSiniestro]").val();
+            var sRFC = $("[id*=txtRFC]").val();
+
+            if (siniestro == undefined || siniestro == null) {
+                siniestro = "";
+            }
+
+            if (sRFC == undefined || sRFC == null) {
+                sRFC = "";
+            }
+
+            sRFC = sRFC.replace("&", "!");
+
+            if (siniestro != "" && sRFC != "") {
+                $("[id*=btn_guardar_xls]").removeClass("hidden");
+            }
+            else {
+                if ($('[id*=chkMultipago]').is(':checked')) {
+                    $("[id*=btn_guardar_xls]").removeClass("hidden");
+                }
+                else {
+                    $("#btn_Guardar").removeClass("hidden");
+                }
+            }  
 
 
         } catch (error) {
@@ -1273,6 +1427,11 @@
         var Nombre_Razon_Social = jQuery("#list47").jqGrid('getRowData', id).Nombre_Razon_Social
         var TipoPago = jQuery("#list47").jqGrid('getRowData', id).Tipo_Pago2
         var cta_clabe = jQuery("#list47").jqGrid('getRowData', id).Cuenta_Bancaria
+
+
+
+
+
 
         if (CodigoPres == "") {
             CodigoPres = 0
@@ -1358,6 +1517,47 @@
         else {
             jQuery("#list47").setColProp('Nombre_Razon_Social', { editable: true });
         }
+
+
+     
+            var siniestro = $("[id*=txtSiniestro]").val();
+            var sRFC = $("[id*=txtRFC]").val();
+
+            if (siniestro == undefined || siniestro == null) {
+                siniestro = "";
+            }
+
+            if (sRFC == undefined || sRFC == null) {
+                sRFC = "";
+            }
+
+            sRFC = sRFC.replace("&", "!");
+
+            if (siniestro != "" && sRFC != "") {
+                jQuery("#list47").setColProp('Concepto_Pago', { editable: false });
+                jQuery("#list47").setColProp('Concepto2', { editable: false });
+                jQuery("#list47").setColProp('Notas', { editable: false });
+                jQuery("#list47").setColProp('Observaciones', { editable: false });
+                jQuery("#list47").setColProp('Nombre_Razon_Social', { editable: false });
+                jQuery("#list47").setColProp('Moneda_Pago', { editable: false });
+                jQuery("#list47").setColProp('Importe', { editable: false });
+                jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: false });
+                jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: false });
+            }
+
+            if ($('[id*=chkMultipago]').is(':checked')) {
+                jQuery("#list47").setColProp('Concepto_Pago', { editable: false });
+                jQuery("#list47").setColProp('Concepto2', { editable: false });
+                jQuery("#list47").setColProp('Notas', { editable: false });
+                jQuery("#list47").setColProp('Observaciones', { editable: false });
+                jQuery("#list47").setColProp('Nombre_Razon_Social', { editable: false });
+                jQuery("#list47").setColProp('Moneda_Pago', { editable: false });
+                jQuery("#list47").setColProp('Importe', { editable: false });
+                jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: false });
+                jQuery("#list47").setColProp('Confirmar_Cuenta', { editable: false });
+            }
+        
+
     };
 
     function Validar(valor, columnName, length) {
@@ -1741,6 +1941,25 @@ $("body").on('click', '[id*=chkFisica]', function (e) {
 });
 
 
+$("body").on('change', "#cmbPagarA", function () {
+    //alert($(this).val());
+
+    if ($(this).val() != 10) {
+        $("[id*=chkMultipago]").prop('disabled', true);
+        $("[id*=txtRFC]").prop('disabled', true);
+        $("[id*=txtSiniestro]").prop('disabled', true);
+
+    }
+    else {
+        $("[id*=chkMultipago]").prop('disabled', false);
+        $("[id*=txtRFC]").prop('disabled', false);
+        $("[id*=txtSiniestro]").prop('disabled', false);
+    }
+
+    
+
+});
+
 
 $("body").on("click", ".contraer", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
@@ -1766,6 +1985,7 @@ $("body").on('click', '[id*=chkMoral]', function (e) {
         $("[id*=chkMoral]").prop('checked', true);
     }
 });
+
 
 
 function LoadGridCatTerceros(mydata) {
