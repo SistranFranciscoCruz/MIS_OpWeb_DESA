@@ -20,6 +20,7 @@ Public Class Prueba : Implements IHttpHandler
         Dim TipoUsuario As String
         Dim id_tipo_pago As String
         Dim CodigoPres As String
+        Dim codAnalista As String
         Dim FolioOnbase As String
 
         Catalgo = context.Request.QueryString("Catalgo")
@@ -66,6 +67,7 @@ Public Class Prueba : Implements IHttpHandler
                 TipoUsuario = context.Request.QueryString("TipoUsuario")
                 id_tipo_pago = context.Request.QueryString("id_tipo_pago")
                 CodigoPres = context.Request.QueryString("CodigoPres")
+                codAnalista = context.Request.QueryString("codAnalista")
 
 
                 Select Case TipoUsuario
@@ -80,6 +82,7 @@ Public Class Prueba : Implements IHttpHandler
 
                 oParametros.Add("TipoUsuario", TipoUsuario)
                 oParametros.Add("Fondos", "1")
+                oParametros.Add("cod_analista", codAnalista)
 
                 If TipoUsuario = "10" Then
                     If String.IsNullOrEmpty(CodigoPres) = False Then
@@ -121,21 +124,8 @@ Public Class Prueba : Implements IHttpHandler
                 poliza = context.Request.QueryString("Poliza")
                 param = Replace(poliza, "-", ",")
 
-
-
                 Funciones.fn_Consulta("SELECT DISTINCT cod_aseg, nombre FROM f_aseg_poliza(" & param & ") ", oTabla)
-
-
-
-
         End Select
-
-
-
-
-
-
-
 
 
         context.Response.Write(JsonConvert.SerializeObject(oTabla))

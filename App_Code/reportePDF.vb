@@ -341,7 +341,7 @@ Public Class reportePDF
             Else
                 RutaArchivo_correo = rutacompleta
                 If sn_impresion Then
-                    Process.Start(rutacompleta)
+                    ' Process.Start(rutacompleta) 'VZAVALETA_10290_CC7_PDF
                 End If
 
             End If
@@ -455,7 +455,7 @@ Public Class reportePDF
         '...Abrir el archivo
         RutaArchivo_correo = RutaCompleta
         If sn_impresion Then
-            Process.Start(RutaCompleta)
+            'Process.Start(RutaCompleta) 'VZAVALETA_10290_CC7_PDF
         End If
 
 

@@ -2,6 +2,7 @@
 Imports System.Data
 Imports System.Net.Mail
 Imports Mensaje
+Imports System.Diagnostics '>VZAVALETA_10290_CC7_PDF
 
 Partial Class Siniestros_EnviosPagosInternacionales
     Inherits System.Web.UI.Page
@@ -282,6 +283,7 @@ Partial Class Siniestros_EnviosPagosInternacionales
                 pdf.Cod_usuario = Master.cod_usuario.ToString()
                 pdf.Nro_ops = archivos
                 pdf.ReportePagosInter(True)
+                Process.Start(pdf.RutaArchivo_correo) '>VZAVALETA_10290_CC7_PDF
             Else
                 Index = 0
                 MuestraMensaje("Validación", "Error al imprimir el PDF", TipoMsg.Falla)
@@ -454,6 +456,7 @@ Partial Class Siniestros_EnviosPagosInternacionales
         html = html + "<tr>"
         html = html + "<td style='text-align: center; background-color: #ffffff;'> " + dtPagosInter.Rows(0).Item("moneda").ToString() + "</td>"
         html = html + "<td style='text-align: center; background-color: #ffffff;'>$&nbsp;&nbsp;&nbsp;&nbsp; " + dtPagosInter.Rows(0).Item("monto").ToString() + "</td>"
+
         html = html + "<td style='text-align: center; background-color: #ffffff;'>" + dtPagosInter.Rows(0).Item("nro_op").ToString() + "</td>"
         html = html + "</tr>"
         html = html + "<tr>"

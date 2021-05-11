@@ -2144,7 +2144,8 @@ Partial Class Pages_SiteMaster
 
                 Funciones.CerrarModal("#Transferencias_stro")
             Else
-                Mensaje.MuestraMensaje("Cuentas bancarias", "Error al validar la confirmacion de la cuenta bancaria", TipoMsg.Falla)
+                'Mensaje.MuestraMensaje("Cuentas bancarias", "Error al validar la confirmacion de la cuenta bancaria", TipoMsg.Falla)
+                Mensaje.MuestraMensaje("Cuentas bancarias", "La cuenta bancaria y la confirmación de la cuenta no coinciden.", TipoMsg.Falla)
                 txtCuentaBancariaT_stro_Confirmacion.Text = String.Empty
                 txtCuentaBancariaT_stro.Text = String.Empty
             End If

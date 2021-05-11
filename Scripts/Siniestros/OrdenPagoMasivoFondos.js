@@ -1427,7 +1427,7 @@
         var Nombre_Razon_Social = jQuery("#list47").jqGrid('getRowData', id).Nombre_Razon_Social
         var TipoPago = jQuery("#list47").jqGrid('getRowData', id).Tipo_Pago2
         var cta_clabe = jQuery("#list47").jqGrid('getRowData', id).Cuenta_Bancaria
-
+        var codAnalista = $("[id*=cmbAnalistaSolicitante]").val();
 
 
 
@@ -1467,8 +1467,8 @@
 
         var row = $(id.target).closest('tr.jqgrow');
 
-        $.ajax({
-            url: "../Siniestros/Catalogos.ashx?Catalgo=ConceptoPagoFondos&TipoUsuario=" + TipoUsuario + "&id_tipo_pago=" + id_tipo_pago + "&CodigoPres=" + CodigoPres,
+        $.ajax({            
+            url: "../Siniestros/Catalogos.ashx?Catalgo=ConceptoPagoFondos&TipoUsuario=" + TipoUsuario + "&id_tipo_pago=" + id_tipo_pago + "&CodigoPres=" + CodigoPres + "&codAnalista=" + codAnalista,
             dataType: "json",
             type: "POST",
             contentType: "application/json; charset=utf-8",
@@ -1999,17 +1999,16 @@ function LoadGridCatTerceros(mydata) {
             data: mydata,
             datatype: "local",
 
-            height: 280,
-            width: 400,
+            height: 250,
+            width: 200,
             rowNum: 8000,
             rowList: [10, 20, 30],
             colNames: ['Codigo', 'Nombre', 'RFC'],
             colModel: [
 
-                { name: 'cod_tercero', index: 'cod_tercero', width: 100, frozen: false },
-                { name: 'nombre', index: 'nombre', width: 100 },
-                { name: 'nro_nit', index: 'nro_nit', width: 182 },
-
+                { name: 'cod_tercero', index: 'cod_tercero', width: 50, frozen: false },
+                { name: 'nombre', index: 'nombre', width: 250 },
+                { name: 'nro_nit', index: 'nro_nit', width: 110 },
 
 
             ],
@@ -2038,6 +2037,7 @@ function LoadGridCatTerceros(mydata) {
                 jQuery("#list47").jqGrid('setCell', rowId, 'Nombre_Razon_Social', nomTercero);
                 jQuery("#list47").jqGrid('setCell', rowId, 'RFC', rfcTercero);
 
+                ObtenerCuentasDependencias(rowId, codTercero) 
 
                 $("#CatalogoTerceros").modal('hide');
 
@@ -2073,6 +2073,39 @@ function LoadGridCatTerceros(mydata) {
 
 };
 
+function ObtenerCuentasDependencias(ID, CodCliente) {
+    //>VZAVALETA_10290_CC7
+    var FolioOnbase = jQuery("#list47").jqGrid('getRowData', ID).FolioOnbaseHidden
+
+    $.ajax({
+        url: "../LocalServices/OrdenPagoMasiva.asmx/RecuperarCtasDepend",
+        data: "{ 'CodCliente': '" + CodCliente + "', 'FolioOnbase': '" + FolioOnbase + "'}",
+        dataType: "json",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            var mydata = $.parseJSON(result.d);
+            if (mydata.length != 0) {
+                var vClabe = mydata[0].clabe
+                if (vClabe != "") {
+                    jQuery("#list47").jqGrid('setCell', ID, 'Cuenta_Bancaria_ok', vClabe);
+                    jQuery("#list47").jqGrid('setCell', ID, 'Confirmar_Cuenta_ok', vClabe);
+                    $("#" + ID + "_Cuenta_Bancaria").val(vClabe);
+                    $("#" + ID + "_Confirmar_Cuenta").val(vClabe);
+                }
+                else {
+                    jQuery("#list47").jqGrid('setCell', ID, 'Cuenta_Bancaria_ok', null);
+                    jQuery("#list47").jqGrid('setCell', ID, 'Confirmar_Cuenta_ok', null);
+                    $("#" + ID + "_Cuenta_Bancaria").val(null);
+                    $("#" + ID + "_Confirmar_Cuenta").val(null);
+                }
+            }
+            return;
+        },
+        error: function (err) {
+        }
+    });
+};
 function RecuperarClasePago(ID, Cpto_pago, Prestador) {
     $.ajax({
         url: "../LocalServices/OrdenPagoMasiva.asmx/RecuperarClasePago",
