@@ -179,7 +179,7 @@
                                         <img class="btn-mail"/>&nbsp Enviar
 									</span>
                                 </asp:LinkButton>
-
+                                
                                <%-- <asp:LinkButton ID="btn_Continuar" runat="server" class="btn botones" Width="153px" data-toggle="modal" data-target="#mailPI" Visible="true">
                                 <span>
                                     <img class="btn-aceptar"/>&nbspContinuar

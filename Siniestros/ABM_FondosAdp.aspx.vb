@@ -113,7 +113,7 @@ Partial Class Siniestros_ABM_FondosAdp
             Dim Concepto As String
             Dim Clase As String
             Concepto = row.Cells(0).Text
-            Clase = row.Cells(2).Text
+            Clase = row.Cells(5).Text
 
             oParametros.Add("Accion", "2")
             oParametros.Add("cod_cpto", Concepto)

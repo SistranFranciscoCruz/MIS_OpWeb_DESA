@@ -259,6 +259,7 @@ Partial Class Siniestros_EnviosPagosInternacionales
         Dim archivos() As String = Nothing
         Dim Index As Integer = 0
         Dim pdf = New reportePDF
+        Dim RutaArchivo As String
 
         dtSelec = obtenerSeleccionadosImp()
         Dim strFoliosRep As String = ""
@@ -283,7 +284,13 @@ Partial Class Siniestros_EnviosPagosInternacionales
                 pdf.Cod_usuario = Master.cod_usuario.ToString()
                 pdf.Nro_ops = archivos
                 pdf.ReportePagosInter(True)
-                Process.Start(pdf.RutaArchivo_correo) '>VZAVALETA_10290_CC7_PDF
+
+                '>VZAVALETA_10290_CC7_PDF  
+                RutaArchivo = Replace(pdf.RutaArchivo_correo, " ", "%20")
+                RutaArchivo = Replace(RutaArchivo, "\", "/")
+
+                Funciones.EjecutaFuncion("window.open('file:" + RutaArchivo + "', '_blank');", "PDF")
+                '<VZAVALETA_10290_CC7_PDF               
             Else
                 Index = 0
                 MuestraMensaje("Validación", "Error al imprimir el PDF", TipoMsg.Falla)

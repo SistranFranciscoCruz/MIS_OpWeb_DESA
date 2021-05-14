@@ -2441,7 +2441,8 @@ Partial Class Siniestros_OrdenPago
                             txtTotalAutorizacion.Text = dPago + txtTotalAutorizacion.Text
                             txtTotalImpuestos.Text = dImporteImpuesto + txtTotalImpuestos.Text
                             txtTotalRetenciones.Text = dImporteRetencion + txtTotalRetenciones.Text
-                            txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto + dImporteRetencion
+                            'txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto + dImporteRetencion
+                            txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto - dImporteRetencion 'VZAVALETA_10290_CC8
                             txtTotalNacional.Text = dPago + txtTotalNacional.Text
 
                             'varios conceptos
@@ -3841,7 +3842,7 @@ Partial Class Siniestros_OrdenPago
             Dim hrefOnBase As String
             linkOnBase.HRef = ""
             hrefOnBase = ""
-            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id = 1,  @folioOnbase = " & txtOnBase.Text.Trim)
+            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id_pagar_a = " & Me.cmbTipoUsuario.SelectedValue & ",  @folioOnbase = " & txtOnBase.Text.Trim)
             linkOnBase.HRef = hrefOnBase
 
             If validaFolioBloqueado() Then
