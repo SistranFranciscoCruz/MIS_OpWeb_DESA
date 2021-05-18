@@ -96,9 +96,20 @@ Public Class Prueba : Implements IHttpHandler
 
             Case "ClasePagoFondos"
                 FolioOnbase = context.Request.QueryString("FolioOnbase")
+                TipoUsuario = context.Request.QueryString("TipoUsuario")
+
+                Select Case TipoUsuario
+                    Case "Asegurado"
+                        TipoUsuario = "7"
+                    Case "Tercero"
+                        TipoUsuario = "8"
+                    Case "Proveedor"
+                        TipoUsuario = "10"
+                End Select
 
                 oParametros.Add("Folio_OnBase", FolioOnbase)
                 oParametros.Add("Accion", "2")
+                oParametros.Add("paga_a", TipoUsuario)
                 oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos2", oParametros)
                 oTabla = oDatos.Tables(1)
 

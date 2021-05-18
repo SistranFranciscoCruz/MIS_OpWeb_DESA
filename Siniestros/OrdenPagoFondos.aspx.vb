@@ -612,6 +612,7 @@ Partial Class Siniestros_OrdenPago
                             oParametros.Add("Accion", 2)
                             oParametros.Add("Folio_OnBase", Me.txtSiniestro.Text.Trim)
                             oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                            oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
 
                             oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
 
@@ -1185,8 +1186,8 @@ Partial Class Siniestros_OrdenPago
                         oParametros.Add("Banco", oBancoT_stro.Value)
                         oParametros.Add("Sucursal", oSucursalT_stro.Value)
                         oParametros.Add("Beneficiario", oBeneficiarioT_stro.Value)
-                        oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
-                        'oParametros.Add("Moneda", oMonedaT_stro.Value)
+                        'oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
+                        oParametros.Add("Moneda", oMonedaT_stro.Value)
                         oParametros.Add("TipoCuenta", oTipoCuentaT_stro.Value)
                         oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                         oParametros.Add("Plaza", oPlazaT_stro.Value)
@@ -3370,7 +3371,8 @@ Partial Class Siniestros_OrdenPago
                 Case eTipoUsuario.Proveedor
                     oParametros.Add("Accion", 2)
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
-
+                    oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
 
                     oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
 
@@ -3502,16 +3504,16 @@ Partial Class Siniestros_OrdenPago
                         pnlProveedor.Style("display") = ""
 
                     Else
-                        If Not oDatos Is Nothing AndAlso oDatos.Tables(4).Rows.Count > 0 Then
+                        If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
                             'FFUENTES Esto es en caso de que no traiga nada la consulta con todas las tablas esta solo es la tabla de factura_conta_electronica 
-                            oSeleccionActual = oDatos.Tables(4)
-                            With oDatos.Tables(4).Rows(0)
-                                If (oDatos.Tables(4).Rows(0).Item("sn_relacionado") = "-1") Then
+                            oSeleccionActual = oDatos.Tables(0)
+                            With oDatos.Tables(0).Rows(0)
+                                If (oDatos.Tables(0).Rows(0).Item("sn_relacionado") = "-1") Then
                                     'Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(4).Rows(0).Item("fecha_relacion").ToString() + " Usuario relacion: " + oDatos.Tables(4).Rows(0).Item("cod_usuario_relacion").ToString() + " Fecha de Comprobante: " + oDatos.Tables(4).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
                                     Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(0).Rows(0).Item("fecha_relacion").ToString() + "<br>" + "Usuario relacion: " + oDatos.Tables(0).Rows(0).Item("cod_usuario_relacion").ToString() + "<br>" + "Fecha de Comprobante: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString() + "<br>" + "OP Relacionada: " + oDatos.Tables(0).Rows(0).Item("Nro_OP").ToString(), TipoMsg.Falla) 'FJCP 10290 MEJORAS Folio OnBase Relacionado
                                     Limpiartodo()
                                 Else
-                                    Mensaje.MuestraMensaje("Folio Onbase con datos erroneos:", "Folio Onbase: " + oDatos.Tables(4).Rows(0).Item("num_folio").ToString() + " Numero Siniestro: " + oDatos.Tables(4).Rows(0).Item("num_siniestro").ToString() + " RFC Proveedor: " + oDatos.Tables(4).Rows(0).Item("RFC_proveedor").ToString(), TipoMsg.Falla)
+                                    Mensaje.MuestraMensaje("Folio Onbase con datos erroneos:", "Folio Onbase: " + oDatos.Tables(0).Rows(0).Item("num_folio").ToString() + " Numero Siniestro: " + oDatos.Tables(0).Rows(0).Item("num_siniestro").ToString() + " RFC Proveedor: " + oDatos.Tables(0).Rows(0).Item("RFC_proveedor").ToString(), TipoMsg.Falla)
 
                                     'Me.txtPoliza.Text = .Item("poliza")
                                     'Me.txtMonedaPoliza.Text = .Item("txt_desc")
@@ -3538,6 +3540,8 @@ Partial Class Siniestros_OrdenPago
                     oParametros.Add("Accion", 2)
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
                     oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
+
 
                     oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
                     If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
