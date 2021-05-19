@@ -1294,7 +1294,8 @@ Partial Class Siniestros_OrdenPago
                         oParametros.Add("Banco", oBancoT_stro.Value)
                         oParametros.Add("Sucursal", oSucursalT_stro.Value)
                         oParametros.Add("Beneficiario", oBeneficiarioT_stro.Value)
-                        oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
+                        'oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
+                        oParametros.Add("Moneda", oMonedaT_stro.Value)
                         oParametros.Add("TipoCuenta", oTipoCuentaT_stro.Value)
                         oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                         oParametros.Add("Plaza", oPlazaT_stro.Value)
@@ -2109,6 +2110,19 @@ Partial Class Siniestros_OrdenPago
             CargarBeneficiarios()
 
             CargarCatalogosCuentasBancarias()
+            '>VZAVALETA_10290_CC7
+            Me.txtOnBase.Text = String.Empty
+
+            If Me.cmbTipoComprobante.Items.Count > 0 Then
+                Me.cmbTipoComprobante.Items.Clear()
+            End If
+            If Me.cmbNumPago.Items.Count > 0 Then
+                Me.cmbNumPago.Items.Clear()
+            End If
+            If Me.drBeneficiario.Items.Count > 0 Then
+                Me.drBeneficiario.Items.Clear()
+            End If
+            '<VZAVALETA_10290_CC7
 
             Me.cmbTipoUsuario.Enabled = True
             Me.cmbTipoUsuario.SelectedValue = eTipoUsuario.Ninguno 'VZAVALETA_10290_INICIO
@@ -2427,7 +2441,8 @@ Partial Class Siniestros_OrdenPago
                             txtTotalAutorizacion.Text = dPago + txtTotalAutorizacion.Text
                             txtTotalImpuestos.Text = dImporteImpuesto + txtTotalImpuestos.Text
                             txtTotalRetenciones.Text = dImporteRetencion + txtTotalRetenciones.Text
-                            txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto + dImporteRetencion
+                            'txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto + dImporteRetencion
+                            txtTotal.Text = txtTotal.Text + dPago + dImporteImpuesto - dImporteRetencion 'VZAVALETA_10290_CC8
                             txtTotalNacional.Text = dPago + txtTotalNacional.Text
 
                             'varios conceptos
@@ -3827,7 +3842,7 @@ Partial Class Siniestros_OrdenPago
             Dim hrefOnBase As String
             linkOnBase.HRef = ""
             hrefOnBase = ""
-            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id = 1,  @folioOnbase = " & txtOnBase.Text.Trim)
+            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id_pagar_a = " & Me.cmbTipoUsuario.SelectedValue & ",  @folioOnbase = " & txtOnBase.Text.Trim)
             linkOnBase.HRef = hrefOnBase
 
             If validaFolioBloqueado() Then
@@ -4260,6 +4275,7 @@ Partial Class Siniestros_OrdenPago
     Private Sub cmbNumPago_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbNumPago.SelectedIndexChanged 'FJCP MEJORAS FASE II NUMERO PAGO
         Try
             If cmbNumPago.SelectedValue <> -1 Then
+                cmbTipoUsuario.SelectedValue = eTipoUsuario.Ninguno
                 BuscarFolioOnbase()
             End If
 

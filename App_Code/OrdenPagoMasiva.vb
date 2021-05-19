@@ -505,7 +505,29 @@ Public Class OrdenPagoMasiva
 
     End Function
 
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function RecuperarCtasDepend(ByVal CodCliente As String, ByVal FolioOnbase As String) As String
+        'VZAVALETA_10290_CC7
+        Dim oDatos As DataSet
+        Dim oTabla As DataTable
+        Dim oParametros As New Dictionary(Of String, Object)
+        Dim serializer As New JavaScriptSerializer
+        Try
+            serializer.MaxJsonLength = 500000000
+            oParametros.Add("Folio_OnBase", FolioOnbase)
+            oParametros.Add("cod_cliente", CodCliente)
 
+            oDatos = Funciones.ObtenerDatos("sp_Recuperar_Ctas_Depend", oParametros)
+            oTabla = oDatos.Tables(0)
+
+            Return JsonConvert.SerializeObject(oTabla)
+        Catch ex As Exception
+            Return JsonConvert.SerializeObject(oTabla)
+        End Try
+
+
+    End Function
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>

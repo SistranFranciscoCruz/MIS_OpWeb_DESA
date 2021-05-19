@@ -612,6 +612,7 @@ Partial Class Siniestros_OrdenPago
                             oParametros.Add("Accion", 2)
                             oParametros.Add("Folio_OnBase", Me.txtSiniestro.Text.Trim)
                             oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                            oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
 
                             oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
 
@@ -1147,12 +1148,16 @@ Partial Class Siniestros_OrdenPago
             If grd.Rows.Count > 0 AndAlso cmbTipoPagoOP.SelectedValue = "T" Then
 
                 'FJCP 10290 MEJORAS Folio Onbase Edo Cta Ini
-                folioOnBase = txtOnBase.Text.Trim
+                folioOnBase = IIf(txtOnBase.Text.Trim = "", "0", txtOnBase.Text.Trim)
                 oDatos = New DataSet
                 oParametros = New Dictionary(Of String, Object)
                 oParametros.Add("folioOnBase", CInt(folioOnBase.ToString()))
                 oDatos = Funciones.ObtenerDatos("usp_obtenerNroCta_FolioOnBase", oParametros)
-                folioOnbase_edoCta = oDatos.Tables(0).Rows(0).Item("Folio_Onbase_est_cuenta").ToString()
+                If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
+                    folioOnbase_edoCta = oDatos.Tables(0).Rows(0).Item("Folio_Onbase_est_cuenta").ToString()
+                Else
+                    folioOnbase_edoCta = ""
+                End If
                 'FJCP 10290 MEJORAS Folio Onbase Edo Cta Fin
 
                 oDatos = New DataSet
@@ -1181,8 +1186,8 @@ Partial Class Siniestros_OrdenPago
                         oParametros.Add("Banco", oBancoT_stro.Value)
                         oParametros.Add("Sucursal", oSucursalT_stro.Value)
                         oParametros.Add("Beneficiario", oBeneficiarioT_stro.Value)
-                        oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
-                        'oParametros.Add("Moneda", oMonedaT_stro.Value)
+                        'oParametros.Add("Moneda", cmbMonedaPago.SelectedValue)
+                        oParametros.Add("Moneda", oMonedaT_stro.Value)
                         oParametros.Add("TipoCuenta", oTipoCuentaT_stro.Value)
                         oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                         oParametros.Add("Plaza", oPlazaT_stro.Value)
@@ -1261,6 +1266,8 @@ Partial Class Siniestros_OrdenPago
                 'oParametros.Add("CuentaBancaria", oCuentaBancariaT_stro.Value)
                 'oParametros.Add("Plaza", oPlazaT_stro.Value)
                 'oParametros.Add("ABA", oAbaT_stro.Value)
+
+                oParametros.Add("Fasttrack", "NO")
 
                 Master.MuestraTransferenciasBancariasSiniestros(IO.Path.GetFileName(Request.Url.AbsolutePath),
                                                                 oCatalogoBancosT, oCatalogoTiposCuentaT, oCatalogoMonedasT,
@@ -1428,7 +1435,7 @@ Partial Class Siniestros_OrdenPago
                     oSolicitudPago.AppendFormat("<fOnbase>{0}</fOnbase>", CInt(oFila.Item("FolioOnbase"))) 'FJCP MULTIPAGO 
                     oSolicitudPago.AppendFormat("<IdSiniestro>{0}</IdSiniestro>", 1)
                     oSolicitudPago.AppendFormat("<Subsiniestro>{0}</Subsiniestro>", 0)
-                    oSolicitudPago.AppendFormat("<NumPago>{0}</NumPago>", CInt(oFila.Item("NumeroPago"))) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    'oSolicitudPago.AppendFormat("<NumPago>{0}</NumPago>", CInt(oFila.Item("NumeroPago"))) 'FJCP MEJORAS FASE II NUMERO PAGO
                     oSolicitudPago.AppendFormat("<CodigoTercero>{0}</CodigoTercero>", CInt(oFila.Item("CodigoTercero")))
                     oSolicitudPago.AppendFormat("<ClasePago>{0}</ClasePago>", CInt(oFila.Item("ClasePago")))
                     oSolicitudPago.AppendFormat("<ConceptoPago>{0}</ConceptoPago>", CInt(oFila.Item("ConceptoPago")))
@@ -1836,7 +1843,16 @@ Partial Class Siniestros_OrdenPago
 
             CargarCatalogosCuentasBancarias()
 
+            '>VZAVALETA_10290_CC7
+            Me.txtOnBase.Text = String.Empty
 
+            If Me.cmbTipoComprobante.Items.Count > 0 Then
+                Me.cmbTipoComprobante.Items.Clear()
+            End If
+            If Me.cmbNumPago.Items.Count > 0 Then
+                Me.cmbNumPago.Items.Clear()
+            End If
+            '<VZAVALETA_10290_CC7
 
 
             Me.cmbTipoUsuario.Enabled = True
@@ -2888,6 +2904,7 @@ Partial Class Siniestros_OrdenPago
                 oParametros.Add("Cod_Pres", Me.txtCodigoBeneficiario_stro.Text)
                 oParametros.Add("cod_cpto", scpto)
                 oParametros.Add("folioonbase", txtOnBase.Text) 'Folios onbase
+                oParametros.Add("cod_analista", cmbAnalistaSolicitante.SelectedValue)
 
                 oDatos = Funciones.ObtenerDatos("MIS_sp_op_stro_Consulta_Fondos", oParametros)
 
@@ -2952,6 +2969,7 @@ Partial Class Siniestros_OrdenPago
                     oParametros.Add("Cod_cpto", cmbConceptoPago.SelectedValue)
                 End If
                 oParametros.Add("folioonbase", txtOnBase.Text) '
+                oParametros.Add("cod_analista", cmbAnalistaSolicitante.SelectedValue)
 
                 oDatos = Funciones.ObtenerDatos("MIS_sp_op_stro_Consulta_Fondos", oParametros)
 
@@ -3340,7 +3358,7 @@ Partial Class Siniestros_OrdenPago
             Dim hrefOnBase As String
             linkOnBase.HRef = ""
             hrefOnBase = ""
-            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id = 1,  @folioOnbase = " & txtOnBase.Text.Trim)
+            hrefOnBase = Funciones.fn_EjecutaStr("usp_consulta_folio_onbase_ws  @id_pagar_a = " & Me.cmbTipoUsuario.SelectedValue & ",  @folioOnbase = " & txtOnBase.Text.Trim)
             linkOnBase.HRef = hrefOnBase
             If validaFolioBloqueado() Then
                 'Exit Sub
@@ -3353,7 +3371,8 @@ Partial Class Siniestros_OrdenPago
                 Case eTipoUsuario.Proveedor
                     oParametros.Add("Accion", 2)
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
-
+                    oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
 
                     oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
 
@@ -3485,16 +3504,16 @@ Partial Class Siniestros_OrdenPago
                         pnlProveedor.Style("display") = ""
 
                     Else
-                        If Not oDatos Is Nothing AndAlso oDatos.Tables(4).Rows.Count > 0 Then
+                        If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
                             'FFUENTES Esto es en caso de que no traiga nada la consulta con todas las tablas esta solo es la tabla de factura_conta_electronica 
-                            oSeleccionActual = oDatos.Tables(4)
-                            With oDatos.Tables(4).Rows(0)
-                                If (oDatos.Tables(4).Rows(0).Item("sn_relacionado") = "-1") Then
+                            oSeleccionActual = oDatos.Tables(0)
+                            With oDatos.Tables(0).Rows(0)
+                                If (oDatos.Tables(0).Rows(0).Item("sn_relacionado") = "-1") Then
                                     'Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(4).Rows(0).Item("fecha_relacion").ToString() + " Usuario relacion: " + oDatos.Tables(4).Rows(0).Item("cod_usuario_relacion").ToString() + " Fecha de Comprobante: " + oDatos.Tables(4).Rows(0).Item("fecha_emision_gmx").ToString(), TipoMsg.Falla)
                                     Mensaje.MuestraMensaje("Folio OnBase Relacionado", "Fecha Relacionado: " + oDatos.Tables(0).Rows(0).Item("fecha_relacion").ToString() + "<br>" + "Usuario relacion: " + oDatos.Tables(0).Rows(0).Item("cod_usuario_relacion").ToString() + "<br>" + "Fecha de Comprobante: " + oDatos.Tables(0).Rows(0).Item("fecha_emision_gmx").ToString() + "<br>" + "OP Relacionada: " + oDatos.Tables(0).Rows(0).Item("Nro_OP").ToString(), TipoMsg.Falla) 'FJCP 10290 MEJORAS Folio OnBase Relacionado
                                     Limpiartodo()
                                 Else
-                                    Mensaje.MuestraMensaje("Folio Onbase con datos erroneos:", "Folio Onbase: " + oDatos.Tables(4).Rows(0).Item("num_folio").ToString() + " Numero Siniestro: " + oDatos.Tables(4).Rows(0).Item("num_siniestro").ToString() + " RFC Proveedor: " + oDatos.Tables(4).Rows(0).Item("RFC_proveedor").ToString(), TipoMsg.Falla)
+                                    Mensaje.MuestraMensaje("Folio Onbase con datos erroneos:", "Folio Onbase: " + oDatos.Tables(0).Rows(0).Item("num_folio").ToString() + " Numero Siniestro: " + oDatos.Tables(0).Rows(0).Item("num_siniestro").ToString() + " RFC Proveedor: " + oDatos.Tables(0).Rows(0).Item("RFC_proveedor").ToString(), TipoMsg.Falla)
 
                                     'Me.txtPoliza.Text = .Item("poliza")
                                     'Me.txtMonedaPoliza.Text = .Item("txt_desc")
@@ -3521,6 +3540,8 @@ Partial Class Siniestros_OrdenPago
                     oParametros.Add("Accion", 2)
                     oParametros.Add("Folio_OnBase", Me.txtOnBase.Text.Trim)
                     oParametros.Add("numPago", cmbNumPago.SelectedValue) 'FJCP MEJORAS FASE II NUMERO PAGO
+                    oParametros.Add("Paga_a", Me.cmbTipoUsuario.SelectedValue)
+
 
                     oDatos = Funciones.ObtenerDatos("MIS_sp_cir_op_stro_Catalogos_Fondos", oParametros)
                     If Not oDatos Is Nothing AndAlso oDatos.Tables(0).Rows.Count > 0 Then
@@ -3733,7 +3754,7 @@ Partial Class Siniestros_OrdenPago
                 txtcpto2.Text = ""
             End If
         Catch ex As Exception
-            Mensaje.MuestraMensaje("OrdenPagoSiniestros", String.Format("ObtenerTipoCambio error: {0}", ex.Message), TipoMsg.Falla)
+            Mensaje.MuestraMensaje("OrdenPagoSiniestros", String.Format("CargarConceptoAdp error: {0}", ex.Message), TipoMsg.Falla)
         End Try
 
 

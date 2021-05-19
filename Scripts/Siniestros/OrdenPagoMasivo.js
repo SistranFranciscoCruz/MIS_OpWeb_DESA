@@ -689,9 +689,9 @@
                     { name: 'Tipo_Pago2', index: 'Tipo_Pago2', width: 90, hidden: false },
                     { name: 'Folio_Onbase_cuenta', index: 'Folio_Onbase_cuenta', width: 90 },
 
-                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Cuenta_Bancaria', index: 'Cuenta_Bancaria', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },                    
                     { name: 'Cuenta_Bancaria_ok', index: 'Cuenta_Bancaria_ok', width: 180, hidden: true }, //FJCP_10290_CC                
-                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },
+                    { name: 'Confirmar_Cuenta', index: 'Confirmar_Cuenta', width: 180, formatter: MascaraPwdCta, editable: false, editoptions: { size: "30", maxlength: "18" }, editrules: { custom: true, custom_func: Validar, required: true } },                    
                     { name: 'Confirmar_Cuenta_ok', index: 'Confirmar_Cuenta_ok', width: 180, hidden: true }, //FJCP_10290_CC
 
                     { name: 'Solicitante', index: 'Solicitante', width: 90 },
@@ -1130,10 +1130,56 @@
         var cta_clabe = jQuery("#list47").jqGrid('getRowData', id).Cuenta_Bancaria
         var SubStro = jQuery("#list47").jqGrid('getRowData', id).Subsiniestro
 
+        //>VZAVALETA_10290_CC7      
+        if (TipoUsuario == "Asegurado") {
+            jQuery("#list47").setColProp('Nombre_Razon_Social', {
+                editable: true, edittype: "select", editoptions: {
+                    value: res, dataEvents: [
+                        {
+                            type: 'change',
+                            fn: function (e) {
+                                var v = parseInt($(e.target).val(), 10);
+                                var row = $(e.target).closest('tr.jqgrow');
+                                var rowId = row.attr('id');
+                                jQuery("#list47").jqGrid('setCell', rowId, 'CodigoCliente', v);
 
+                                ObtenerCuentasDependencias(rowId, v)
 
+                            }
+                        }
+                    ]
+                }
+            });
 
-
+            $.ajax({
+                url: "../Siniestros/Catalogos.ashx?Catalgo=FigurasPoliza&Poliza=" + poliza,
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    //var s = '<option value="0">Seleccione valor</option>';
+                    var s = '';
+                    for (var i = 0; i < result.length; i++) {
+                        if (Nombre_Razon_Social == result[i].nombre) {
+                            s += '<option value="' + result[i].cod_aseg + '"  selected = "selected">' + result[i].nombre + '</option>';
+                        }
+                        else {
+                            s += '<option value="' + result[i].cod_aseg + '">' + result[i].nombre + '</option>';
+                        }
+                    }
+                    res = s;
+                    $("select#" + id + "_Nombre_Razon_Social", row[0]).html(res);
+                },
+                error: function (err) {
+                    debugger
+                    alert(err);
+                }
+            });
+        }
+        else {
+            jQuery("#list47").setColProp('Nombre_Razon_Social', { editable: false });
+        }
+       //<ZAVALETA_10290_CC7
 
         if (TipoUsuario == "Proveedor") {
             jQuery("#list47").setColProp('Cuenta_Bancaria', { editable: false });
@@ -1222,88 +1268,7 @@
 
 
 
-        if (TipoUsuario == "Asegurado") {
-            jQuery("#list47").setColProp('Nombre_Razon_Social', {
-                editable: true, edittype: "select", editoptions: {
-                    value: res, dataEvents: [
-                        {
-                            type: 'change',
-                            fn: function (e) {
-                                var v = parseInt($(e.target).val(), 10);
-
-
-
-
-
-                                var row = $(e.target).closest('tr.jqgrow');
-                                var rowId = row.attr('id');
-
-
-
-
-
-                                jQuery("#list47").jqGrid('setCell', rowId, 'CodigoCliente', v);
-
-
-
-
-
-
-                            }
-                        }
-                    ]
-                }
-            });
-
-
-
-
-
-            $.ajax({
-                url: "../Siniestros/Catalogos.ashx?Catalgo=FigurasPoliza&Poliza=" + poliza,
-                dataType: "json",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-
-
-                    //var s = '<option value="0">Seleccione valor</option>';
-                    var s = '';
-                    for (var i = 0; i < result.length; i++) {
-
-
-                        if (Nombre_Razon_Social == result[i].nombre) {
-
-                            s += '<option value="' + result[i].cod_aseg + '"  selected = "selected">' + result[i].nombre + '</option>';
-                        }
-                        else {
-                            s += '<option value="' + result[i].cod_aseg + '">' + result[i].nombre + '</option>';
-                        }
-
-
-                    }
-
-
-                    res = s;
-                    $("select#" + id + "_Nombre_Razon_Social", row[0]).html(res);
-
-
-
-                },
-                error: function (err) {
-                    debugger
-                    alert(err);
-
-                }
-            });
-
-
-
-
-        }
-        else {
-            jQuery("#list47").setColProp('Nombre_Razon_Social', { editable: false });
-        }
+       
 
         if (SubStro == "VARIOS") {
             jQuery("#list47").setColProp('Concepto_Pago', { editable: false });
@@ -1526,8 +1491,6 @@ function selecTercero(rowId) {
     jQuery("#list47").jqGrid('setCell', rowId, 'CodigoCliente', codTercero);
     jQuery("#list47").jqGrid('setCell', rowId, 'Nombre_Razon_Social', nomTercero);
     jQuery("#list47").jqGrid('setCell', rowId, 'RFC', rfcTercero);
-
-
 
 }
 
@@ -1800,23 +1763,19 @@ function LoadGridCatTerceros(mydata) {
             data: mydata,
             datatype: "local",
 
-            height: 280,
-            width: 400,
+            height: 250,
+            width: 200,
             rowNum: 8000,
             rowList: [10, 20, 30],
             colNames: ['Codigo', 'Nombre', 'RFC'],
             colModel: [
 
-                { name: 'cod_tercero', index: 'cod_tercero', width: 100, frozen: false },
-                { name: 'nombre', index: 'nombre', width: 50 },
-                { name: 'nro_nit', index: 'nro_nit', width: 182 },
-
+                { name: 'cod_tercero', index: 'cod_tercero', width: 50, frozen: false },
+                { name: 'nombre', index: 'nombre', width: 250 },
+                { name: 'nro_nit', index: 'nro_nit', width: 110 },
 
 
             ],
-
-
-
 
             // pager: "#plist47",
             viewrecords: true,
@@ -1839,6 +1798,7 @@ function LoadGridCatTerceros(mydata) {
                 jQuery("#list47").jqGrid('setCell', rowId, 'Nombre_Razon_Social', nomTercero);
                 jQuery("#list47").jqGrid('setCell', rowId, 'RFC', rfcTercero);
 
+                ObtenerCuentasDependencias(rowId, codTercero)
 
                 $("#CatalogoTerceros").modal('hide');
 
@@ -1856,8 +1816,7 @@ function LoadGridCatTerceros(mydata) {
 
         jQuery("#grdTercero").jqGrid('setFrozenColumns')
 
-
-
+        
 
 
 
@@ -1874,8 +1833,42 @@ function LoadGridCatTerceros(mydata) {
 
 };
 
+function ObtenerCuentasDependencias(ID, CodCliente) {
+    //>VZAVALETA_10290_CC7
+    var FolioOnbase = jQuery("#list47").jqGrid('getRowData', ID).FolioOnbaseHidden
 
-function RecuperarClasePago(ID, Cpto_pago, Prestador) {
+    $.ajax({
+        url: "../LocalServices/OrdenPagoMasiva.asmx/RecuperarCtasDepend",
+        data: "{ 'CodCliente': '" + CodCliente + "', 'FolioOnbase': '" + FolioOnbase + "'}",
+        dataType: "json",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            var mydata = $.parseJSON(result.d);
+            if (mydata.length != 0) {
+                var vClabe = mydata[0].clabe
+                if (vClabe != "") {
+                    jQuery("#list47").jqGrid('setCell', ID, 'Cuenta_Bancaria_ok', vClabe);
+                    jQuery("#list47").jqGrid('setCell', ID, 'Confirmar_Cuenta_ok', vClabe);                   
+                    $("#" + ID + "_Cuenta_Bancaria").val(vClabe);
+                    $("#" + ID + "_Confirmar_Cuenta").val(vClabe);
+                }
+                else
+                {
+                    jQuery("#list47").jqGrid('setCell', ID, 'Cuenta_Bancaria_ok', null);
+                    jQuery("#list47").jqGrid('setCell', ID, 'Confirmar_Cuenta_ok', null);
+                    $("#" + ID + "_Cuenta_Bancaria").val(null);
+                    $("#" + ID + "_Confirmar_Cuenta").val(null);
+                }
+            }
+            return;
+        },
+        error: function (err) {
+        }
+    });
+};
+
+function RecuperarClasePago(ID, Cpto_pago, Prestador) {    
     $.ajax({
         url: "../LocalServices/OrdenPagoMasiva.asmx/RecuperarClasePago",
         data: "{ 'Cpto_pago': '" + Cpto_pago + "', 'sn_prestador': '" + Prestador + "' }",
